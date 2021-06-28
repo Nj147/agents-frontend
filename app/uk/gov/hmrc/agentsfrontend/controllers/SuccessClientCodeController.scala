@@ -30,5 +30,9 @@ class SuccessClientCodeController @Inject()(mcc: MessagesControllerComponents,
   val successClientCode = Action { implicit request =>
     Ok(success())
   }
+
+  //route for dashboard = '@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()'
+
+
 }
 
