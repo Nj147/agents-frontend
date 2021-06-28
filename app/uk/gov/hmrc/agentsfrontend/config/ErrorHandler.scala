@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.examplefrontend.config
+package uk.gov.hmrc.agentsfrontend.config
 
 import javax.inject.{Inject, Singleton}
 import play.api.i18n.MessagesApi
