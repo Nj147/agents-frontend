@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.examplefrontend.controllers
+package uk.gov.hmrc.agentsfrontend.controllers
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -25,7 +25,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.inject.guice.GuiceApplicationBuilder
 
-class CitizenshipControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+class HomeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
@@ -34,34 +34,20 @@ class CitizenshipControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
       )
       .build()
 
-  private val fakeRequest = FakeRequest("GET", "/citizenship")
-  private val fakePostRequest = FakeRequest("POST", "/citizenship").withFormUrlEncodedBody("citizenship" -> "false")
-  private val badFakePostRequest = FakeRequest("POST", "/citizenship").withFormUrlEncodedBody()
+  private val fakeRequest = FakeRequest("GET", "/")
 
+  private val controller = app.injector.instanceOf[HomeController]
 
-  private val controller = app.injector.instanceOf[CitizenshipController]
-
-  "GET /citizenship" should {
+  "GET /" should {
     "return 200" in {
-      val result = controller.pageStart(fakeRequest)
+      val result = controller.home(fakeRequest)
       status(result) shouldBe Status.OK
     }
-
     "return HTML" in {
-      val result = controller.pageStart(fakeRequest)
+      val result = controller.home(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result)     shouldBe Some("utf-8")
     }
   }
-  "POST /citizenship" should {
-    "add to the session data" in {
-      val result = controller.processCitizenship(fakePostRequest)
-      session(result) .get("citizenship").get shouldBe "false"
-    }
-    "redirect to the next page" in {
-      val result = controller.processCitizenship(fakePostRequest)
-      status(result) shouldBe 303
-    }
-  }
-
 }
+
