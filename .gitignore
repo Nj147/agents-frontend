@@ -1,6 +1,7 @@
 *.class
 *.log
 *.target
+.*
 .cache
 /.classpath
 db
