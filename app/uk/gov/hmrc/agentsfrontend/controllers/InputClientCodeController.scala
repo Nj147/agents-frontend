@@ -31,6 +31,16 @@ class InputClientCodeController @Inject()(     mcc: MessagesControllerComponents
     Ok(clientCode())
   }
 
+/*
+* get input from form
+*
+* send input + agent code to them, if client exists and is not already connected to agent they can update their DB if not do nothing
+* match on client status code returned
+*
+* */
+
+
+
   //  def submitClientCode() = Action { implicit request =>
   //    InputClientCode.form.bindFromRequest().fold(
   //      formWithErrors => BadRequest(views.html.inputClientCode(formWithErrors)),

@@ -7,3 +7,4 @@ GET        /assets/*file            controllers.Assets.versioned(path = "/public
 
 GET        /                        uk.gov.hmrc.agentsfrontend.controllers.HomeController.home()
 GET        /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.inputClientCode()
+GET        /successClientCode       uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController.successClientCode()
