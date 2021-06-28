@@ -10,3 +10,5 @@ POST         /agent-login            uk.gov.hmrc.agentsfrontend.controllers.Agen
 
 
 GET        /                        uk.gov.hmrc.agentsfrontend.controllers.HomeController.home()
+
+GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
