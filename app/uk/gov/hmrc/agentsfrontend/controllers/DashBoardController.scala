@@ -29,4 +29,6 @@ class DashBoardController @Inject()( mcc: MessagesControllerComponents,
   val index = Action { implicit request =>
     Ok(indexPage())
   }
+
+
 }
