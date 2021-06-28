@@ -17,13 +17,39 @@
 package uk.gov.hmrc.agentsfrontend.connectors
 
 import play.api.libs.json.Json
+
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 import play.api.libs.ws._
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json._
+import play.api.mvc.{BaseController, ControllerComponents}
+import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentLogin
 
-class AgentConnector @Inject()(ws: WSClient, ec: ExecutionContext){
+import scala.concurrent.duration.DurationInt
 
+class AgentConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents, ec: ExecutionContext) extends BaseController {
+
+  def wspost(url: String, jsObject: JsObject): Future[WSResponse] = {
+    ws.url(url).withRequestTimeout(5000.millis).post(jsObject)
+  }
+
+  def checkLogin(agentLogin: AgentLogin) = {
+    val newLogin = Json.obj(
+      "arn" -> agentLogin.arn,
+      "password" -> agentLogin.password
+    )
+    wspost("http://localhost:8080/create", newLogin).map{_.status match {
+      case 201 => true
+      case 400 => false
+    }}
+  }
+
+  def jsValueToPerson(value: JsValue): Option[AgentLogin] = {
+    Some(AgentLogin(
+      (value \ "arn").as[String],
+      (value \ "password").as[String]
+    ))
+  }
 }
