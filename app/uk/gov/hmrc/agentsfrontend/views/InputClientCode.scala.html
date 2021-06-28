@@ -2,8 +2,14 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("User Management")) {
+@layout(pageTitle = Some("Add a Client")) {
 
-    <p class="govuk-body">Input a client code</p>
+<div class="govuk-form-group">
+    <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="input-client-code">
+        Add a Client Code:
+    </label>
+    </h1>
+    <input class="govuk-input" id="input-client-code" name="input-client-code" type="text">
+</div>
 
 }
