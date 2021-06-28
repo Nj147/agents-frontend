@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
-
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.views.html.Home
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HomeController @Inject()(     mcc: MessagesControllerComponents,
-                                    homePage: Home)
-  extends FrontendController(mcc) {
+class RemoveClientController @Inject()(mcc: MessagesControllerComponents,
+                                       removePage: RemoveClients) {
 
-  val home = Action { implicit request =>
-    Ok(homePage)
+  val removeClients = Action {
+    Ok(removePage)
   }
 }

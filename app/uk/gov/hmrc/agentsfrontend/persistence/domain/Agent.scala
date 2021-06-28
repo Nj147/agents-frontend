@@ -15,3 +15,14 @@
  */
 
 case class Agent(name: String)
+
+case class Client(crn: String)
+
+object Client {
+  val clientForm: Form[Client] =
+    Form(
+      mapping(
+        "crn" -> nonEmptyText
+      )(Client.apply)(Client.unapply)
+    )
+}
