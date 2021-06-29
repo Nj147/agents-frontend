@@ -1,0 +1,21 @@
+
+@this(layout: Layout, govukInput : GovukInput,  govukButton: GovukButton, govukErrorSummary : GovukErrorSummary)
+
+@(arn: String)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("Add Clients")) {
+
+    <a href="/agents-frontend/customerDetails" class="govuk-back-link">Back</a>
+    <h1 class="govuk-heading-xl">Are you sure you want to remove client @arn from your client list>></h1>
+    <form method="GET" action="/agents-frontend/index">
+        <button id="cancelButton" class="govuk-button--warning" data-module="govuk-button">
+            No
+        </button>
+    </form>
+    <form method="POST" action="/agents-frontend/removeConfirmed/@arn">
+        <button id="confirmButton" class="govuk-button" data-module="govuk-button">
+            Yes
+        </button>
+    </form>
+
+}

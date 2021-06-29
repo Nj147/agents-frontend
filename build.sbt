@@ -39,3 +39,6 @@ lazy val microservice = Project(appName, file("."))
 libraryDependencies += ws
 libraryDependencies += "org.scalatestplus" %% "mockito-3-4" % "3.2.5.0" % "test"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % "test"
+
+
+PlayKeys.devSettings := Seq("play.server.http.port" -> "9005")

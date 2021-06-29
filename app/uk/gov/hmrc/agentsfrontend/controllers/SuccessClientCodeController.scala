@@ -16,21 +16,23 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import play.api.libs.ws
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.views.html.Index
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
-class DashBoardController @Inject()( mcc: MessagesControllerComponents,
-                                     indexPage: Index)
+@Singleton
+class SuccessClientCodeController @Inject()(mcc: MessagesControllerComponents,
+                                            success: uk.gov.hmrc.agentsfrontend.views.html.SuccessClientCode)
   extends FrontendController(mcc) {
 
-  val index: Action[AnyContent] = Action { implicit request =>
-    val arn = request.session.get("arn").get
-    Ok(indexPage(arn))
+  val successClientCode = Action { implicit request =>
+    Ok(success())
   }
+
+  //route for dashboard = '@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()'
+
 
 }
 
