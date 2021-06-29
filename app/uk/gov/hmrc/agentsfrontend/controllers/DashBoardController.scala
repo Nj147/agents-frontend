@@ -27,10 +27,12 @@ class DashBoardController @Inject()( mcc: MessagesControllerComponents,
                                      indexPage: Index)
   extends FrontendController(mcc) {
 
-  val index: Action[AnyContent] = Action { implicit request =>
+  def index: Action[AnyContent] = Action { implicit request =>
+
     val arn = request.session.get("arn").get
     Ok(indexPage(arn))
   }
+
 
 }
 
