@@ -16,20 +16,33 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
+import play.api.data.Form
+import play.api.data.Forms.{mapping, text}
+import play.api.libs.json.Json
+import play.api.libs.ws.{WSClient, WSResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.views.html.{Home, InputClientCode}
 
 import javax.inject.{Inject, Singleton}
+import scala.concurrent.Future
 
 @Singleton
-class InputClientCodeController @Inject()(     mcc: MessagesControllerComponents,
+class InputClientCodeController @Inject()(     ws: WSClient,
+                                               mcc: MessagesControllerComponents,
                                                clientCode: InputClientCode)
   extends FrontendController(mcc) {
 
   val inputClientCode = Action { implicit request =>
     Ok(clientCode())
   }
+
+ // val agentCode = "testAgent"
+//  lazy val arn = request.session.get("arn").get
+}
+
+
+
 
 /*
 * get input from form
@@ -39,22 +52,45 @@ class InputClientCodeController @Inject()(     mcc: MessagesControllerComponents
 *
 * */
 
+//  def ClientCodePost(): Action[AnyContent] = Action.async { implicit request =>
+//    val postData = request.body.asFormUrlEncoded
+//
+//    val vehicleName = postData.map { args =>
+//      args("Vehicle Name").head
+//    }.getOrElse(Ok("Error"))
 
+//    val dataToBeSent = Json.obj(
+//      "crn" -> s"${input}",
+//      "arn" -> s"${agentCode}"
+//    )
+//    val futureResponse: Future[WSResponse] = ws.url("http://localhost:9006/addAgent").post(dataToBeSent)
 
-  //  def submitClientCode() = Action { implicit request =>
-  //    InputClientCode.form.bindFromRequest().fold(
-  //      formWithErrors => BadRequest(views.html.inputClientCode(formWithErrors)),
-  //      success =>  Redirect(controllers.routes.inputClientCodeController.colourForm()).withSession(request.session + ("code" -> s"${success.clientCode}"))
-  //    )
-  //  }
-}
+//    futureResponse.map {
+//      response =>
+//        val js = Json.fromJson[Vehicle](response.json)
+//        val veh = js.get
+//        Ok(views.html.vehicle(veh))
+//    } recover {
+//      case _ => NotFound
+//    }
+//  }
+//
+//
+//
+//
+//    def submitClientCode() = Action { implicit request =>
+//      InputClientCode.form.bindFromRequest().fold(
+//        formWithErrors => BadRequest(views.html.inputClientCode(formWithErrors)),
+//        success =>
+//      )
+//    }
+//}
 //case class InputClientCode(code: String)
 //object InputClientCode {
 //
 //  val form: Form[InputClientCode] = Form(
 //    mapping(
-//      "code" -> text
+//      "crn" -> text,
 //    )(InputClientCode.apply)(InputClientCode.unapply)
 //  )
-//}
 //}
