@@ -29,4 +29,5 @@ class HomeController @Inject()(     mcc: MessagesControllerComponents,
   val home = Action { implicit request =>
     Ok(homePage())
   }
+
 }

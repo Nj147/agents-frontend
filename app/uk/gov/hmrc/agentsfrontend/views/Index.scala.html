@@ -1,19 +1,29 @@
 @this(layout: Layout, govukButton: GovukButton)
 
-@()(implicit request: Request[_], messages: Messages)
+@(arn:String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("DASHBOARD")) {
+@layout(pageTitle = Some("Agent DashBoard")) {
 
-<p class="govuk-body">Welcome to Dashboard</p>
-<a href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-    Add a client
-    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
-        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
-    </svg></a>
+<div class="govuk-width-container">
 
-<a href="#" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-    Delete a client
-    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
-        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
-    </svg></a>
+    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.HomeController.home()" class="govuk-back-link">Logout</a>
+
+    <main class="govuk-main-wrapper--auto-spacing">
+
+        <h1 class="govuk-heading-l govuk-!-font-weight-bold">Welcome to Dashboard</h1>
+
+        <p>This is your ARN Number : @arn</p>
+        <div class="govuk-button-group">
+            <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.inputClientCode()" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+                Add a client
+           </a>
+
+            <a href="#" role="button" draggable="false" class="govuk-button govuk-button--warning" data-module="govuk-button">
+                Delete a client
+           </a>
+        </div>
+
+    </main>
+
+</div>
 }
