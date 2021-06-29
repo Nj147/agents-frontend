@@ -1,39 +1,3 @@
 service.name = agents-frontend
 service.text = This is your new service
 
-service.home = This is the Customer management interface, from here you can Create, Read, Update and Delete customer details
-
-service.intro = Welcome to the customer registration page, please press the start button to your registration.
-
-service.name = Please enter your name:
-service.fName = Please enter your first name:
-service.lName = Please enter your last name:
-
-service.dob = Please enter your date of birth:
-
-service.number = Please enter your phone number:
-service.email = Please enter your email address:
-
-service.citizen = Are you a registered British Citizen?
-
-error.summary.title = There is a problem
-site.continue = Next
-
-service.created = The customer has been successfully added to the system, click below to return to the start of the process
-service.failed = There has been a problem creating this customer, click below to return to the start of the process
-
-service.read = Please enter the email address of the Customer you would like to see details of
-
-service.update = Please enter the email address of the Customer you would like to update
-service.upSuccess = The customer has been successfully updated, click below to return to the start of the process
-service.upFailure = The customer has failed to be updated, click below to return to the start of the process
-
-service.delete = Please enter the email address of the Customer you would like to delete
-service.delSuccess = The customer has been successfully deleted, click below to return to the start of the process
-service.delFailure = The customer could not be deleted, click below to return to the start of the process
-
-service.createSum = Click below to enter the Customer registration portal for new customers
-service.readSum = Click below to access the customer details portal to retrieve information on a specified customer
-service.readAllSum = Click below to get the names of all customers registered in the system
-service.updateSum = Click below to update a specified customers details in the system
-service.deleteSum = Click below to delete a specified customer from the system using their email
