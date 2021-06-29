@@ -31,8 +31,6 @@ trait WireMockHelper extends Eventually with IntegrationPatience{
   val wireMockPort = 9006
   val wireMockHost = "localhost"
   val url = s"http://$wireMockHost:$wireMockPort"
-  val appRouteContext: String = "/create"
-
   lazy val ws: WSClient = app.injector.instanceOf[WSClient]
 
   lazy val wmConfig: WireMockConfiguration = wireMockConfig().port(wireMockPort)
