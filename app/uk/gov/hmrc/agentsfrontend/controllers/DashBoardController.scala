@@ -16,21 +16,28 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import play.api.libs.ws
+
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
 import uk.gov.hmrc.agentsfrontend.views.html.Index
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class DashBoardController @Inject()( mcc: MessagesControllerComponents,
-                                     indexPage: Index)
+                                     indexPage: Index,
+                                    connector:DashBoardConnector)
   extends FrontendController(mcc) {
 
-  def index: Action[AnyContent] = Action { implicit request =>
 
-    val arn = request.session.get("arn").get
-    Ok(indexPage(arn))
+  def index: Action[AnyContent] = Action.async { implicit request =>
+
+    // val arn = request.session.get("ABBCVDD").get
+    val arn = "ABBCVDD"
+
+    connector.getAllClientsData().map{ client =>
+      Ok(indexPage(arn,client))
+    }
   }
 
 

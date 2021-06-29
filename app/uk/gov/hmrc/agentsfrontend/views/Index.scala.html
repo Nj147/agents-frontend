@@ -1,18 +1,30 @@
 @this(layout: Layout, govukButton: GovukButton)
 
-@(arn:String)(implicit request: Request[_], messages: Messages)
+@(arn:String, client:List[Client])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Agent DashBoard")) {
 
 <div class="govuk-width-container">
 
-    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.HomeController.home()" class="govuk-back-link">Logout</a>
 
+    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.HomeController.home()" class="govuk-back-link">Logout</a>
     <main class="govuk-main-wrapper--auto-spacing">
 
         <h1 class="govuk-heading-l govuk-!-font-weight-bold">Welcome to Dashboard</h1>
 
         <p>This is your ARN Number : @arn</p>
+
+        @client.map(c =>
+                <h3> Client's CRN : @c.crn</h3>
+                <h3> Client's Business Name : @c.businessName</h3>
+                <h3> Client's Contact Number : @c.contactNumber</h3>
+                <h3> Client's Property Number : @c.propertyNumber</h3>
+                <h3> Client's Post Code : @c.postcode</h3>
+                <h3> Client's Business Type : @c.businessType</h3>
+                <h3> Client's Business ARN Number : @c.arn</h3>
+
+        )
+
         <div class="govuk-button-group">
             <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.inputClientCode()" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
                 Add a client
