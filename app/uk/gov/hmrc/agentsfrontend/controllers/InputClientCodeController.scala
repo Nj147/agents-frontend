@@ -29,16 +29,11 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class InputClientCodeController @Inject()(     implicit val ec: ExecutionContext,
-                                               ws: WSClient,
-                                               mcc: MessagesControllerComponents,
+class InputClientCodeController @Inject()(mcc: MessagesControllerComponents, clientCode: InputClientCode)(implicit val ec: ExecutionContext)
+  extends FrontendController(mcc) with play.api.i18n.I18nSupport  {
 
-                                               clientCode: InputClientCode,
-                                               successPage: uk.gov.hmrc.agentsfrontend.views.html.SuccessClientCode)
-  extends FrontendController(mcc) {
-
-  val inputClientCode = Action { implicit request =>
-    Ok(clientCode())
+  def getInputClientCode(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+   Ok(clientCode(Client.form))
   }
 
 }
