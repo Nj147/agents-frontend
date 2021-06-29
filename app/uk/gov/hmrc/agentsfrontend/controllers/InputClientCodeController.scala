@@ -21,7 +21,8 @@ import play.api.data.Forms.{mapping, text}
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSClient, WSResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import uk.gov.hmrc.agentsfrontend.persistence.domain.Client
 import uk.gov.hmrc.agentsfrontend.views.html.{Home, InputClientCode}
 
 import javax.inject.{Inject, Singleton}
@@ -40,55 +41,6 @@ class InputClientCodeController @Inject()(     implicit val ec: ExecutionContext
     Ok(clientCode())
   }
 
-  //  def submitInputClientCode() = Action { implicit request =>
-  //    InputClientCode.form.bindFromRequest().fold(
-  //      formWithErrors => BadRequest(views.html.InputClientCode(formWithErrors)),
-  //      success =>  Redirect(controllers.routes.InputClientCodeController.inputClientCode()).withSession(request.session + ("crn" -> s"${success.}"))
-  //    )
-  // val agentCode = "testAgent"
-  //  lazy val arn = request.session.get("arn").get
-  //}
-
-
-  /*
-* get input from form
-*
-* send input + agent code to them, if client exists and is not already connected to agent they can update their DB if not do nothing
-* match on client status code returned
-*
-* */
-
-  def ClientCodePost(): Action[AnyContent] = Action.async { implicit request =>
-    val dataToBeSent = Json.obj(
-      "crn" -> "client",
-      "arn" -> "agent"
-    )
-    val futureResponse: Future[WSResponse] = ws.url("http://localhost:9006/addAgent").post(dataToBeSent)
-    futureResponse.map {
-      response =>
-        Ok(successPage())
-    } recover {
-      case _ => NotFound
-    }
-  }
 }
-//
-//
-//
-//
-//    def submitClientCode() = Action { implicit request =>
-//      InputClientCode.form.bindFromRequest().fold(
-//        formWithErrors => BadRequest(views.html.inputClientCode(formWithErrors)),
-//        success =>
-//      )
-//    }
-//}
-//case class InputClientCode(code: String)
-//object InputClientCode {
-//
-//  val form: Form[InputClientCode] = Form(
-//    mapping(
-//      "crn" -> text,
-//    )(InputClientCode.apply)(InputClientCode.unapply)
-//  )
-//}
+
+
