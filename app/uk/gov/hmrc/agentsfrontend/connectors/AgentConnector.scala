@@ -40,9 +40,9 @@ class AgentConnector @Inject()(ws: WSClient, val controllerComponents: Controlle
       "arn" -> agentLogin.arn,
       "password" -> agentLogin.password
     )
-    wspost("http://localhost:8080/create", newLogin).map{_.status match {
-      case 201 => true
-      case 400 => false
+    wspost("http://localhost:9009/check-agent-login", newLogin).map{_.status match {
+      case 200 => true
+      case 500 => false
     }}
   }
 
