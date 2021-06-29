@@ -25,7 +25,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import play.api.inject.guice.GuiceApplicationBuilder
 
-class HomeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
@@ -36,19 +36,18 @@ class HomeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
 
   private val fakeRequest = FakeRequest("GET", "/")
 
-  private val controller = app.injector.instanceOf[HomeController]
+  private val controller = app.injector.instanceOf[InputClientCodeController]
 
   "GET /" should {
     "return 200" in {
-      val result = controller.home(fakeRequest)
+      val result = controller.inputClientCode(fakeRequest)
       status(result) shouldBe Status.OK
     }
     "return HTML" in {
-      val result = controller.home(fakeRequest)
+      val result = controller.inputClientCode(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       charset(result)     shouldBe Some("utf-8")
     }
   }
-
 }
 
