@@ -27,3 +27,13 @@ case class AgentClient(arn: String, crn: String)
 object AgentClient{
   implicit val format = Json.format[AgentClient]
 }
+
+case class Client(crn: String)
+
+object Client {
+  val form: Form[Client] = Form (
+    mapping(
+      "crn" -> nonEmptyText
+    )(Client.apply)(Client.unapply)
+  )
+}
