@@ -16,12 +16,9 @@
 
 package uk.gov.hmrc.agentsfrontend.services
 
-import akka.stream.impl.Stages.DefaultAttributes.recover
-import play.api.libs.json.Json
-import play.api.libs.ws
-import play.api.mvc.{AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.views.html.Index
-import uk.gov.hmrc.govukfrontend.views.viewmodels.cookiebanner.Action
+
+import play.api.mvc.MessagesControllerComponents
+
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject

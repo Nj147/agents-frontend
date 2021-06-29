@@ -35,7 +35,8 @@ class DashBoardController @Inject()( mcc: MessagesControllerComponents,
     // val arn = request.session.get("ABBCVDD").get
     val arn = "ABBCVDD"
 
-    connector.getAllClientsData().map{ client =>
+
+    connector.getAllClientsData.map{ client =>
       Ok(indexPage(arn,client))
     }
   }
@@ -43,3 +44,14 @@ class DashBoardController @Inject()( mcc: MessagesControllerComponents,
 
 }
 
+
+//val agentLoginSubmit = Action.async { implicit request =>
+//  AgentLoginForm.submitForm.bindFromRequest().fold({ formWithErrors =>
+//  Future.successful(BadRequest(agentLoginPage(formWithErrors)))
+//}, { agentLogin =>
+//  ac.checkLogin(agentLogin).map {
+//  case true => Redirect(routes.DashBoardController.index()).withSession(request.session + ("arn" -> agentLogin.arn) + ("isLoggedIn" -> "true"))
+//  case false => BadRequest(agentLoginErrorPage(AgentLoginForm.submitForm.fill(AgentLogin("",""))))
+//}
+//})
+//}
