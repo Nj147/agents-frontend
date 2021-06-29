@@ -1,0 +1,18 @@
+@this(layout: Layout, govukButton: GovukButton)
+
+@()(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("Add a Client")) {
+
+<div class="govuk-form-group">
+    <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="input-client-code">
+        Add a Client Code
+    </label>
+    </h1>
+    <input class="govuk-input" id="input-client-code" name="input-client-code" type="text">
+</div>
+<button class="govuk-button" data-module="govuk-button">
+    Confirm and send
+</button>
+
+}
