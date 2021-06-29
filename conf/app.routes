@@ -8,3 +8,8 @@ GET        /assets/*file            controllers.Assets.versioned(path = "/public
 GET        /                        uk.gov.hmrc.agentsfrontend.controllers.HomeController.home()
 GET        /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.inputClientCode()
 GET        /successClientCode       uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController.successClientCode()
+GET        /removeClients/:crn      uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
++nocsrf
+GET        /removeConfirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
+GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
+

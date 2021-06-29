@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.persistence.domain
+package uk.gov.hmrc.agentsfrontend.controllers
 
-import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
-import play.api.libs.json.Json
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.agentsfrontend.views.html.Index
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-case class Agent(name: String)
+import javax.inject.Inject
 
-case class AgentClient(arn: String, crn: String)
+class DashBoardController @Inject()( mcc: MessagesControllerComponents,
+                                     indexPage: Index)
+  extends FrontendController(mcc) {
 
-object AgentClient{
-  implicit val format = Json.format[AgentClient]
+  val index = Action { implicit request =>
+    Ok(indexPage())
+  }
+
+
 }
