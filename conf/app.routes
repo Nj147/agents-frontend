@@ -7,4 +7,6 @@ GET        /assets/*file            controllers.Assets.versioned(path = "/public
 
 GET        /                        uk.gov.hmrc.agentsfrontend.controllers.HomeController.home()
 
-GET        /removeClients           uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients
+GET        /removeClients/:crn      uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
++nocsrf
+GET       /removeConfirmed/:crn         uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)

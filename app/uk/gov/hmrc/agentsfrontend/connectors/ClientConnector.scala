@@ -14,19 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
+package uk.gov.hmrc.agentsfrontend.connectors
 
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.views.html.Home
-import javax.inject.{Inject, Singleton}
+import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
+import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
 
-@Singleton
-class HomeController @Inject()(     mcc: MessagesControllerComponents,
-                                    homePage: Home)
-  extends FrontendController(mcc) {
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext
+import scala.concurrent.ExecutionContext.Implicits.global
 
-  val home = Action { implicit request =>
-    Ok(homePage())
+class ClientConnector @Inject()(ws: WSClient, ec: ExecutionContext) {
+
+  def removeClient(agentClient: AgentClient) = {
+    ws.url(s"http://localhost:9001/removeClient").post(Json.toJson(agentClient)) map {
+      _.status match {
+        case 202 => true
+        case _ => false
+      }
+    }
   }
 }

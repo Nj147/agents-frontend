@@ -1,0 +1,14 @@
+@this(layout: Layout, govukButton: GovukButton)
+
+@(success: Boolean)(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("Add Clients")) {
+
+    <a href="/agents-frontend/processRemoval" class="govuk-back-link">Back</a>
+    @if(success){
+        <p>Client has been successfully unlinked from your account</p>
+    } else {
+        <p>Client has failed to be unlinked from your account</p>
+    }
+
+}
