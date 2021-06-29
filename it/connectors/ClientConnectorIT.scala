@@ -17,13 +17,13 @@ class ClientConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
 
   override def afterEach() = stopWireMock()
 
-  "POST /create" should {
-    "return true when created response returned" in {
+  "POST /removeClient" should {
+    "return true when accepted response returned" in {
       stubPost("/removeClient",202, "")
       val result = connector.removeClient(AgentClient("ARN01234567", "CRN98765432"))
       await(result) shouldBe true
     }
-    "return false when created response returned" in {
+    "return false when bad request response returned" in {
       stubPost("/removeClient",400, "")
       val result = connector.removeClient(AgentClient("ARN01234567", "CRN98765432"))
       await(result) shouldBe false
