@@ -25,26 +25,32 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.views.html.{Home, InputClientCode}
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class InputClientCodeController @Inject()(     ws: WSClient,
+class InputClientCodeController @Inject()(     implicit val ec: ExecutionContext,
+                                               ws: WSClient,
                                                mcc: MessagesControllerComponents,
-                                               clientCode: InputClientCode)
+
+                                               clientCode: InputClientCode,
+                                               successPage: uk.gov.hmrc.agentsfrontend.views.html.SuccessClientCode)
   extends FrontendController(mcc) {
 
   val inputClientCode = Action { implicit request =>
     Ok(clientCode())
   }
 
- // val agentCode = "testAgent"
-//  lazy val arn = request.session.get("arn").get
-}
+  //  def submitInputClientCode() = Action { implicit request =>
+  //    InputClientCode.form.bindFromRequest().fold(
+  //      formWithErrors => BadRequest(views.html.InputClientCode(formWithErrors)),
+  //      success =>  Redirect(controllers.routes.InputClientCodeController.inputClientCode()).withSession(request.session + ("crn" -> s"${success.}"))
+  //    )
+  // val agentCode = "testAgent"
+  //  lazy val arn = request.session.get("arn").get
+  //}
 
 
-
-
-/*
+  /*
 * get input from form
 *
 * send input + agent code to them, if client exists and is not already connected to agent they can update their DB if not do nothing
@@ -52,28 +58,20 @@ class InputClientCodeController @Inject()(     ws: WSClient,
 *
 * */
 
-//  def ClientCodePost(): Action[AnyContent] = Action.async { implicit request =>
-//    val postData = request.body.asFormUrlEncoded
-//
-//    val vehicleName = postData.map { args =>
-//      args("Vehicle Name").head
-//    }.getOrElse(Ok("Error"))
-
-//    val dataToBeSent = Json.obj(
-//      "crn" -> s"${input}",
-//      "arn" -> s"${agentCode}"
-//    )
-//    val futureResponse: Future[WSResponse] = ws.url("http://localhost:9006/addAgent").post(dataToBeSent)
-
-//    futureResponse.map {
-//      response =>
-//        val js = Json.fromJson[Vehicle](response.json)
-//        val veh = js.get
-//        Ok(views.html.vehicle(veh))
-//    } recover {
-//      case _ => NotFound
-//    }
-//  }
+  def ClientCodePost(): Action[AnyContent] = Action.async { implicit request =>
+    val dataToBeSent = Json.obj(
+      "crn" -> "client",
+      "arn" -> "agent"
+    )
+    val futureResponse: Future[WSResponse] = ws.url("http://localhost:9006/addAgent").post(dataToBeSent)
+    futureResponse.map {
+      response =>
+        Ok(successPage())
+    } recover {
+      case _ => NotFound
+    }
+  }
+}
 //
 //
 //
