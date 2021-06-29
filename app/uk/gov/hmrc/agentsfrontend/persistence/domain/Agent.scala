@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.agentsfrontend.persistence.domain
 
-import play.api.data.Form
-import play.api.data.Forms.{mapping, nonEmptyText}
 import play.api.libs.json.Json
 
 case class Agent(name: String)

@@ -21,13 +21,13 @@ import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ClientConnector @Inject()(ws: WSClient, ec: ExecutionContext) {
 
-  def removeClient(agentClient: AgentClient) = {
-    ws.url(s"http://localhost:9001/removeClient").post(Json.toJson(agentClient)) map {
+  def removeClient(agentClient: AgentClient):Future[Boolean] = {
+    ws.url(s"http://localhost:9006/removeClient").post(Json.toJson(agentClient)) map {
       _.status match {
         case 202 => true
         case _ => false
