@@ -26,47 +26,45 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class DashBoardConnector @Inject()(ws: WSClient) {
 
     def getAllClientsData:Future[List[Client]]={
-      val arnToSend = Json.obj(
-        "arn" -> "someArn"
-      )
+//      val arnToSend = Json.obj(
+//        "arn" -> "someArn"
+//      )
+//
+//      ws.url(s"http://localhost:9006/readAllAgent").post(arnToSend)
+//        .map { x =>
+//          x.status match {
+//            case 200 => x.json.as[JsArray].value.flatMap(response => Some(Client(
+//              (response \ "crn").as[String],
+//              (response \ "name").as[String],
+//              (response \ "businessName").as[String],
+//              (response \ "contactNumber").as[String],
+//              (response \ "propertyNumber").as[Int],
+//              (response \ "postCode").as[String],
+//              (response \ "businessType").as[String],
+//              (response \ "arn").as[String]
+//            ))).toList
+//            case _ => List()
+//          }
+//        }
 
-      ws.url(s"http://localhost:9006/readAllAgent").post(arnToSend)
-        .map { x =>
-          x.status match {
-            case 200 => x.json.as[JsArray].value.flatMap(response => Some(Client(
-              (response \ "crn").as[String],
-              (response \ "name").as[String],
-              (response \ "businessName").as[String],
-              (response \ "contactNumber").as[String],
-              (response \ "propertyNumber").as[Int],
-              (response \ "postCode").as[String],
-              (response \ "businessType").as[String],
-              (response \ "arn").as[String]
-            ))).toList
-            case _ => List()
-          }
-        }
+            Future (List( Client("AABCCD",
+                          "Elon Musk",
+                          "SpaceX",
+                          "08977643456",
+                           8,
+                          "BS166FGJ",
+                          "Space Exploration",
+                          "ABBCVDDE"),
+                          Client("AADSCCD",
+                           "Elon Musk",
+                           "SpaceX",
+                           "08977643456",
+                           7,
+                           "BS166FGJ",
+                           "Space Exploration",
+                           "AVVCVDDE")
+                          ))
       }
-
-
-//      Future (List( Client("AABCCD",
-//                    "Elon Musk",
-//                    "SpaceX",
-//                    "08977643456",
-//                     8,
-//                    "BS166FGJ",
-//                    "Space Exploration",
-//                    "ABBCVDDE"),
-//                    Client("AADSCCD",
-//                     "Elon Musk",
-//                     "SpaceX",
-//                     "08977643456",
-//                     7,
-//                     "BS166FGJ",
-//                     "Space Exploration",
-//                     "AVVCVDDE")
-//                    ))
-
 
 }
 

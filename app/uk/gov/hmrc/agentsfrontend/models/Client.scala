@@ -23,7 +23,7 @@ case class Client (crn: String,
                    businessName: String,
                    contactNumber: String,
                    propertyNumber: Int,
-                   postCode: String,
+                   postcode: String,
                    businessType: String,
                    arn: String)
 

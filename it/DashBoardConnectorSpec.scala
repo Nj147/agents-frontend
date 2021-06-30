@@ -16,13 +16,15 @@ class DashBoardConnectorSpec extends AnyWordSpec with Matchers with GuiceOneServ
   override def beforeEach(): Unit = startWireMock()
   override def afterEach(): Unit = stopWireMock()
 
-  val clientList = Json.toJson(List( Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", 8, "BS166FGJ", "Space Exploration", "ABBCVDDE"), Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", 7, "BS166FGJ","Space Exploration", "AVVCVDDE"))).toString()
+  val clientList = Json.toJson(List( Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", 8, "BS166FGJ", "Space Exploration", "ABBCVDDE"),
+                                     Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", 7, "BS166FGJ","Space Exploration", "AVVCVDDE"))).toString()
   "getsAllClientsData" should {
     "return 200" when {
       "Clients data successfully fetched" in {
         stubPost("/readAllAgent", 200, clientList)
         val result = connector.getAllClientsData
-        await(result) shouldBe (List( Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", 8, "BS166FGJ", "Space Exploration", "ABBCVDDE"), Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", 7, "BS166FGJ","Space Exploration", "AVVCVDDE")))
+        await(result) shouldBe (List( Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", 8, "BS166FGJ", "Space Exploration", "ABBCVDDE"),
+                                      Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", 7, "BS166FGJ","Space Exploration", "AVVCVDDE")))
       }
     }
 

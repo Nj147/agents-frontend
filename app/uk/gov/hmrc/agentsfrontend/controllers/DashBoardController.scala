@@ -32,13 +32,12 @@ class DashBoardController @Inject()( mcc: MessagesControllerComponents,
 
   def index: Action[AnyContent] = Action.async { implicit request =>
 
-    // val arn = request.session.get("ABBCVDD").get
+//    val arn = request.session.get("ABBCVDD").get
     val arn = "ABBCVDD"
-
-
     connector.getAllClientsData.map{ client =>
       Ok(indexPage(arn,client))
     }
+
   }
 
 
