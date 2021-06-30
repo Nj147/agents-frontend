@@ -16,20 +16,45 @@
         <h1 class="govuk-heading-l govuk-!-font-weight-bold">Welcome to Dashboard</h1>
 
         <h2>This is your ARN Number : @arn</h2>
-        <div>
-            <ul>
-                @client.map{ c =>
-                <li> Client's CRN : @c.crn</li>
-                <li> Client's Business Name : @c.businessName</li>
-                <li> Client's Contact Number : @c.contactNumber</li>
-                <li> Client's Property Number : @c.propertyNumber</li>
-                <li> Client's Post Code : @c.postcode</li>
-                <li> Client's Business Type : @c.businessType</li>
-                <li> Client's Business ARN Number : @c.arn</li>
-                }
-            </ul>
-        </div>
+        <dl class="govuk-summary-list">
 
+            @client.map { c =>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Business Name
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @c.businessName
+                </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Business Type
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @c.businessType
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    Contact Details
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @c.contactNumber
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    CRN
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    @c.crn
+                </dd>
+            </div>
+            }
+
+        </dl>
 
         <div class="govuk-button-group">
             <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.inputClientCode()" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">

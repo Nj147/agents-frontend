@@ -22,10 +22,7 @@ import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Play.materializer
-import play.api.libs.json.Json
 import play.api.test.{FakeRequest, Helpers}
-import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import uk.gov.hmrc.agentsfrontend.models.Client
 import uk.gov.hmrc.agentsfrontend.services.DashBoardClientService
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
