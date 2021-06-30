@@ -6,6 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
+import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
@@ -31,19 +32,30 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
   "agentLogin" should {
     "return status 200" in {
       val result = controller.agentLogin.apply(FakeRequest())
-      status(result) shouldBe 200
+      status(result) shouldBe Status.OK
     }
-
+    "redirect to the Dashboard" when {
+      "an agent is already logged in" in {
+        val result = controller.agentLogin.apply(FakeRequest().withSession("isLoggedIn" -> "true"))
+        status(result) shouldBe Status.SEE_OTHER
+      }
+    }
   }
+
   "agentLoginSubmit" should {
     "return bad request if some fields are blank" in {
       val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "", "password" -> "pa55w0rd"))
-      status(result) shouldBe 400
+      status(result) shouldBe Status.BAD_REQUEST
     }
     "redirect if all fields filled in" in {
       when(ac.checkLogin(any())) thenReturn Future.successful(true)
-      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "3242MKOSD", "password" -> "pa55w0rd"))
-      status(result) shouldBe 303
+      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
+      status(result) shouldBe Status.SEE_OTHER
+    }
+    "return a status NOT_FOUND" in {
+      when(ac.checkLogin(any())) thenReturn Future.successful(false)
+      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
+      status(result) shouldBe Status.NOT_FOUND
     }
   }
 }
