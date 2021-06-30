@@ -21,6 +21,7 @@ import play.api.mvc.MessagesControllerComponents
 import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
 import uk.gov.hmrc.agentsfrontend.models.Client
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+
 import javax.inject.Inject
 import scala.concurrent.Future
 
@@ -28,7 +29,7 @@ class DashBoardClientService @Inject()(mcc: MessagesControllerComponents,
                                        connector:DashBoardConnector)
                                        extends FrontendController(mcc){
 
-  def getClientData(arn:String):Future[List[Client]] = {
-  connector.getAllClientsData(arn)
+  def processAllClientsData(arn:String):Future[List[Client]] = {
+    connector.getAllClientsData(arn)
   }
 }

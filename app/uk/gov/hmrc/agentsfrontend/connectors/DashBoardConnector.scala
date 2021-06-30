@@ -16,12 +16,14 @@
 
 package uk.gov.hmrc.agentsfrontend.connectors
 
+
 import play.api.libs.json.{JsArray, Json}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.models.Client
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+
 
 class DashBoardConnector @Inject()(ws: WSClient) {
 
@@ -36,18 +38,15 @@ class DashBoardConnector @Inject()(ws: WSClient) {
               (response \ "businessName").as[String],
               (response \ "contactNumber").as[String],
               (response \ "propertyNumber").as[Int],
-              (response \ "postCode").as[String],
+              (response \ "postcode").as[String],
               (response \ "businessType").as[String],
               (response \ "arn").as[String]
               ))).toList
             case _ => List()
           }
         }
-
       }
-
 }
-
 
 
 
