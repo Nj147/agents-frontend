@@ -29,17 +29,19 @@ import scala.concurrent.Future
 
 @Singleton
 class AgentLoginController @Inject()(
-                                    mcc: MessagesControllerComponents,
-                                    agentLoginPage: AgentLoginPage,
-                                    agentLoginErrorPage: AgentLoginErrorPage,
-                                    ac: AgentConnector
+                                      mcc: MessagesControllerComponents,
+                                      agentLoginPage: AgentLoginPage,
+                                      agentLoginErrorPage: AgentLoginErrorPage,
+                                      ac: AgentConnector
                                     ) extends FrontendController(mcc) {
 
   val agentLogin = Action { implicit request =>
-    val form: Form[AgentLogin] = request.session.get("").fold(AgentLoginForm.submitForm.fill(AgentLogin("",""))) { data =>
-      AgentLoginForm.submitForm.fill(AgentLogin.decode(data))
+    if(request.session.get("isLoggedIn").getOrElse("Agent not logged in") == "true"){
+      Redirect(routes.DashBoardController.index())
+    }else{
+      val form: Form[AgentLogin] = AgentLoginForm.submitForm.fill(AgentLogin("",""))
+      Ok(agentLoginPage(form))
     }
-    Ok(agentLoginPage(form))
   }
 
   val agentLoginSubmit = Action.async { implicit request =>
@@ -48,7 +50,7 @@ class AgentLoginController @Inject()(
     }, { agentLogin =>
       ac.checkLogin(agentLogin).map {
         case true => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn) + ("isLoggedIn" -> "true"))
-        case false => BadRequest(agentLoginErrorPage(AgentLoginForm.submitForm.fill(AgentLogin("",""))))
+        case false => NotFound(agentLoginPage(AgentLoginForm.submitForm.fill(AgentLogin("",""))))
       }
     })
   }
