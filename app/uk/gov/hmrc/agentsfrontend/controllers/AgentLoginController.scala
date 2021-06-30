@@ -47,7 +47,7 @@ class AgentLoginController @Inject()(
       Future.successful(BadRequest(agentLoginPage(formWithErrors)))
     }, { agentLogin =>
       ac.checkLogin(agentLogin).map {
-        case true => Redirect(routes.DashBoardController.index()).withSession(request.session + ("arn" -> agentLogin.arn) + ("isLoggedIn" -> "true"))
+        case true => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn) + ("isLoggedIn" -> "true"))
         case false => BadRequest(agentLoginErrorPage(AgentLoginForm.submitForm.fill(AgentLogin("",""))))
       }
     })
