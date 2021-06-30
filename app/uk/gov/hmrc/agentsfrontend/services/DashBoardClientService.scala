@@ -18,26 +18,17 @@ package uk.gov.hmrc.agentsfrontend.services
 
 
 import play.api.mvc.MessagesControllerComponents
-
+import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
+import uk.gov.hmrc.agentsfrontend.models.Client
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class DashBoardClientService @Inject()(mcc: MessagesControllerComponents) extends FrontendController(mcc){
+class DashBoardClientService @Inject()(mcc: MessagesControllerComponents,
+                                       connector:DashBoardConnector)
+                                       extends FrontendController(mcc){
 
-//  def getClientData() = Action.async { implicit request =>
-//
-//    val arnToSend = Json.obj(
-//      "arn" -> "someArn"
-//    )
-//    val futureResult = ws.url(s"http://localhost:9006/readAllAgent").post(arnToSend)
-//
-//    futureResult.map { response =>
-//      val js = Json.fromJson[Vehicle](response.json)
-//      val veh = js.get
-//      Ok(views.html.vehicle(veh))
-//    } recover {
-//        case _ => NotFound
-//    }
-//  }
+  def getClientData(arn:String):Future[List[Client]] = {
+  connector.getAllClientsData(arn)
+  }
 }

@@ -18,41 +18,23 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
+import uk.gov.hmrc.agentsfrontend.services.DashBoardClientService
 import uk.gov.hmrc.agentsfrontend.views.html.Index
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class DashBoardController @Inject()( mcc: MessagesControllerComponents,
                                      indexPage: Index,
-                                    connector:DashBoardConnector)
-  extends FrontendController(mcc) {
+                                     clientService:DashBoardClientService)
+                                     extends FrontendController(mcc) {
 
 
   def index: Action[AnyContent] = Action.async { implicit request =>
-//    if (request.session.get("arn"))   Ok(indexPage(arn,client))
-//    else
-//    val arn = request.session.get("arn").get
-
-    val arn = "ABBCVDD"
-    connector.getAllClientsData.map{ client =>
-      Ok(indexPage(arn,client))
+    request.session.get("arn") match {
+      case Some(arn)   => clientService.getClientData(arn).map( x => Ok(indexPage(arn, x)))
+      case _           => Future (BadRequest)
     }
-
   }
-
-
 }
-
-
-//val agentLoginSubmit = Action.async { implicit request =>
-//  AgentLoginForm.submitForm.bindFromRequest().fold({ formWithErrors =>
-//  Future.successful(BadRequest(agentLoginPage(formWithErrors)))
-//}, { agentLogin =>
-//  ac.checkLogin(agentLogin).map {
-//  case true => Redirect(routes.DashBoardController.index()).withSession(request.session + ("arn" -> agentLogin.arn) + ("isLoggedIn" -> "true"))
-//  case false => BadRequest(agentLoginErrorPage(AgentLoginForm.submitForm.fill(AgentLogin("",""))))
-//}
-//})
-//}
