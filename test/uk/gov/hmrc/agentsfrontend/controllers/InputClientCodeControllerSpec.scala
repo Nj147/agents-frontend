@@ -26,14 +26,10 @@ import play.api.http.Status
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
-import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
-
 import scala.concurrent.Future
 
 class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -66,9 +62,7 @@ class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with Guice
   "submitClientCode" should {
     "return 204 when successfully added agent to client and redirected to success page" in {
       when(service.postClientCode(any())) thenReturn(Future.successful(204))
-//      val result = controller.submitClientCode(FakeRequest("POST", "/clientCode"))
       val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody("crn" -> "client"))
-//        .withHeaders("Content-Type" -> "application/json").withBody(Json.toJson(obj)))
       status(result) shouldBe Status.SEE_OTHER
     }
     "return 404 when the client code provided does not exist in the client database" in {
