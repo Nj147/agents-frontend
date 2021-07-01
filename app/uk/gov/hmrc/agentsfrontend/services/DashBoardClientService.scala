@@ -14,24 +14,21 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.connectors
+package uk.gov.hmrc.agentsfrontend.services
 
-import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
-import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
 
+import play.api.mvc.MessagesControllerComponents
+import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
+import uk.gov.hmrc.agentsfrontend.models.Client
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class ClientConnector @Inject()(ws: WSClient, ec: ExecutionContext) {
+class DashBoardClientService @Inject()(mcc: MessagesControllerComponents,
+                                       connector:DashBoardConnector)
+                                       extends FrontendController(mcc){
 
-  def removeClient(agentClient: AgentClient):Future[Boolean] = {
-    ws.url(s"http://localhost:9006/removeClient").post(Json.toJson(agentClient)) map {
-      _.status match {
-        case 202 => true
-        case _ => false
-      }
-    }
+  def processAllClientsData(arn:String):Future[List[Client]] = {
+    connector.getAllClientsData(arn)
   }
 }

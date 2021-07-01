@@ -1,0 +1,50 @@
+@import helper._
+@import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentLogin
+@import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentLogin, AgentLoginForm}
+
+@this(layout: Layout, govukButton: GovukButton, govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukErrorSummary : GovukErrorSummary)
+
+@(form: Form[AgentLogin])(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = Some("Agent Login")) {
+
+<h1 class="govuk-heading-xl">Enter your Login details</h1>
+@helper.form(action=uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLoginSubmit()){
+<div class="govuk-list govuk-error-summary__list">
+    @if(form.errors.nonEmpty) {
+    @defining(form.errors.map { error =>
+    ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))
+    }) { errorLinks =>
+    @govukErrorSummary(ErrorSummary(
+    errorList = errorLinks,
+    title = Text(messages("There is a problem")
+    )
+    ))
+    }
+    }
+
+    @govukInput(
+    Input(
+    id = "arn",
+    name = "arn",
+    label = Label(
+    content = Text("ARN Number")
+    )
+    )
+    )
+
+    @govukInput(
+    Input(
+    id = "password",
+    inputType = "password",
+    name = "password",
+    label = Label(
+    content = Text("Password")
+    )
+    )
+    )
+
+</div>
+<button name="submit-button" class="govuk-button" data-module="govuk-button" type="submit">Log in</button>
+}
+}

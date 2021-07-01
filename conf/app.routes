@@ -5,13 +5,24 @@
 
 GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
 
+GET         /start-page             uk.gov.hmrc.agentsfrontend.controllers.StartController.start()
+
+GET         /agent-login            uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.agentLogin()
++nocsrf
+POST         /agent-login            uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.agentLoginSubmit()
+
+
 GET        /                        uk.gov.hmrc.agentsfrontend.controllers.HomeController.home()
+
 +nocsrf
 POST       /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.submitClientCode()
 GET        /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.getInputClientCode()
+
 GET        /successClientCode       uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController.successClientCode()
+
 GET        /removeClients/:crn      uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
+
 +nocsrf
 GET        /removeConfirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
-GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
 
+GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()

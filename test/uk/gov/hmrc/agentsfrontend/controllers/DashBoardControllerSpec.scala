@@ -16,39 +16,50 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
+
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.Application
-import play.api.http.Status
-import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
-
+import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.agentsfrontend.models.Client
+import uk.gov.hmrc.agentsfrontend.services.DashBoardClientService
+import play.api.test.Helpers.{defaultAwaitTimeout, status}
+import uk.gov.hmrc.agentsfrontend.views.html.Index
+import scala.concurrent.Future
 
 class DashBoardControllerSpec  extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
-  override def fakeApplication(): Application =
-    new GuiceApplicationBuilder()
-      .configure(
-        "metrics.jvm"     -> false,
-        "metrics.enabled" -> false
-      )
-      .build()
+   val  dashBoard = app.injector.instanceOf[Index]
+   val clientService:DashBoardClientService = mock(classOf[DashBoardClientService])
+   val controller = new DashBoardController(Helpers.stubMessagesControllerComponents(),dashBoard, clientService)
 
-  private val fakeRequest = FakeRequest("GET", "/dashboard")
+   val obj = Client("CRN684077E0",
+                    "testName",
+                    "testBusiness",
+                     "testContact",
+                     12,
+                     "testPostcode",
+                     "testBusinessType",
+                     "testArn" )
 
-  private val controller = app.injector.instanceOf[DashBoardController]
-
-  "GET /" should {
-    "return 200" in {
-      val result = controller.index(fakeRequest)
-      status(result) shouldBe Status.OK
+  "DashBoardController index" should{
+    "return 200 Ok" in {
+      when(clientService.processAllClientsData(any())) thenReturn(Future.successful(List(obj)))
+      val result = controller.index()
+                  .apply(FakeRequest("GET", "/dashboard")
+                  .withSession("arn" -> "arn"))
+      status(result) shouldBe 200
     }
-    "return HTML" in {
-      val result = controller.index(fakeRequest)
-      contentType(result) shouldBe Some("text/html")
-      charset(result)     shouldBe Some("utf-8")
+
+    "return 400 BadRequest" in {
+      when(clientService.processAllClientsData(any())) thenReturn(Future.successful(List(obj)))
+      val result = controller.index()
+                  .apply(FakeRequest("GET", "/dashboard"))
+      status(result) shouldBe 400
     }
   }
+
+
 
 }
