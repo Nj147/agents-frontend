@@ -22,28 +22,56 @@
     ))
     }
     }
+</div>
 
-    @govukInput(
-    Input(
+<div class="govuk-form-group">
+    @if(form.errors("arn").nonEmpty) {
+    @govukInput(Input(
     id = "arn",
     name = "arn",
+    classes = "govuk-input--width-10",
     label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
     content = Text("ARN Number")
     )
-    )
-    )
-
-    @govukInput(
-    Input(
-    id = "password",
-    inputType = "password",
-    name = "password",
+    ))
+    } else {
+    @govukInput(Input(
+    id = "arn",
+    name = "arn",
+    classes = "govuk-input--width-10",
     label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("ARN Number")
+    )
+    ))
+    }
+
+    @if(form.errors("password").nonEmpty) {
+    @govukInput(Input(
+    id = "password",
+    name = "password",
+    classes = "govuk-input--width-10",
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
     content = Text("Password")
     )
+    ))
+    } else {
+    @govukInput(Input(
+    id = "password",
+    name = "password",
+    classes = "govuk-input--width-10",
+    label = Label(
+    isPageHeading = true,
+    classes = "govuk-label--m",
+    content = Text("Password")
     )
-    )
-
+    ))
+    }
 </div>
 <button name="submit-button" class="govuk-button" data-module="govuk-button" type="submit">Log in</button>
 }

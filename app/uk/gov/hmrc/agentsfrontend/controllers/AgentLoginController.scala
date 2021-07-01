@@ -50,7 +50,7 @@ class AgentLoginController @Inject()(
     }, { agentLogin =>
       ac.checkLogin(agentLogin).map {
         case true => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn) + ("isLoggedIn" -> "true"))
-        case false => NotFound(agentLoginPage(AgentLoginForm.submitForm.fill(AgentLogin("",""))))
+        case false => NotFound(agentLoginPage(AgentLoginForm.submitForm.withError("arn","Login does not exist")))
       }
     })
   }
