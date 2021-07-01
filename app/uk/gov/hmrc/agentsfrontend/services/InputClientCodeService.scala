@@ -18,13 +18,12 @@ package uk.gov.hmrc.agentsfrontend.services
 
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
-
-import java.lang.ProcessBuilder.Redirect
 import javax.inject.Inject
 
 class InputClientCodeService @Inject() (connector: InputClientCodeConnector){
 
-  def postClientCode(id: AgentClient): Unit = {
+  def postClientCode(id: AgentClient) = {
 
+    connector.postClientCode(id)
   }
 }
