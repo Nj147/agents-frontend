@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.persistence.domain
+package uk.gov.hmrc.agentsfrontend.services
 
-import play.api.libs.json.Json
+import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
+import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
+import javax.inject.Inject
 
-case class Agent(name: String)
+class InputClientCodeService @Inject() (connector: InputClientCodeConnector){
 
-case class AgentClient(arn: String, crn: String)
+  def postClientCode(id: AgentClient) = {
 
-object AgentClient{
-  implicit val format = Json.format[AgentClient]
-}
-
-case class Client(crn: String)
-
-object Client {
-  val form: Form[Client] = Form (
-    mapping(
-      "crn" -> nonEmptyText
-    )(Client.apply)(Client.unapply)
-  )
+    connector.postClientCode(id)
+  }
 }

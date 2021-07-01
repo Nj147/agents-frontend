@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.persistence.domain
+package uk.gov.hmrc.agentsfrontend.connectors
 
 import play.api.libs.json.Json
+import play.api.libs.ws.WSClient
+import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
+import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 
-case class Agent(name: String)
+class InputClientCodeConnector @Inject()(ws: WSClient) {
 
-case class AgentClient(arn: String, crn: String)
+  def postClientCode(agentClientCode: AgentClient) = {
 
-object AgentClient{
-  implicit val format = Json.format[AgentClient]
+    ws.url("http://localhost:9006/addAgent").post(Json.obj("crn" -> agentClientCode.crn,
+      "arn" -> agentClientCode.arn)) map(_.status)
+    }
 }
 
-case class Client(crn: String)
 
-object Client {
-  val form: Form[Client] = Form (
-    mapping(
-      "crn" -> nonEmptyText
-    )(Client.apply)(Client.unapply)
-  )
-}
+
+
+

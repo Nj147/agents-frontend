@@ -1,18 +1,23 @@
-@this(layout: Layout, govukButton: GovukButton)
+@import uk.gov.hmrc.agentsfrontend.persistence.domain.Client
+@import helper._
 
-@()(implicit request: Request[_], messages: Messages)
+@this(layout: Layout, govukInput : GovukInput, errorSummary : GovukErrorSummary, govukButton: GovukButton)
+
+@(form: Form[Client])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Add a Client")) {
+    @helper.form(action = uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.submitClientCode()) {
 
-<div class="govuk-form-group">
-    <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--l" for="input-client-code">
-        Add a Client Code
-    </label>
-    </h1>
-    <input class="govuk-input" id="input-client-code" name="input-client-code" type="text">
-</div>
-<button class="govuk-button" data-module="govuk-button">
+    @if(form.errors.nonEmpty) { @defining(form.errors.map { error => ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))}) { errorLinks => @errorSummary(ErrorSummary(errorList = errorLinks,title = Text(messages("Error Alert "))))}}
+
+    @if(form.errors("crn").nonEmpty) {
+    @govukInput(Input(id = "crn", name = "crn",label = Label(content = Text("Add a Client Code:")), hint = Some(Hint(content = Text("It is similar to your Agent Code but uniquely identifies a Client"))), errorMessage = Some(ErrorMessage(content = Text("Please enter a Client Code.")))))
+    } else {
+    @govukInput(Input(id = "crn", name = "crn", label = Label(isPageHeading = true, classes = "govuk-label--l, gg, govuk-input-error", content = Text("Add a Client Code:"))))
+    }
+<button class="govuk-button" value="Submit" type="submit">
     Confirm and send
 </button>
-
 }
+}
+
