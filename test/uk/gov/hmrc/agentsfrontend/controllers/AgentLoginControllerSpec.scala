@@ -30,13 +30,15 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
   private val controller = new AgentLoginController(Helpers.stubMessagesControllerComponents(), agentLoginPage, agentLoginErrorPage, ac)
 
   "agentLogin" should {
-    "return status 200" in {
-      val result = controller.agentLogin.apply(FakeRequest())
-      status(result) shouldBe Status.OK
+    "return status 200 with an empty session" when {
+      "agent login page is loaded" in {
+        val result = controller.agentLogin.apply(FakeRequest())
+        status(result) shouldBe Status.OK
+      }
     }
     "redirect to the Dashboard" when {
       "an agent is already logged in" in {
-        val result = controller.agentLogin.apply(FakeRequest().withSession("isLoggedIn" -> "true"))
+        val result = controller.agentLogin.apply(FakeRequest().withSession("arn" -> "G4G3G4FSV"))
         status(result) shouldBe Status.SEE_OTHER
       }
     }

@@ -16,8 +16,9 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
+import play.api.libs.ws
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.views.html.{ErrorTemplate, Index}
+import uk.gov.hmrc.agentsfrontend.views.html.Index
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -27,18 +28,9 @@ class DashBoardController @Inject()( mcc: MessagesControllerComponents,
   extends FrontendController(mcc) {
 
   val index: Action[AnyContent] = Action { implicit request =>
-    request.session.get("isLoggedIn") match {
-      case Some(_) => Ok(indexPage(request.session.get("arn").getOrElse("ARN Not found")))
-      case _ => Redirect(routes.AgentLoginController.agentLogin())
-    }
+    val arn = request.session.get("arn").get
+    Ok(indexPage(arn))
   }
+
 }
 
-//if(request.session.get("isLoggedIn").getOrElse("") == "true") {
-//  val arn = request.session.get("arn").get
-//  Ok(indexPage(arn))
-//}
-//  else {
-//  Ok(errorPage("You are not logged in, you can't access this page!","",""))
-//}
-//}

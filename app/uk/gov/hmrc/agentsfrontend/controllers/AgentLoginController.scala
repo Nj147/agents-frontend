@@ -36,11 +36,9 @@ class AgentLoginController @Inject()(
                                     ) extends FrontendController(mcc) {
 
   val agentLogin = Action { implicit request =>
-    if(request.session.get("isLoggedIn").getOrElse("Agent not logged in") == "true"){
-      Redirect(routes.DashBoardController.index())
-    }else{
-      val form: Form[AgentLogin] = AgentLoginForm.submitForm.fill(AgentLogin("",""))
-      Ok(agentLoginPage(form))
+    request.session.get("arn") match {
+      case Some(_) => Redirect(routes.DashBoardController.index())
+      case _ => Ok(agentLoginPage(AgentLoginForm.submitForm.fill(AgentLogin("","")))).withNewSession
     }
   }
 
@@ -49,7 +47,7 @@ class AgentLoginController @Inject()(
       Future.successful(BadRequest(agentLoginPage(formWithErrors)))
     }, { agentLogin =>
       ac.checkLogin(agentLogin).map {
-        case true => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn) + ("isLoggedIn" -> "true"))
+        case true => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn))
         case false => NotFound(agentLoginPage(AgentLoginForm.submitForm.withError("arn","Login does not exist")))
       }
     })
