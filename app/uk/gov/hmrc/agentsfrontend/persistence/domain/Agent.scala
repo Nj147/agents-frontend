@@ -16,14 +16,16 @@
 
 package uk.gov.hmrc.agentsfrontend.persistence.domain
 
-import play.api.libs.json.Json
+import play.api.data.Form
+import play.api.data.Forms.{mapping, nonEmptyText}
+import play.api.libs.json.{Json, OFormat}
 
 case class Agent(name: String)
 
 case class AgentClient(arn: String, crn: String)
 
 object AgentClient{
-  implicit val format = Json.format[AgentClient]
+  implicit val format: OFormat[AgentClient] = Json.format[AgentClient]
 }
 
 case class Client(crn: String)
