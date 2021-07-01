@@ -19,26 +19,18 @@ package uk.gov.hmrc.agentsfrontend.connectors
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
-
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class InputClientCodeConnector @Inject()(ws: WSClient, ec: ExecutionContext) {
+class InputClientCodeConnector @Inject()(ws: WSClient) {
 
   def postClientCode(agentClientCode: AgentClient) = {
 
     ws.url("http://localhost:9006/addAgent").post(Json.obj("crn" -> agentClientCode.crn,
-      "arn" -> agentClientCode.arn)) map {
-      _.status match {
-        case 204 => 204 // redirect to success page
-        case 404 => 404 // bad input not a client code
-        case 409 => 409 // client already has an agent
-        case _ => false
-      }
+      "arn" -> agentClientCode.arn)) map(_.status)
     }
-  }
 }
+
 
 
 
