@@ -24,15 +24,18 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.models.Client
-import uk.gov.hmrc.agentsfrontend.services.DashBoardClientService
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
+import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
 import uk.gov.hmrc.agentsfrontend.views.html.Index
 import scala.concurrent.Future
 
-class DashBoardControllerSpec  extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
+class DashBoardControllerSpec   extends AnyWordSpec
+                                with Matchers
+                                with GuiceOneAppPerSuite{
+
    val  dashBoard = app.injector.instanceOf[Index]
-   val clientService:DashBoardClientService = mock(classOf[DashBoardClientService])
-   val controller = new DashBoardController(Helpers.stubMessagesControllerComponents(),dashBoard, clientService)
+   val connector:DashBoardConnector = mock(classOf[DashBoardConnector])
+   val controller = new DashBoardController(Helpers.stubMessagesControllerComponents(),dashBoard, connector)
 
    val obj = Client("CRN684077E0",
                     "testName",
@@ -45,21 +48,21 @@ class DashBoardControllerSpec  extends AnyWordSpec with Matchers with GuiceOneAp
 
   "DashBoardController index" should{
     "return 200 Ok" in {
-      when(clientService.processAllClientsData(any())) thenReturn(Future.successful(List(obj)))
-      val result = controller.index()
+      when(connector.getAllClientsData(any())) thenReturn(Future.successful(List(obj)))
+      val result = controller
+                  .index()
                   .apply(FakeRequest("GET", "/dashboard")
                   .withSession("arn" -> "arn"))
       status(result) shouldBe 200
     }
 
     "return 400 BadRequest" in {
-      when(clientService.processAllClientsData(any())) thenReturn(Future.successful(List(obj)))
-      val result = controller.index()
+      when(connector.getAllClientsData(any())) thenReturn(Future.successful(List(obj)))
+      val result = controller
+                  .index()
                   .apply(FakeRequest("GET", "/dashboard"))
       status(result) shouldBe 400
     }
   }
-
-
 
 }
