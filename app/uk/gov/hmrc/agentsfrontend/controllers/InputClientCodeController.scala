@@ -20,7 +20,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentClient, Client}
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,7 +42,6 @@ class InputClientCodeController @Inject()(mcc: MessagesControllerComponents, cli
   }
 }
 
-  // for testing 204 = 303, 404 = 400?? 409 = 400??
 
 
 
