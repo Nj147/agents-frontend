@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.connectors
+package uk.gov.hmrc.agentsfrontend.services
 
-import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
+import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
-
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.ExecutionContext.Implicits.global
 
-class ClientConnector @Inject()(ws: WSClient, ec: ExecutionContext) {
+class InputClientCodeService @Inject() (connector: InputClientCodeConnector){
 
-  def removeClient(agentClient: AgentClient):Future[Boolean] = {
-    ws.url(s"http://localhost:9006/removeClient").post(Json.toJson(agentClient)) map {
-      _.status match {
-        case 202 => true
-        case _ => false
-      }
-    }
+  def postClientCode(id: AgentClient) = {
+
+    connector.postClientCode(id)
   }
 }

@@ -25,7 +25,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-
 class DashBoardConnector @Inject()(ws: WSClient) {
 
   def getAllClientsData(arn: String):Future[List[Client]]= {
