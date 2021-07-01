@@ -2,7 +2,7 @@
 @import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentLogin
 @import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentLogin, AgentLoginForm}
 
-@this(layout: Layout, govukButton: GovukButton, govukInput: GovukInput, govukErrorSummary : GovukErrorSummary)
+@this(layout: Layout, govukButton: GovukButton, govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukErrorSummary : GovukErrorSummary)
 
 @(form: Form[AgentLogin])(implicit request: Request[_], messages: Messages)
 
@@ -43,10 +43,6 @@
     )
     )
     )
-
-
-
-
 
 </div>
 <button name="submit-button" class="govuk-button" data-module="govuk-button" type="submit">Log in</button>
