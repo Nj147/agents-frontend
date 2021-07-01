@@ -50,5 +50,6 @@ class HomeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSu
     }
   }
 
+
 }
 
