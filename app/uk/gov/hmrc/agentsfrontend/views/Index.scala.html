@@ -8,7 +8,7 @@
 
 <div class="govuk-width-container">
 
-    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.StartController.start()" class="govuk-back-link">Logout</a>
+    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLogin()" class="govuk-back-link">Logout</a>
 
     <main class="govuk-main-wrapper--auto-spacing">
 
@@ -25,6 +25,7 @@
                 </dt>
                 <dd class="govuk-summary-list__value">
                     @c.businessName
+
                 </dd>
             </div>
 
@@ -54,6 +55,11 @@
             </div>
             <p>End of the Client detail</p>
             <br>
+
+            <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.RemoveClientController.removeClients(c.crn)" role="button" draggable="false" class="govuk-button govuk-button--warning" data-module="govuk-button">
+                Remove a client
+            </a>
+
             }
 
         </dl>
@@ -63,9 +69,7 @@
                 Add a client
            </a>
 
-            <a href="#" role="button" draggable="false" class="govuk-button govuk-button--warning" data-module="govuk-button">
-                Remove a client
-           </a>
+
         </div>
 
     </main>
