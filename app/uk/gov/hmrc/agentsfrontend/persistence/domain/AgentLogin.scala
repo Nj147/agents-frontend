@@ -35,7 +35,7 @@ object AgentLogin {
 }
 
 object AgentLoginForm {
-  val submitForm =
+  val submitForm: Form[AgentLogin] =
     Form(
       mapping(
         "arn" -> nonEmptyText,

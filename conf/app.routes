@@ -9,7 +9,7 @@ GET         /start-page             uk.gov.hmrc.agentsfrontend.controllers.Start
 
 GET         /agent-login            uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.agentLogin()
 +nocsrf
-POST         /agent-login            uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.agentLoginSubmit()
+POST        /agent-login            uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.agentLoginSubmit()
 
 
 GET        /                        uk.gov.hmrc.agentsfrontend.controllers.HomeController.home()
@@ -19,10 +19,10 @@ POST       /clientCode              uk.gov.hmrc.agentsfrontend.controllers.Input
 GET        /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.getInputClientCode()
 
 GET        /successClientCode       uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController.successClientCode()
-
++nocsrf
 GET        /removeClients/:crn      uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
 
 +nocsrf
-GET        /removeConfirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
+POST       /removeConfirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
 
 GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()

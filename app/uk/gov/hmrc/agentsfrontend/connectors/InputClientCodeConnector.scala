@@ -21,14 +21,12 @@ import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class InputClientCodeConnector @Inject()(ws: WSClient) {
 
-  def postClientCode(agentClientCode: AgentClient) = {
-
-    ws.url("http://localhost:9006/addAgent").post(Json.obj("crn" -> agentClientCode.crn,
-      "arn" -> agentClientCode.arn)) map(_.status)
-    }
+  def postClientCode(agentClientCode: AgentClient): Future[Int] = ws.url("http://localhost:9006/addAgent").post(Json.obj("crn" -> agentClientCode.crn,
+    "arn" -> agentClientCode.arn)) map(_.status)
 }
 
 

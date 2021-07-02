@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
 import uk.gov.hmrc.agentsfrontend.views.html.Index

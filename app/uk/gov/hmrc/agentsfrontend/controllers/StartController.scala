@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.views.html.StartPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -27,7 +27,7 @@ class StartController @Inject()(
                                  startPage: StartPage,
                                ) extends FrontendController(mcc) {
 
-  val start = Action { implicit request =>
+  val start: Action[AnyContent] = Action { implicit request =>
     Ok(startPage()).withNewSession
   }
 }

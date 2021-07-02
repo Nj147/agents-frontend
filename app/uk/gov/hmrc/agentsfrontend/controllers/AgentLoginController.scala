@@ -16,13 +16,11 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import play.api.data.Form
-import play.api.mvc.MessagesControllerComponents
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentLogin, AgentLoginForm}
-import uk.gov.hmrc.agentsfrontend.views.html.{AgentLoginErrorPage, AgentLoginPage}
+import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
@@ -31,18 +29,17 @@ import scala.concurrent.Future
 class AgentLoginController @Inject()(
                                       mcc: MessagesControllerComponents,
                                       agentLoginPage: AgentLoginPage,
-                                      agentLoginErrorPage: AgentLoginErrorPage,
                                       ac: AgentConnector
                                     ) extends FrontendController(mcc) {
 
-  val agentLogin = Action { implicit request =>
+  val agentLogin: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect(routes.DashBoardController.index())
       case _ => Ok(agentLoginPage(AgentLoginForm.submitForm.fill(AgentLogin("","")))).withNewSession
     }
   }
 
-  val agentLoginSubmit = Action.async { implicit request =>
+  val agentLoginSubmit: Action[AnyContent] = Action.async { implicit request =>
     AgentLoginForm.submitForm.bindFromRequest().fold({ formWithErrors =>
       Future.successful(BadRequest(agentLoginPage(formWithErrors)))
     }, { agentLogin =>

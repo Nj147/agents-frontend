@@ -26,7 +26,7 @@ class HomeController @Inject()(     mcc: MessagesControllerComponents,
                                     homePage: Home)
   extends FrontendController(mcc) {
 
-  val home = Action { implicit request =>
+  val home: Action[AnyContent] = Action { implicit request =>
     Ok(homePage())
   }
 

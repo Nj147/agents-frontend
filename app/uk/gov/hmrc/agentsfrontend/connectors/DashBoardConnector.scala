@@ -16,14 +16,12 @@
 
 package uk.gov.hmrc.agentsfrontend.connectors
 
-
 import play.api.libs.json.{JsArray, Json}
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.models.Client
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 
 class DashBoardConnector @Inject()(ws: WSClient) {
 
@@ -44,7 +42,6 @@ class DashBoardConnector @Inject()(ws: WSClient) {
         case _ => List()
       }
     }
-
   }
 
 }

@@ -18,11 +18,12 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import uk.gov.hmrc.agentsfrontend.views.html.SuccessClientCode
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class SuccessClientCodeController @Inject()(mcc: MessagesControllerComponents,
-                                            success: uk.gov.hmrc.agentsfrontend.views.html.SuccessClientCode)
+                                            success: SuccessClientCode)
   extends FrontendController(mcc) {
 
   val successClientCode: Action[AnyContent] = Action { implicit request =>

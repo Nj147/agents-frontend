@@ -21,9 +21,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
 import uk.gov.hmrc.agentsfrontend.views.html.{RemovalConfirmation, RemoveClients}
-
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class RemoveClientController @Inject()(mcc: MessagesControllerComponents,
@@ -31,11 +30,11 @@ class RemoveClientController @Inject()(mcc: MessagesControllerComponents,
                                        resultConf: RemovalConfirmation,
                                        conn: ClientConnector)(implicit ec: ExecutionContext) extends FrontendController(mcc){
 
-  def removeClients(crn: String) = Action { implicit request =>
+  def removeClients(crn: String): Action[AnyContent] = Action { implicit request =>
     Ok(removePage(crn))
   }
 
-  def processRemoval(crn: String) = Action async { implicit request =>
+  def processRemoval(crn: String): Action[AnyContent] = Action async { implicit request =>
     conn.removeClient(AgentClient(request.session.get("arn").get, crn)).map(result => Ok(resultConf(result)))
   }
 }

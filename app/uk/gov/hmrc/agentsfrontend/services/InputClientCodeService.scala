@@ -19,10 +19,11 @@ package uk.gov.hmrc.agentsfrontend.services
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
 import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
 import javax.inject.Inject
+import scala.concurrent.Future
 
 class InputClientCodeService @Inject() (connector: InputClientCodeConnector){
 
-  def postClientCode(id: AgentClient) = {
+  def postClientCode(id: AgentClient): Future[Int] = {
 
     connector.postClientCode(id)
   }

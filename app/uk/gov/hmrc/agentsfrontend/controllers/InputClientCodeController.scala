@@ -22,9 +22,10 @@ import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentClient, Client}
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 
 @Singleton
-class InputClientCodeController @Inject()(mcc: MessagesControllerComponents, clientCode: InputClientCode, post: uk.gov.hmrc.agentsfrontend.services.InputClientCodeService)(implicit val ec: ExecutionContext)
+class InputClientCodeController @Inject()(mcc: MessagesControllerComponents, clientCode: InputClientCode, post: InputClientCodeService)(implicit val ec: ExecutionContext)
   extends FrontendController(mcc) with play.api.i18n.I18nSupport {
 
   def getInputClientCode: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
