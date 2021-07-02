@@ -23,6 +23,7 @@ class DashBoardConnectorSpec  extends AnyWordSpec
 
   val clientList = Json.toJson(List( Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", 8, "BS166FGJ", "Space Exploration", "ABBCVDDE"),
     Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", 7, "BS166FGJ","Space Exploration", "AVVCVDDE"))).toString()
+
   "getsAllClientsData" should {
     "return 200" when {
       "Clients data successfully fetched" in {
