@@ -1,6 +1,6 @@
 @import uk.gov.hmrc.agentsfrontend.models.Client
 
-@this(layout: Layout, govukButton: GovukButton)
+@this(layout: Layout, govukButton: GovukButton ,govukTable : GovukTable)
 
 @(arn:String, client:List[Client])(implicit request: Request[_], messages: Messages)
 
@@ -16,61 +16,36 @@
 
         <h2 class="govuk-heading-s govuk-!-font-weight-bold">This is your ARN Number : @arn</h2>
 
-        <dl class="govuk-summary-list">
+        <div class="govuk-button-group">
+            <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.getInputClientCode()" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">Add a client</a>
+        </div>
 
-            @client.map { c =>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Business Name
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @c.businessName
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m">List of clients</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">CRN </th>
+                    <th scope="col" class="govuk-table__header">Business name</th>
+                    <th scope="col" class="govuk-table__header">Business type</th>
+                    <th scope="col" class="govuk-table__header">Contact details</th>
+                    <th scope="col" class="govuk-table__header"></th>
+                </tr>
+            </thead>
 
-                </dd>
-            </div>
+            <tbody class="govuk-table__body">
 
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Business Type
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @c.businessType
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    Contact Details
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @c.contactNumber
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    CRN
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    @c.crn
-                </dd>
-            </div>
-            <p>End of the Client detail</p>
-            <br>
-
-            <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.RemoveClientController.removeClients(c.crn)" role="button" draggable="false" class="govuk-button govuk-button--warning" data-module="govuk-button">
-                Remove a client
-            </a>
-
+            @client.map{c =>
+            <tr class="govuk-table__row">
+                <td class="govuk-table__cell">@c.crn</td>
+                <td class="govuk-table__cell">@c.businessName</td>
+                <td class="govuk-table__cell">@c.businessType</td>
+                <td class="govuk-table__cell">@c.contactNumber</td>
+                <td class="govuk-table__cell"> <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.RemoveClientController.removeClients(c.crn)" role="button" draggable="false" class="govuk-button govuk-button--warning" data-module="govuk-button">Remove </a> </td>
+            </tr>
             }
 
-        </dl>
-
-        <div class="govuk-button-group">
-            <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.getInputClientCode()" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
-                Add a client
-           </a>
-
-
-        </div>
+            </tbody>
+        </table>
 
     </main>
 
