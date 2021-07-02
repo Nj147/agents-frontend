@@ -32,11 +32,9 @@ class DashBoardController @Inject()( mcc: MessagesControllerComponents,
 
 
   def index: Action[AnyContent] = Action.async { implicit request =>
-
-    request.session.get("arn") match {
-      case Some(arn)   => connector.getAllClientsData(arn)
+    request.session.get("arn")  match {
+      case Some(arn) => connector.getAllClientsData(arn)
                           .map(x => Ok(indexPage(arn, x)))
-
       case _           => Future (BadRequest)
     }
   }
