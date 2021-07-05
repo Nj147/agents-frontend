@@ -9,8 +9,8 @@
 @layout(pageTitle = Some("Home Page")) {
 
 <h1 class="govuk-heading-xl">Agent System</h1>
-<a id="login-button" href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLogin()" class="govuk-button" data-module="govuk-button" type="submit">Sign in</a>
+<a name="submit-button" id="signIn" href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLogin()" class="govuk-button" data-module="govuk-button" type="submit">Sign in</a>
 </br>
-<a id="register-button" href="http://localhost:9000/registration/businessName/false" class="govuk-button" data-module="govuk-button" type="submit">Register</a>
+<a name="submit-button" id="register" href="http://localhost:9000/registration/businessName/false" class="govuk-button" data-module="govuk-button" type="submit">Register</a>
 
 }
