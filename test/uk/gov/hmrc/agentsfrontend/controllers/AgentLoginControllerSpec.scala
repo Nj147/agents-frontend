@@ -24,7 +24,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{defaultAwaitTimeout, status}
+import play.api.test.Helpers.{defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsfrontend.views.html.{AgentLoginErrorPage, AgentLoginPage}
@@ -73,6 +73,14 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
       when(ac.checkLogin(any())) thenReturn Future.successful(false)
       val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
       status(result) shouldBe Status.NOT_FOUND
+    }
+  }
+
+  "logout" should {
+    "redirect if all fields filled in" in {
+      val result = controller.logout.apply(FakeRequest())
+      status(result) shouldBe Status.SEE_OTHER
+      session(result) shouldBe empty
     }
   }
 }
