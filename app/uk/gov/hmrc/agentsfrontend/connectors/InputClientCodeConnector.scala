@@ -25,7 +25,7 @@ import scala.concurrent.Future
 
 class InputClientCodeConnector @Inject()(ws: WSClient) {
 
-  def postClientCode(agentClientCode: AgentClient): Future[Int] = ws.url("http://localhost:9006/addAgent").post(Json.obj("crn" -> agentClientCode.crn,
+  def postClientCode(agentClientCode: AgentClient): Future[Int] = ws.url("http://localhost:9006/add-agent").patch(Json.obj("crn" -> agentClientCode.crn,
     "arn" -> agentClientCode.arn)) map(_.status)
 }
 

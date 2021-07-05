@@ -4,11 +4,25 @@
 
 @layout(pageTitle = Some("Add Clients")) {
 
-    <a href="/agents-frontend/index" class="govuk-back-link">Back</a>
+    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-back-link">Back</a>
     @if(success){
-        <p class="govuk-body-l">Client has been successfully unlinked from your account</p>
+        <div class="govuk-panel govuk-panel--confirmation">
+            <h1 class="govuk-panel__title">
+                Successful
+            </h1>
+            <div class="govuk-panel__body">
+                Client has been successfully unlinked from your account
+            </div>
+        </div>
     } else {
-        <p class="govuk-body-l">Client has failed to be unlinked from your account</p>
+        <div class="govuk-panel govuk-panel--confirmation" style="background-color:red;">
+            <h1 class="govuk-panel__title">
+                Unsuccessful
+            </h1>
+            <div class="govuk-panel__body">
+                Client has failed to be unlinked from your account
+            </div>
+        </div>
     }
 
 }

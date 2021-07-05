@@ -25,9 +25,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class ClientConnector @Inject()(ws: WSClient) {
 
-  def removeClient(agentClient: AgentClient):Future[Boolean] = ws.url(s"http://localhost:9006/removeClient").post(Json.toJson(agentClient)) map {
+  def removeClient(agentClient: AgentClient):Future[Boolean] = ws.url(s"http://localhost:9006/remove-agent").patch(Json.toJson(agentClient)) map {
     _.status match {
-      case 202 => true
+      case 204 => true
       case _ => false
     }
   }
