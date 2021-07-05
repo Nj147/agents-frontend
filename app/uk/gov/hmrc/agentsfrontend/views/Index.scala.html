@@ -8,15 +8,13 @@
 
 <div class="govuk-width-container">
 
-    <a name="submit-button" href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLogin()" class="govuk-button govuk-button--secondary" data-module="govuk-button" type="submit">Logout</a>
-
-    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLogin()" class="govuk-back-link">Logout</a>
+    <a name="submit-button" href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.logout()" class="govuk-button govuk-button--secondary" style="text-align:right;" data-module="govuk-button" type="submit">Logout</a>
 
     <main class="govuk-main-wrapper--auto-spacing">
 
         <h1 class="govuk-heading-l govuk-!-font-weight-bold">Welcome to Dashboard</h1>
 
-        <h2 class="govuk-heading-s govuk-!-font-weight-bold">This is your ARN Number : @arn</h2>
+        <h2 class="govuk-heading-s govuk-!-font-weight-bold">This is your ARN Number : @arn </h2>
 
         <div class="govuk-button-group">
             <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.getInputClientCode()" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">Add a client</a>
