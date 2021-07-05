@@ -56,12 +56,12 @@ class DashBoardControllerSpec   extends AnyWordSpec
       status(result) shouldBe 200
     }
 
-    "return 400 BadRequest" in {
-      when(connector.getAllClientsData(any())) thenReturn(Future.successful(List(obj)))
+    "return 303 BadRequest" in {
+      when(connector.getAllClientsData(any())) thenReturn(Future.successful(List()))
       val result = controller
                   .index()
                   .apply(FakeRequest("GET", "/dashboard"))
-      status(result) shouldBe 400
+      status(result) shouldBe 303
     }
   }
 
