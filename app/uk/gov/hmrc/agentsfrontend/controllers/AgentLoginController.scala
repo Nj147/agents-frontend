@@ -50,4 +50,9 @@ class AgentLoginController @Inject()(
     })
   }
 
+  val logout: Action[AnyContent] = Action { implicit request =>
+    Redirect(routes.AgentLoginController.agentLogin()).withNewSession
+
+  }
+
 }
