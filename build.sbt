@@ -24,8 +24,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= Seq(
       compilerPlugin("com.github.ghik" % "silencer-plugin" % silencerVersion cross CrossVersion.full),
       "com.github.ghik" % "silencer-lib" % silencerVersion % Provided cross CrossVersion.full,
-      "org.jsoup"  %  "jsoup"  % "1.13.1",
-      "com.github.tomakehurst" % "wiremock" % "1.33" % "test"
+      "org.jsoup"  %  "jsoup"  % "1.13.1"
     )
 
     // ***************
