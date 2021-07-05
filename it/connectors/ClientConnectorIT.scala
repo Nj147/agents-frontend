@@ -35,7 +35,7 @@ class ClientConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
 
   "POST /removeClient" should {
     "return true when accepted response returned" in {
-      stubPost("/removeClient",202, "")
+      stubPost("/removeClient",204, "")
       val result = connector.removeClient(AgentClient("ARN01234567", "CRN98765432"))
       await(result) shouldBe true
     }
