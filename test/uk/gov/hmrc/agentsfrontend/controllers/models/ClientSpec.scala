@@ -9,7 +9,7 @@ import uk.gov.hmrc.agentsfrontend.models.Client
 
 class ClientSpec extends AnyWordSpec with Matchers{
 
-  val testClient: Client = Client(
+  val clientModel: Client = Client(
     crn = "testCrn",
     name = "testName",
     businessName = "testBusiness",
@@ -19,7 +19,7 @@ class ClientSpec extends AnyWordSpec with Matchers{
     businessType = "testBusinessType",
     arn = "testArn")
 
-  val testClientJs: JsValue = Json.parse(
+  val clientModelJs: JsValue = Json.parse(
     """{
 				"crn": "testCrn",
 				"name": "testName",
@@ -31,32 +31,18 @@ class ClientSpec extends AnyWordSpec with Matchers{
 				"arn": "testArn"
 			}""".stripMargin)
 
-  val testClientJsNone: JsValue = Json.parse(
-    """{
-				"crn": "testCrn",
-				"name": "testName",
-				"businessName": "testBusiness",
-				"contactNumber": "testContact",
-				"propertyNumber": 12,
-				"postcode": "testPostcode",
-				"businessType": "testBusinessType"
-			}""".stripMargin)
-
   "client" can {
     "format to json" should {
       "succeed with ARN" in {
-        Json.toJson(testClient) shouldBe testClientJs
+        Json.toJson(clientModel) shouldBe clientModelJs
       }
-
     }
 
     "format from json" should {
       "succeed with ARN" in {
-        Json.fromJson[Client](testClientJs) shouldBe JsSuccess(testClient)
+        Json.fromJson[Client](clientModelJs) shouldBe JsSuccess(clientModel)
       }
-
     }
   }
-
 
 }
