@@ -19,8 +19,9 @@ package uk.gov.hmrc.agentsfrontend.controllers
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
-import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
+import uk.gov.hmrc.agentsfrontend.models.AgentClient
 import uk.gov.hmrc.agentsfrontend.views.html.{RemovalConfirmation, RemoveClients}
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext
 

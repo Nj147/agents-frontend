@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.persistence.domain
+package uk.gov.hmrc.agentsfrontend.models
 
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
@@ -28,12 +28,12 @@ object AgentClient{
   implicit val format: OFormat[AgentClient] = Json.format[AgentClient]
 }
 
-case class Client(crn: String)
+case class ClientCode(crn: String)
 
-object Client {
-  val form: Form[Client] = Form (
+object ClientCode {
+  val form: Form[ClientCode] = Form (
     mapping(
       "crn" -> nonEmptyText
-    )(Client.apply)(Client.unapply)
+    )(ClientCode.apply)(ClientCode.unapply)
   )
 }

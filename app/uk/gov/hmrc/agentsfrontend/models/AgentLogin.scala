@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.persistence.domain
+package uk.gov.hmrc.agentsfrontend.models
 
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}

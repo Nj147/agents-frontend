@@ -1,9 +1,9 @@
-@import uk.gov.hmrc.agentsfrontend.persistence.domain.Client
+@import uk.gov.hmrc.agentsfrontend.models.ClientCode
 @import helper._
 
 @this(layout: Layout, govukInput : GovukInput, errorSummary : GovukErrorSummary, govukButton: GovukButton)
 
-@(form: Form[Client])(implicit request: Request[_], messages: Messages)
+@(form: Form[ClientCode])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Add a Client")) {
     @helper.form(action = uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.submitClientCode()) {
