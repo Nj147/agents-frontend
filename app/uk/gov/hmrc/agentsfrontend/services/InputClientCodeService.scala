@@ -17,7 +17,8 @@
 package uk.gov.hmrc.agentsfrontend.services
 
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
-import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
+import uk.gov.hmrc.agentsfrontend.models.AgentClient
+
 import javax.inject.Inject
 import scala.concurrent.Future
 

@@ -26,10 +26,12 @@ import play.api.http.Status
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
 import play.api.inject.guice.GuiceApplicationBuilder
-import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
+import uk.gov.hmrc.agentsfrontend.models.AgentClient
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
+
 import scala.concurrent.Future
 
 class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {

@@ -22,7 +22,7 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
-import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
+import uk.gov.hmrc.agentsfrontend.models.AgentClient
 
 class InputClientCodeConnectorISpec extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach{
   lazy val connector: InputClientCodeConnector = injector.instanceOf[InputClientCodeConnector]

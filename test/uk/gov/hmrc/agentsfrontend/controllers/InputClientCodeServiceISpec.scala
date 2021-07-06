@@ -23,8 +23,9 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
-import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentClient
+import uk.gov.hmrc.agentsfrontend.models.AgentClient
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 

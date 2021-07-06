@@ -1,0 +1,48 @@
+package uk.gov.hmrc.agentsfrontend.controllers.models
+
+
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import play.api.libs.json.{JsSuccess, JsValue, Json}
+import uk.gov.hmrc.agentsfrontend.models.Client
+
+
+class ClientSpec extends AnyWordSpec with Matchers{
+
+  val clientModel: Client = Client(
+    crn = "testCrn",
+    name = "testName",
+    businessName = "testBusiness",
+    contactNumber = "testContact",
+    propertyNumber = 12,
+    postcode = "testPostcode",
+    businessType = "testBusinessType",
+    arn = "testArn")
+
+  val clientModelJs: JsValue = Json.parse(
+    """{
+				"crn": "testCrn",
+				"name": "testName",
+				"businessName": "testBusiness",
+				"contactNumber": "testContact",
+				"propertyNumber": 12,
+				"postcode": "testPostcode",
+				"businessType": "testBusinessType",
+				"arn": "testArn"
+			}""".stripMargin)
+
+  "client" can {
+    "format to json" should {
+      "succeed with ARN" in {
+        Json.toJson(clientModel) shouldBe clientModelJs
+      }
+    }
+
+    "format from json" should {
+      "succeed with ARN" in {
+        Json.fromJson[Client](clientModelJs) shouldBe JsSuccess(clientModel)
+      }
+    }
+  }
+
+}

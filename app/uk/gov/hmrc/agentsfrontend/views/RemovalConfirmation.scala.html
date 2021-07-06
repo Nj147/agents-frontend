@@ -2,7 +2,7 @@
 
 @(success: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Add Clients")) {
+@layout(pageTitle = Some("Remove Clients Confirmation")) {
 
     <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-back-link">Back</a>
     @if(success){

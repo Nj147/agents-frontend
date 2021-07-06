@@ -1,12 +1,12 @@
 @import helper._
-@import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentLogin
-@import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentLogin, AgentLoginForm}
+@import uk.gov.hmrc.agentsfrontend.models.AgentLogin
+@import uk.gov.hmrc.agentsfrontend.models.{AgentLogin, AgentLoginForm}
 
 @this(layout: Layout, govukButton: GovukButton, govukInput: GovukInput, govukErrorSummary : GovukErrorSummary)
 
 @(form: Form[AgentLogin])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Agent Login")) {
+@layout(pageTitle = Some("Agent Login Error")) {
 
 <h1 class="govuk-heading-xl">Enter your Login details</h1>
 @helper.form(action=uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLoginSubmit()){
@@ -16,7 +16,7 @@
     }) { errorLinks =>
     @govukErrorSummary(ErrorSummary(
     errorList = errorLinks,
-    title = Text(messages("There is a problem")
+    title = Text(messages("Either your ARN or Password have been entered incorrectly")
     )
     ))
     }

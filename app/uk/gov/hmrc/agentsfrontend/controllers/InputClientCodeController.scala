@@ -18,8 +18,9 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
-import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentClient, Client}
+import uk.gov.hmrc.agentsfrontend.models.{AgentClient, ClientCode}
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
@@ -29,16 +30,16 @@ class InputClientCodeController @Inject()(mcc: MessagesControllerComponents, cli
   extends FrontendController(mcc) with play.api.i18n.I18nSupport {
 
   def getInputClientCode: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(clientCode(Client.form))
+    Ok(clientCode(ClientCode.form))
   }
 
   def submitClientCode: Action[AnyContent] = Action async { implicit request =>
-    Client.form.bindFromRequest.fold(
+    ClientCode.form.bindFromRequest.fold(
       formWithErrors => Future.successful(BadRequest(clientCode(formWithErrors))),
       response => post.postClientCode(AgentClient(request.session.get("arn").get, response.crn)) map {
         case 204 => Redirect(routes.SuccessClientCodeController.successClientCode())
-        case 404 => NotFound(clientCode(Client.form.withError("crn", "wrong client code entered")))
-        case 409 => Conflict(clientCode(Client.form.withError("crn", "this client already has an agent")))
+        case 404 => NotFound(clientCode(ClientCode.form.withError("crn", "wrong client code entered")))
+        case 409 => Conflict(clientCode(ClientCode.form.withError("crn", "this client already has an agent")))
       })
   }
 }

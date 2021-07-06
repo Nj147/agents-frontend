@@ -1,6 +1,5 @@
 @import helper._
-@import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentLogin
-@import uk.gov.hmrc.agentsfrontend.persistence.domain.{AgentLogin, AgentLoginForm}
+@import uk.gov.hmrc.agentsfrontend.models.{AgentLogin, AgentLoginForm}
 
 @this(layout: Layout, govukButton: GovukButton, govukCheckboxes: GovukCheckboxes, govukInput: GovukInput, govukErrorSummary : GovukErrorSummary)
 
@@ -17,7 +16,7 @@
     }) { errorLinks =>
     @govukErrorSummary(ErrorSummary(
     errorList = errorLinks,
-    title = Text(messages("There is a problem")
+    title = Text(messages("Either your ARN or Password have been entered incorrectly")
     )
     ))
     }
