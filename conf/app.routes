@@ -11,9 +11,6 @@ GET         /agent-login            uk.gov.hmrc.agentsfrontend.controllers.Agent
 +nocsrf
 POST        /agent-login            uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.agentLoginSubmit()
 
-
-GET        /                        uk.gov.hmrc.agentsfrontend.controllers.HomeController.home()
-
 +nocsrf
 POST       /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.submitClientCode()
 GET        /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.getInputClientCode()
