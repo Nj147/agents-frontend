@@ -25,7 +25,8 @@ import play.api.libs.ws._
 import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json._
 import play.api.mvc.{BaseController, ControllerComponents}
-import uk.gov.hmrc.agentsfrontend.persistence.domain.AgentLogin
+import uk.gov.hmrc.agentsfrontend.models.AgentLogin
+
 import scala.concurrent.duration.DurationInt
 
 class AgentConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
