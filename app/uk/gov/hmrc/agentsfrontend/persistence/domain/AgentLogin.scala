@@ -19,20 +19,7 @@ package uk.gov.hmrc.agentsfrontend.persistence.domain
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 
-case class AgentLogin (arn: String, password: String) {
-  def encode(): String = {
-    this.arn + "£" + this.password + "£"
-  }
-}
-
-object AgentLogin {
-  def decode(x: String): AgentLogin = {
-    val (f,l): (String, String) = x.split("£").toList match {
-      case h :: t :: _ => (h,t)
-    }
-    AgentLogin(f,l)
-  }
-}
+case class AgentLogin (arn: String, password: String)
 
 object AgentLoginForm {
   val submitForm: Form[AgentLogin] =
