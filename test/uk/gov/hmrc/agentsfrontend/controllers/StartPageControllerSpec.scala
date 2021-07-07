@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
@@ -31,7 +30,7 @@ class StartPageControllerSpec extends AnyWordSpec with Matchers with GuiceOneSer
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
-        "metrics.jvm"     -> false,
+        "metrics.jvm" -> false,
         "metrics.enabled" -> false
       )
       .build()
