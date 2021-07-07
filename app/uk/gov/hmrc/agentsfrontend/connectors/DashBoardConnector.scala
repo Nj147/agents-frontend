@@ -25,11 +25,11 @@ import scala.concurrent.Future
 
 class DashBoardConnector @Inject()(ws: WSClient) {
 
-  def getAllClientsData(arn: String):Future[List[Client]]= {
+  def getAllClientsData(arn: String): Future[Option[List[Client]]] = {
 
     ws.url(s"http://localhost:9006/read-all-agent").post(Json.obj("arn" -> arn)).map { x =>
       x.status match {
-        case 200 => x.json.as[JsArray].value.flatMap(response => Some(Client(
+        case 200 => Some(x.json.as[JsArray].value.flatMap(response => Some(Client(
           (response \ "crn").as[String],
           (response \ "name").as[String],
           (response \ "businessName").as[String],
@@ -38,10 +38,10 @@ class DashBoardConnector @Inject()(ws: WSClient) {
           (response \ "postcode").as[String],
           (response \ "businessType").as[String],
           (response \ "arn").as[String]
-        ))).toList
-        case _ => List()
+        ))).toList)
+        case _ => Some(List())
       }
-    }.recover{case _ => List()}
+    }.recover { case _ => None }
   }
 }
 
