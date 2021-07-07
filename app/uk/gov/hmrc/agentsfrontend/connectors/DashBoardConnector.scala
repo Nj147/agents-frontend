@@ -41,7 +41,7 @@ class DashBoardConnector @Inject()(ws: WSClient) {
         ))).toList
         case _ => List()
       }
-    }
+    }.recover{case _ => List()}
   }
 }
 
