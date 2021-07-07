@@ -8,9 +8,36 @@
 
 @layout(pageTitle = Some("Home Page")) {
 
-<h1 class="govuk-heading-xl">Agent System</h1>
-<a name="submit-button" id="signIn" href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLogin()" class="govuk-button" data-module="govuk-button" type="submit">Sign in</a>
-</br>
-<a name="submit-button" id="register" href="http://localhost:9000/registration/businessName/false" class="govuk-button" data-module="govuk-button" type="submit">Register</a>
-
+<div class="govuk-width-container">
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="#">Home</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="#">Agent Client Services</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item" aria-current="page">Agent Client Management</li>
+        </ol>
+    </div>
+    <main class="govuk-main-wrapper " id="main-content" role="main">
+                <h1 class="govuk-heading-l">Agent Client Management</h1>
+                <p class="govuk-body">Use this service to:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>register as a new agent</li>
+                    <li>link to a new client</li>
+                    <li>manage clients</li>
+                </ul>
+                <p class="govuk-body">Registering takes around 5 minutes.</p>
+                <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLogin()" role="button" draggable="false" class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-8 govuk-button--start" id="signIn" data-module="govuk-button">
+                    Start now
+                    <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                        <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+                    </svg></a>
+                <h2 class="govuk-heading-m">Before you start</h2>
+                <p class="govuk-body">You can also <a class="govuk-link" id="register" href="http://localhost:9000/registration/businessName/false">register as an Agent</a>.</p>
+                <p class="govuk-body">The online service is also available in <a class="govuk-link" href="#">Welsh (Cymraeg)</a>.</p>
+                <p class="govuk-body">You cannot register for this service if you're in the UK illegally.</p>
+    </main>
+</div>
 }
