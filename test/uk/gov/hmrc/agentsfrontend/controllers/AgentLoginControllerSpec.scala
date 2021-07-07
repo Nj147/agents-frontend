@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
-import uk.gov.hmrc.agentsfrontend.views.html.{AgentLoginErrorPage, AgentLoginPage}
+import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 
 import scala.concurrent.Future
 
@@ -35,7 +35,7 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
-        "metrics.jvm"     -> false,
+        "metrics.jvm" -> false,
         "metrics.enabled" -> false
       )
       .build()

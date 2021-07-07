@@ -2,51 +2,81 @@
 
 @this(layout: Layout, govukButton: GovukButton ,govukTable : GovukTable)
 
-@(arn:String, client:List[Client])(implicit request: Request[_], messages: Messages)
+@(arn:String, client:Option[List[Client]])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Agent DashBoard")) {
 
 <div class="govuk-width-container">
 
-    <a name="submit-button" href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.logout()" class="govuk-button govuk-button--secondary" style="text-align:right;" data-module="govuk-button" type="submit">Logout</a>
+    <a name="submit-button" href="@uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.logout()"
+       class="govuk-button govuk-button--secondary" style="text-align:right;" data-module="govuk-button" type="submit">Logout</a>
 
     <main class="govuk-main-wrapper--auto-spacing">
 
         <h1 class="govuk-heading-l govuk-!-font-weight-bold">Welcome to Dashboard</h1>
 
-        <h2 class="govuk-heading-s govuk-!-font-weight-bold">This is your ARN Number : @arn </h2>
+        <h2 class="govuk-body">This is your ARN Number : <b>@arn </b></h2>
 
-        <div class="govuk-button-group">
-            <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.getInputClientCode()" id="addClient" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">Add a client</a>
+        @if(client == None){
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1"
+             data-module="govuk-error-summary">
+            <h2 class="govuk-error-summary__title" id="error-summary-title">
+                Sorry, there is a problem with the service
+            </h2>
+            <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                    <li>
+                        <a>We are working on it.</a>
+                    </li>
+                    <li>
+                        <a>Try again later.</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-
+        } else {
+        <div class="govuk-button-group">
+            <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.getInputClientCode()"
+               id="addClient" role="button" draggable="false" class="govuk-button govuk-button--start"
+               data-module="govuk-button">Add a client</a>
+        </div>
+        @if(client.get.isEmpty) {
+        <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+                <span class="govuk-warning-text__assistive">Alert</span>
+                You currently have no clients, click above to add client
+            </strong>
+        </div>
+        } else {
         <table class="govuk-table">
             <caption class="govuk-table__caption govuk-table__caption--m">List of clients</caption>
             <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">CRN </th>
-                    <th scope="col" class="govuk-table__header">Business name</th>
-                    <th scope="col" class="govuk-table__header">Business type</th>
-                    <th scope="col" class="govuk-table__header">Contact details</th>
-                    <th scope="col" class="govuk-table__header"></th>
-                </tr>
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">CRN</th>
+                <th scope="col" class="govuk-table__header">Business name</th>
+                <th scope="col" class="govuk-table__header">Business type</th>
+                <th scope="col" class="govuk-table__header">Contact details</th>
+                <th scope="col" class="govuk-table__header"></th>
+            </tr>
             </thead>
-
             <tbody class="govuk-table__body">
-
-            @client.map{c =>
+            @client.get.map{c =>
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell">@c.crn</td>
                 <td class="govuk-table__cell">@c.businessName</td>
                 <td class="govuk-table__cell">@c.businessType</td>
                 <td class="govuk-table__cell">@c.contactNumber</td>
-                <td class="govuk-table__cell"> <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.RemoveClientController.removeClients(c.crn)" role="button" draggable="false" class="govuk-button govuk-button--warning" data-module="govuk-button">Remove </a> </td>
+                <td class="govuk-table__cell"><a
+                        href="@uk.gov.hmrc.agentsfrontend.controllers.routes.RemoveClientController.removeClients(c.crn)"
+                        role="button" draggable="false" class="govuk-button govuk-button--warning"
+                        data-module="govuk-button">Remove </a></td>
             </tr>
             }
-
+            }
             </tbody>
         </table>
-
+        }
     </main>
 
 </div>
