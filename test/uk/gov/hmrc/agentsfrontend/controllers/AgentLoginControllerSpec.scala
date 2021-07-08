@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
+import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
@@ -28,6 +29,7 @@ import play.api.test.Helpers.{defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
+import uk.gov.hmrc.agentsfrontend.config.ErrorHandler
 
 import scala.concurrent.Future
 
@@ -41,8 +43,9 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
       .build()
 
   private val ac = mock(classOf[AgentConnector])
+  private val error = app.injector.instanceOf[ErrorHandler]
   private val agentLoginPage = app.injector.instanceOf[AgentLoginPage]
-  private val controller = new AgentLoginController(Helpers.stubMessagesControllerComponents(), agentLoginPage, ac)
+  private val controller = new AgentLoginController(Helpers.stubMessagesControllerComponents(), agentLoginPage, ac, error)
 
   "agentLogin" should {
     "return status 200 with an empty session" when {
@@ -60,19 +63,24 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
   }
 
   "agentLoginSubmit" should {
-    "return bad request if some fields are blank" in {
-      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "", "password" -> "pa55w0rd"))
-      status(result) shouldBe Status.BAD_REQUEST
+    "return Internal Server error if the service is down" in {
+      when(ac.checkLogin(any())) thenReturn Future.successful(500)
+      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
+      status(result) shouldBe Status.INTERNAL_SERVER_ERROR
     }
     "redirect if all fields filled in" in {
-      when(ac.checkLogin(any())) thenReturn Future.successful(true)
+      when(ac.checkLogin(any())) thenReturn Future.successful(200)
       val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
       status(result) shouldBe Status.SEE_OTHER
     }
     "return a status NOT_FOUND" in {
-      when(ac.checkLogin(any())) thenReturn Future.successful(false)
+      when(ac.checkLogin(any())) thenReturn Future.successful(Status.NOT_FOUND)
       val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
       status(result) shouldBe Status.NOT_FOUND
+    }
+    "return Bad request error if some fields are blank" in {
+      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "", "password" -> "pa55w0rd"))
+      status(result) shouldBe Status.BAD_REQUEST
     }
   }
 

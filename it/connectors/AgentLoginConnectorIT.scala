@@ -20,6 +20,7 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.http.Status
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
@@ -30,6 +31,7 @@ class AgentLoginConnectorIT extends AnyWordSpec with Matchers with GuiceOneServe
   lazy val connector: AgentConnector = injector.instanceOf[AgentConnector]
 
   override def beforeEach(): Unit = startWireMock()
+
   override def afterEach(): Unit = stopWireMock()
 
   private val testAgentLogin = AgentLogin("FJ3J343J", "pa55w0rd")
@@ -37,23 +39,29 @@ class AgentLoginConnectorIT extends AnyWordSpec with Matchers with GuiceOneServe
   override val wireMockPort: Int = 9009
 
   "checkLogin" should {
-    "return true" when {
+    "returns 200" when {
       "agent login details exist" in {
         stubPost("/check-agent-login", 200, "")
         val result = connector.checkLogin(testAgentLogin)
-        await(result) shouldBe true
+        await(result) shouldBe Status.OK
       }
     }
-  }
-
-  "checkLogin" should {
-    "return false" when {
+    "return 404" when {
       "agent login details do not exist" in {
+        stubPost("/check-agent-login", 404, "")
+        val result = connector.checkLogin(testAgentLogin)
+        await(result) shouldBe Status.NOT_FOUND
+      }
+    }
+    "return false" when {
+      "server is down" in {
         stubPost("/check-agent-login", 500, "")
         val result = connector.checkLogin(testAgentLogin)
-        await(result) shouldBe false
+        await(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
+
   }
+
 
 }
