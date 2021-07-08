@@ -38,8 +38,8 @@ class InputClientCodeController @Inject()(mcc: MessagesControllerComponents, cli
       formWithErrors => Future.successful(BadRequest(clientCode(formWithErrors))),
       response => post.postClientCode(AgentClient(request.session.get("arn").get, response.crn)) map {
         case 204 => Redirect(routes.SuccessClientCodeController.successClientCode())
-        case 404 => NotFound(clientCode(ClientCode.form.withError("crn", "wrong client code entered")))
-        case 409 => Conflict(clientCode(ClientCode.form.withError("crn", "this client already has an agent")))
+        case 404 => NotFound(clientCode(ClientCode.form.withError("crn", "Wrong client code entered")))
+        case 409 => Conflict(clientCode(ClientCode.form.withError("crn", "This client already has an agent")))
       })
   }
 }
