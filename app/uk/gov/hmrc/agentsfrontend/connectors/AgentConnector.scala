@@ -26,7 +26,6 @@ import play.api.libs.json.Format.GenericFormat
 import play.api.libs.json._
 import play.api.mvc.{BaseController, ControllerComponents}
 import uk.gov.hmrc.agentsfrontend.models.AgentLogin
-
 import scala.concurrent.duration.DurationInt
 
 class AgentConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
@@ -35,14 +34,13 @@ class AgentConnector @Inject()(ws: WSClient, val controllerComponents: Controlle
     ws.url(url).withRequestTimeout(5000.millis).post(jsObject)
   }
 
-  def checkLogin(agentLogin: AgentLogin): Future[Boolean] = {
+  def checkLogin(agentLogin: AgentLogin): Future[Int] = {
     val newLogin = Json.obj(
       "arn" -> agentLogin.arn,
       "password" -> agentLogin.password
     )
-    wspost("http://localhost:9009/check-agent-login", newLogin).map{_.status match {
-      case 200 => true
-      case 500 => false
-    }}
+    wspost("http://localhost:9009/check-agent-login", newLogin).map {
+      _.status
+    }
   }
 }

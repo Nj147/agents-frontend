@@ -17,11 +17,11 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsfrontend.config.ErrorHandler
 import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
 import uk.gov.hmrc.agentsfrontend.models.{AgentLogin, AgentLoginForm}
 import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
@@ -30,13 +30,14 @@ import scala.concurrent.Future
 class AgentLoginController @Inject()(
                                       mcc: MessagesControllerComponents,
                                       agentLoginPage: AgentLoginPage,
-                                      ac: AgentConnector
+                                      ac: AgentConnector,
+                                      error: ErrorHandler
                                     ) extends FrontendController(mcc) {
 
   val agentLogin: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect(routes.DashBoardController.index())
-      case _ => Ok(agentLoginPage(AgentLoginForm.submitForm.fill(AgentLogin("","")))).withNewSession
+      case _ => Ok(agentLoginPage(AgentLoginForm.submitForm.fill(AgentLogin("", "")))).withNewSession
     }
   }
 
@@ -45,8 +46,9 @@ class AgentLoginController @Inject()(
       Future.successful(BadRequest(agentLoginPage(formWithErrors)))
     }, { agentLogin =>
       ac.checkLogin(agentLogin).map {
-        case true => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn))
-        case false => NotFound(agentLoginPage(AgentLoginForm.submitForm.withError("arn","Login does not exist")))
+        case 200 => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn))
+        case 404 => NotFound(agentLoginPage(AgentLoginForm.submitForm.withError("arn", "Login does not exist")))
+        case 500 => InternalServerError(error.standardErrorTemplate("", "", ""))
       }
     })
   }
