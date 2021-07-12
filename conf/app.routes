@@ -25,3 +25,5 @@ POST       /removeConfirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.Remov
 GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
 
 GET        /logout                  uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.logout()
+
+GET        /updatePage              uk.gov.hmrc.agentsfrontend.controllers.AgentDetailsController.getUpdatePage()

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
+package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
@@ -27,9 +26,10 @@ import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
-import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 import uk.gov.hmrc.agentsfrontend.config.ErrorHandler
+import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
+import uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController
+import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 
 import scala.concurrent.Future
 

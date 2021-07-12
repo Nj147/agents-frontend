@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
+package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
-import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
 import uk.gov.hmrc.agentsfrontend.models.AgentClient
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
