@@ -29,7 +29,7 @@ import uk.gov.hmrc.agentsfrontend.models.AgentLogin
 
 import scala.concurrent.duration.DurationInt
 
-class AgentConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
+class AgentLoginConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
 
   def wspost(url: String, jsObject: JsObject): Future[WSResponse] = {
     ws.url(url).withRequestTimeout(5000.millis).post(jsObject)

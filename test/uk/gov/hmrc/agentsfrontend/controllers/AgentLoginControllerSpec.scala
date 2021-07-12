@@ -26,7 +26,7 @@ import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
+import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
 import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 
 import scala.concurrent.Future
@@ -40,7 +40,7 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
       )
       .build()
 
-  private val ac = mock(classOf[AgentConnector])
+  private val ac = mock(classOf[AgentLoginConnector])
   private val agentLoginPage = app.injector.instanceOf[AgentLoginPage]
   private val controller = new AgentLoginController(Helpers.stubMessagesControllerComponents(), agentLoginPage, ac)
 
