@@ -27,10 +27,10 @@ import scala.concurrent.Future
 
 class AgentDetailsConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
 
-  def getAgentDetails(arn: String): Future[Some[AgentDetails]] = {
-    ws url (s"http://localhost:9006/get-agent-details") post (Json.toJson(arn)) map {
+  def getAgentDetails(arn: String): Future[AgentDetails] = {
+    ws url (s"http://localhost:9009/get-agent-details") post (Json.toJson(arn)) map {
       response =>
-        Some(AgentDetails(
+        AgentDetails(
           (response.json \ "arn").as[String],
           (response.json \ "businessName").as[String],
           (response.json \ "email").as[String],
@@ -38,7 +38,7 @@ class AgentDetailsConnector @Inject()(ws: WSClient, val controllerComponents: Co
           (response.json \ "moc").as[Seq[String]],
           (response.json \ "propertyNumber").as[String],
           (response.json \ "postcode").as[String]
-        ))
+        )
     }
   }
 

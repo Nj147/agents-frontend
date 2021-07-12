@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
+package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
@@ -23,15 +23,15 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
-import play.api.test.{FakeRequest, Helpers}
-import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
+import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController
 import uk.gov.hmrc.agentsfrontend.models.AgentClient
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {

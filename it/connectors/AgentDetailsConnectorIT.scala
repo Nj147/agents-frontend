@@ -35,7 +35,9 @@ class AgentDetailsConnectorIT extends AnyWordSpec with Matchers with GuiceOneSer
 
   override def afterEach(): Unit = stopWireMock()
 
-  def agent: Option[AgentDetails] = Some(AgentDetails("ARN00000", "testBusinessName", "testEmail", 0x8, List("test"), "testAddressLine1", "testPostcode"))
+  override val wireMockPort: Int = 9009
+
+  def agent: AgentDetails = AgentDetails("ARN00000", "testBusinessName", "testEmail", 0x8, List("test"), "testAddressLine1", "testPostcode")
 
   "getDetails" should {
     "return list of details on the agent" in {

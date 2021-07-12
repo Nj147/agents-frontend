@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
+package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -23,9 +23,10 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status
-import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers._
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
+import uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController
 import uk.gov.hmrc.agentsfrontend.views.html.{RemovalConfirmation, RemoveClients}
 
 import scala.concurrent.ExecutionContext.Implicits.global
