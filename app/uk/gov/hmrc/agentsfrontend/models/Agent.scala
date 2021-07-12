@@ -27,14 +27,14 @@ case class Agent(name: String)
 
 case class AgentClient(arn: String, crn: String)
 
-object AgentClient{
+object AgentClient {
   implicit val format: OFormat[AgentClient] = Json.format[AgentClient]
 }
 
 case class ClientCode(crn: String)
 
 object ClientCode {
-  val form: Form[ClientCode] = Form (
+  val form: Form[ClientCode] = Form(
     mapping(
       "crn" -> nonEmptyText
     )(ClientCode.apply)(ClientCode.unapply)
@@ -64,3 +64,11 @@ object ContactNumber {
         "number" -> text.verifying(valid)
       )(ContactNumber.apply)(ContactNumber.unapply))
 }
+
+case class AgentDetails(arn: String, businessName: String, email: String, mobileNumber: Long, moc: Seq[String], propertyNumber: String, postcode: String)
+
+object AgentDetails {
+  implicit val format: OFormat[AgentDetails] = Json.format[AgentDetails]
+}
+
+

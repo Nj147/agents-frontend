@@ -20,29 +20,32 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.libs.json.Json
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
-import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
+import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
+import uk.gov.hmrc.agentsfrontend.models.AgentDetails
 
-class ClientConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach{
-  lazy val connector: ClientConnector = injector.instanceOf[ClientConnector]
+class AgentDetailsConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
+
+  lazy val connector: AgentDetailsConnector = injector.instanceOf[AgentDetailsConnector]
 
   override def beforeEach(): Unit = startWireMock()
 
   override def afterEach(): Unit = stopWireMock()
 
-  "POST /removeClient" should {
-    "return true when accepted response returned" in {
-      stubPatch("/remove-agent",204, "")
-      val result = connector.removeClient(AgentClient("ARN01234567", "CRN98765432"))
-      await(result) shouldBe true
-    }
-    "return false when bad request response returned" in {
-      stubPatch("/remove-agent",400, "")
-      val result = connector.removeClient(AgentClient("ARN01234567", "CRN98765432"))
-      await(result) shouldBe false
+  override val wireMockPort: Int = 9009
+
+  def agent: AgentDetails = AgentDetails("ARN00000", "testBusinessName", "testEmail", 0x8, List("test"), "testAddressLine1", "testPostcode")
+
+  "getDetails" should {
+    "return list of details on the agent" in {
+      stubPost("/get-agent-details", 200, Json.toJson(agent).toString())
+      val result = connector.getAgentDetails(arn = "ARN00000")
+      await(result) shouldBe agent
     }
   }
+
+
 }

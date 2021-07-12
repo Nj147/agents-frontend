@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.connectors
+package connectors
 
-import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
-import javax.inject.Inject
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+class UpdateConnectorIT {
 
-class ClientConnector @Inject()(ws: WSClient) {
-
-  def removeClient(agentClient: AgentClient):Future[Boolean] = ws.url(s"http://localhost:9006/remove-agent").patch(Json.toJson(agentClient)) map {
-    _.status match {
-      case 204 => true
-      case _ => false
-    }
-  }
 }

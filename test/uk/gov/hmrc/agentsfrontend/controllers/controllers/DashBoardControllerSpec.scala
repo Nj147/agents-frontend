@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
-
+package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.agentsfrontend.models.Client
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
+import uk.gov.hmrc.agentsfrontend.controllers.DashBoardController
+import uk.gov.hmrc.agentsfrontend.models.Client
 import uk.gov.hmrc.agentsfrontend.views.html.Index
+
 import scala.concurrent.Future
 
 class DashBoardControllerSpec extends AnyWordSpec
