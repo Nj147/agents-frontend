@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
