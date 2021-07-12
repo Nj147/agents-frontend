@@ -16,7 +16,7 @@
         ))
         }
     }
-    @helper.form(uk.gov.hmrc.agentsfrontend.controllers.routes.UpdateContactNumberController.startPage) {
+    @helper.form(uk.gov.hmrc.agentsfrontend.controllers.routes.UpdateContactNumberController.processContactNumber) {
         <div class="govuk-form-group">
             @if(form.errors("number").nonEmpty) {
                 @govukInput(Input(

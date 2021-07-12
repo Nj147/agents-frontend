@@ -28,4 +28,10 @@ GET        /logout                  uk.gov.hmrc.agentsfrontend.controllers.Agent
 
 GET        /updatePage              uk.gov.hmrc.agentsfrontend.controllers.AgentDetailsController.getUpdatePage()
 
-GET        /update-start-page       uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
+GET         /update-contact         uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
++nocsrf
+POST        /update-contact         uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.processContactNumber
+
+GET         /update-address         uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
++nocsrf
+POST        /update-address         uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.processAddress

@@ -8,18 +8,18 @@ import play.api.http.Status._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, session, status}
 
-class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
+class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
 
-  val controller: UpdateContactNumberController = app.injector.instanceOf[UpdateContactNumberController]
+  val controller: UpdateAddressController = app.injector.instanceOf[UpdateAddressController]
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")
 
-  "GET /update-contact" should {
+  "GET /update-address" should {
     "return status 200 with a contact number form field" when {
       "the user is logged in as an agent" in {
         val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001"))
         status(result) shouldBe OK
-        Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
+        Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
       }
     }
     "redirect to the home page" when {
@@ -28,27 +28,28 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
         status(result) shouldBe SEE_OTHER
       }
     }
-    "have a prefilled contact number value in the form field" when {
+    "have prefilled values in the form" when {
       "the logged in user opens the page" in {
-        val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001", "contactNumber" -> "01234567898"))
-        Jsoup.parse(contentAsString(result)).getElementById("number").`val`() should be("01234567898")
+        val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001", "address" -> "1 New Street/AA12 1AB"))
+        Jsoup.parse(contentAsString(result)).getElementById("propertyNumber").`val`() should be("1 New Street")
+        Jsoup.parse(contentAsString(result)).getElementById("postcode").`val`() should be("AA12 1AB")
       }
     }
   }
 
-  "POST /update-contact" should {
+  "POST /update-address" should {
     "return a bad request and a form with errors" when {
       "the user submits a form with an invalid contact number" in {
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "123456"))
+        val result = controller.processAddress.apply(fakePostRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> "asdadsasdasdasd"))
         status(result) shouldBe BAD_REQUEST
-        Jsoup.parse(contentAsString(result)).text() should include("Please enter a valid phone number")
+        Jsoup.parse(contentAsString(result)).text() should include("Input is not a valid postcode")
       }
     }
     "redirect back to the dashboard [update summary] with updated session values" when {
       "a valid contact number is submitted" in {
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890"))
+        val result = controller.processAddress.apply(fakePostRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> "AA12 1AB"))
         status(result) shouldBe SEE_OTHER
-        session(result).get("contactNumber") shouldBe Some("01234567890")
+        session(result).get("address") shouldBe Some("1 New Street/AA12 1AB")
         redirectLocation(result) shouldBe Some(s"${routes.DashBoardController.index()}")
       }
     }
