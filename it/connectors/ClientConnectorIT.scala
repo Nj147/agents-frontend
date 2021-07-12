@@ -29,9 +29,9 @@ import uk.gov.hmrc.agentsfrontend.models.AgentClient
 class ClientConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach{
   lazy val connector: ClientConnector = injector.instanceOf[ClientConnector]
 
-  override def beforeEach() = startWireMock()
+  override def beforeEach(): Unit = startWireMock()
 
-  override def afterEach() = stopWireMock()
+  override def afterEach(): Unit = stopWireMock()
 
   "POST /removeClient" should {
     "return true when accepted response returned" in {
