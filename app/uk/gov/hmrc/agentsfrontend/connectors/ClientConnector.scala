@@ -19,7 +19,6 @@ package uk.gov.hmrc.agentsfrontend.connectors
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.models.AgentClient
-
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global

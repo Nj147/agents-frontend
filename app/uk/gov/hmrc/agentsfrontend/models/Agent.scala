@@ -37,3 +37,9 @@ object ClientCode {
     )(ClientCode.apply)(ClientCode.unapply)
   )
 }
+
+case class AgentDetails(arn: String, businessName: String, email: String, mobileNumber: Long, moc: Seq[String], propertyNumber: String, postcode: String)
+
+object AgentDetails {
+  implicit val format: OFormat[AgentDetails] = Json.format[AgentDetails]
+}
