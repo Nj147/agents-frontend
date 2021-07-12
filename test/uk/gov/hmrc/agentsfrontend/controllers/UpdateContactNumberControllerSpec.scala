@@ -31,7 +31,7 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
     "have a prefilled email value in the form field" when {
       "the logged in user opens the page" in {
         val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001", "contactNumber" -> "01234567898"))
-        Jsoup.parse(contentAsString(result)).getElementById("number").`val`() shouldNot be("")
+        Jsoup.parse(contentAsString(result)).getElementById("number").`val`() should be("01234567898")
       }
     }
   }
