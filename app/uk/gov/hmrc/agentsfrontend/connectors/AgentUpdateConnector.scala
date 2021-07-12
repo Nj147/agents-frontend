@@ -26,7 +26,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 
-class AgentDetailsConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
+class AgentUpdateConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
 
   def wsput(url: String, jsObject: JsValue): Future[WSResponse]= {
     ws.url(url).withRequestTimeout(5000.millis).put(jsObject)

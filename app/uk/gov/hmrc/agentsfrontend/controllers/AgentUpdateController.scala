@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
+import uk.gov.hmrc.agentsfrontend.connectors.AgentUpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.{Address, AgentDetails, Correspondence}
 import uk.gov.hmrc.agentsfrontend.views.html.UpdatePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -26,10 +26,10 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class UpdateController @Inject()(
-                                  mcc: MessagesControllerComponents,
-                                  updatePage: UpdatePage,
-                                  ac: AgentDetailsConnector,
+class AgentUpdateController @Inject()(
+                                       mcc: MessagesControllerComponents,
+                                       updatePage: UpdatePage,
+                                       ac: AgentUpdateConnector,
                                     ) extends FrontendController(mcc) {
 
   val agentUpdate: Action[AnyContent] = Action { implicit request =>

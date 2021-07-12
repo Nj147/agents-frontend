@@ -29,4 +29,4 @@ GET        /logout                  uk.gov.hmrc.agentsfrontend.controllers.Agent
 
 GET         /update-start-page      uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
 
-GET        /agent-update            uk.gov.hmrc.agentsfrontend.controllers.UpdateController.agentUpdate()
+GET        /agent-update            uk.gov.hmrc.agentsfrontend.controllers.AgentUpdateController.agentUpdate()

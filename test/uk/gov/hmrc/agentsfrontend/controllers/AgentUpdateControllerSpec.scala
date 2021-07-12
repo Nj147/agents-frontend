@@ -26,12 +26,12 @@ import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
+import uk.gov.hmrc.agentsfrontend.connectors.AgentUpdateConnector
 import uk.gov.hmrc.agentsfrontend.views.html.UpdatePage
 
 import scala.concurrent.Future
 
-class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
+class AgentUpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
@@ -41,7 +41,7 @@ class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPer
       .build()
 
   private val updatePage = app.injector.instanceOf[UpdatePage]
-  private val ac = mock(classOf[AgentDetailsConnector])
+  private val ac = mock(classOf[AgentUpdateConnector])
   private val fakeRequestWithARN = FakeRequest()
     .withSession( newSessions =
       "arn" -> "ARN2312",
@@ -51,7 +51,7 @@ class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPer
       "moc" -> "Text message, Phone",
       "Address" -> "12/SW255R3"
     )
-  private val controller = new UpdateController(Helpers.stubMessagesControllerComponents(), updatePage, ac)
+  private val controller = new AgentUpdateController(Helpers.stubMessagesControllerComponents(), updatePage, ac)
 
   "agentUpdate" should {
     "return OK when session contains an arn" in {
