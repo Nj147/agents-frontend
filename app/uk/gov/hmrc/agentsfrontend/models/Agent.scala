@@ -49,7 +49,7 @@ object ContactNumber {
   val valid: Constraint[String] = Constraint("constraints.number")({ plainText =>
     val errors = plainText match {
       case validNumber() => Nil
-      case _ => Seq(ValidationError("Please Enter an 11 digit, UK Phone Number e.g 07123456789"))
+      case _ => Seq(ValidationError("Please Enter a 10-11 digit, UK Phone Number e.g 07123456789"))
     }
     if (errors.isEmpty) {
       Valid
