@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.config.ErrorHandler
-import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
+import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
 import uk.gov.hmrc.agentsfrontend.models.{AgentLogin, AgentLoginForm}
 import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 class AgentLoginController @Inject()(
                                       mcc: MessagesControllerComponents,
                                       agentLoginPage: AgentLoginPage,
-                                      ac: AgentConnector,
+                                      ac: AgentLoginConnector,
                                       error: ErrorHandler
                                     ) extends FrontendController(mcc) {
 

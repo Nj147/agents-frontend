@@ -24,11 +24,11 @@ import play.api.http.Status
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
-import uk.gov.hmrc.agentsfrontend.connectors.AgentConnector
+import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
 import uk.gov.hmrc.agentsfrontend.models.AgentLogin
 
 class AgentLoginConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
-  lazy val connector: AgentConnector = injector.instanceOf[AgentConnector]
+  lazy val connector: AgentLoginConnector = injector.instanceOf[AgentLoginConnector]
 
   override def beforeEach(): Unit = startWireMock()
 
