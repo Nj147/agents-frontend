@@ -16,6 +16,44 @@
 
 package connectors
 
-class UpdateConnectorIT {
+import org.scalatest.BeforeAndAfterEach
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.http.Status
+import play.api.libs.json.Json
+import play.api.test.Helpers.{await, defaultAwaitTimeout}
+import play.api.test.Helpers.baseApplicationBuilder.injector
+import traits.WireMockHelper
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.models.UpdateContactNumber
+
+class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
+
+  lazy val connector: UpdateConnector = injector.instanceOf[UpdateConnector]
+
+  override def beforeEach(): Unit = startWireMock()
+
+  override def afterEach(): Unit = stopWireMock()
+
+  override val wireMockPort: Int = 9009
+
+  val contactNumber: UpdateContactNumber = UpdateContactNumber("ARN00001", "0098765345".toLong)
+  "UpdateContactNumber" should {
+    "return true" when {
+      "the contact number has been updated" in {
+        stubPatch("/update-contact-number", 202, Json.toJson(contactNumber).toString())
+        val result = connector.updateContactNumber(contactNumber)
+        await(result) shouldBe true
+      }
+    }
+    "return false" when {
+      "the contact number has not been updated" in {
+        stubPatch("/update-contact-number", 406, Json.toJson(contactNumber).toString())
+        val result = connector.updateContactNumber(contactNumber)
+        await(result) shouldBe false
+      }
+    }
+  }
 
 }
