@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
+package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
 import org.jsoup.Jsoup
 import org.scalatest.matchers.should.Matchers
@@ -23,6 +23,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status._
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, session, status}
+import uk.gov.hmrc.agentsfrontend.controllers.{UpdateAddressController, routes}
 
 class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
 

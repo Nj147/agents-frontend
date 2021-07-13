@@ -14,40 +14,34 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers
+package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
 import org.jsoup.Jsoup
+import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status._
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, session, status}
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.{UpdateContactNumberController, routes}
+import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
 
 class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
 
-  val controller: UpdateContactNumberController = app.injector.instanceOf[UpdateContactNumberController]
+  val connector: UpdateConnector = mock(classOf[UpdateConnector])
+  val updatePage: ContactNumberPage = app.injector.instanceOf[ContactNumberPage]
+  val controller = new UpdateContactNumberController(Helpers.stubMessagesControllerComponents(), updatePage, connector)
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")
 
   "GET /update-contact" should {
-    "return status 200 with a contact number form field" when {
-      "the user is logged in as an agent" in {
+    "return status 200" when {
+      "the user is logged in as an agent and it loads the form" in {
         val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001"))
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
-      }
-    }
-    "redirect to the home page" when {
-      "an agent is not logged in" in {
-        val result = controller.startPage.apply(fakeRequest)
-        status(result) shouldBe SEE_OTHER
-      }
-    }
-    "have a prefilled contact number value in the form field" when {
-      "the logged in user opens the page" in {
-        val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001", "contactNumber" -> "01234567898"))
-        Jsoup.parse(contentAsString(result)).getElementById("number").`val`() should be("01234567898")
       }
     }
   }
@@ -55,6 +49,7 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
   "POST /update-contact" should {
     "return a bad request and a form with errors" when {
       "the user submits a form with an invalid contact number" in {
+        when()
         val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "123456"))
         status(result) shouldBe BAD_REQUEST
         Jsoup.parse(contentAsString(result)).text() should include("Please enter a valid phone number")
