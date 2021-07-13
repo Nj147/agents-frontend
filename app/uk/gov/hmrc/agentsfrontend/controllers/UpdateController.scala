@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
+import uk.gov.hmrc.agentsfrontend.connectors.AgentUpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.{Address, AgentDetails, Correspondence}
 import uk.gov.hmrc.agentsfrontend.views.html.UpdatePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -29,8 +29,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class UpdateController @Inject()(
                                   mcc: MessagesControllerComponents,
                                   updatePage: UpdatePage,
-                                  ac: AgentDetailsConnector,
-                                    ) extends FrontendController(mcc) {
+                                  ac: AgentUpdateConnector,
+                                ) extends FrontendController(mcc) {
 
   val agentUpdate: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {

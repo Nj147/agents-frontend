@@ -23,11 +23,11 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
-import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
+import uk.gov.hmrc.agentsfrontend.connectors.AgentUpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.{Address, AgentDetails}
 
 class AgentDetailsConnectorIt extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
-  lazy val connector: AgentDetailsConnector = injector.instanceOf[AgentDetailsConnector]
+  lazy val connector: AgentUpdateConnector = injector.instanceOf[AgentUpdateConnector]
 
   override def beforeEach(): Unit = startWireMock()
   override def afterEach(): Unit = stopWireMock()
