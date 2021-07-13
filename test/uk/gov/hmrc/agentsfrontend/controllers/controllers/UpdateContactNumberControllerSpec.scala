@@ -17,16 +17,19 @@
 package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
-import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, session, status}
+import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.controllers.{UpdateContactNumberController, routes}
 import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
+
+import scala.concurrent.Future
 
 class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
 
@@ -47,19 +50,26 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
   }
 
   "POST /update-contact" should {
+    "return not acceptable" when {
+      "the user submits form data which already exists in db" in {
+        when(connector.updateContactNumber(any())) thenReturn(Future.successful(false))
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("arn" -> "ARN0000001"))
+        status(result) shouldBe NOT_ACCEPTABLE
+        Jsoup.parse(contentAsString(result)).text() should include("Change cannot be made, please try again")
+      }
+    }
     "return a bad request and a form with errors" when {
       "the user submits a form with an invalid contact number" in {
-        when()
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "123456"))
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "0123456").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe BAD_REQUEST
         Jsoup.parse(contentAsString(result)).text() should include("Please enter a valid phone number")
       }
     }
     "redirect back to the dashboard [update summary] with updated session values" when {
       "a valid contact number is submitted" in {
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890"))
+        when(connector.updateContactNumber(any())) thenReturn(Future.successful(true))
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe SEE_OTHER
-        session(result).get("contactNumber") shouldBe Some("01234567890")
         redirectLocation(result) shouldBe Some(s"${routes.DashBoardController.index()}")
       }
     }
