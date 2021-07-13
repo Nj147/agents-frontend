@@ -28,10 +28,9 @@ import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLoca
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.controllers.{UpdateContactNumberController, routes}
 import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
-
 import scala.concurrent.Future
 
-class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite{
+class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   val connector: UpdateConnector = mock(classOf[UpdateConnector])
   val updatePage: ContactNumberPage = app.injector.instanceOf[ContactNumberPage]
@@ -47,12 +46,18 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
       }
     }
+    "redirect to the home page" when {
+      "an agent is not logged in" in {
+        val result = controller.startPage.apply(fakeRequest)
+        status(result) shouldBe SEE_OTHER
+      }
+    }
   }
 
   "POST /update-contact" should {
     "return not acceptable" when {
       "the user submits form data which already exists in db" in {
-        when(connector.updateContactNumber(any())) thenReturn(Future.successful(false))
+        when(connector.updateContactNumber(any())) thenReturn (Future.successful(false))
         val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe NOT_ACCEPTABLE
         Jsoup.parse(contentAsString(result)).text() should include("Change cannot be made, please try again")
@@ -67,7 +72,7 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
     }
     "redirect back to the dashboard [update summary] with updated session values" when {
       "a valid contact number is submitted" in {
-        when(connector.updateContactNumber(any())) thenReturn(Future.successful(true))
+        when(connector.updateContactNumber(any())) thenReturn (Future.successful(true))
         val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe SEE_OTHER
         redirectLocation(result) shouldBe Some(s"${routes.UpdateController.getDetails()}")

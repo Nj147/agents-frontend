@@ -28,7 +28,10 @@ import scala.concurrent.Future
 class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents, updatePage: ContactNumberPage, connector: UpdateConnector) extends FrontendController(mcc) {
 
   def startPage: Action[AnyContent] = Action { implicit request =>
-    Ok(updatePage(ContactNumber.contactForm))
+    request.session.get("arn") match {
+      case Some(arn) => Ok(updatePage(ContactNumber.contactForm))
+      case None => Redirect(routes.StartController.start())
+    }
   }
 
   def processContactNumber: Action[AnyContent] = Action async { implicit request =>
