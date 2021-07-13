@@ -20,7 +20,6 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import play.api.http.Status
 import play.api.libs.json.Json
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
@@ -42,7 +41,7 @@ class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
   "UpdateContactNumber" should {
     "return true" when {
       "the contact number has been updated" in {
-        stubPatch("/update-contact-number", 202, Json.toJson(contactNumber).toString())
+        stubPatch("/update-contact-number", 204, Json.toJson(contactNumber).toString())
         val result = connector.updateContactNumber(contactNumber)
         await(result) shouldBe true
       }
