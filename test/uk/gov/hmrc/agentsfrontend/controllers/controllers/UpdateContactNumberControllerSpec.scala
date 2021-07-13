@@ -70,7 +70,7 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
         when(connector.updateContactNumber(any())) thenReturn(Future.successful(true))
         val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(s"${routes.DashBoardController.index()}")
+        redirectLocation(result) shouldBe Some(s"${routes.UpdateController.getDetails()}")
       }
     }
   }

@@ -35,7 +35,7 @@ class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents,
     ContactNumber.contactForm.bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(updatePage(formWithErrors))),
       cNum => connector.updateContactNumber(UpdateContactNumber(request.session.get("arn").get, cNum.number.toLong)).map {
-        case true => Redirect(routes.DashBoardController.index())
+        case true => Redirect(routes.UpdateController.getDetails())
         case false => NotAcceptable(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
       }
     )
