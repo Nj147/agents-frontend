@@ -26,7 +26,7 @@ GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashB
 
 GET        /logout                  uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.logout()
 
-GET        /updatePage              uk.gov.hmrc.agentsfrontend.controllers.AgentDetailsController.getUpdatePage()
+GET        /update-page              uk.gov.hmrc.agentsfrontend.controllers.UpdateController.getDetails
 
 GET         /update-contact         uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
 +nocsrf
