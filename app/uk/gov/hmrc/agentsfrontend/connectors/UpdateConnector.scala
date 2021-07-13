@@ -19,26 +19,19 @@ package uk.gov.hmrc.agentsfrontend.connectors
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.{BaseController, ControllerComponents}
-import uk.gov.hmrc.agentsfrontend.models.AgentDetails
-import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.agentsfrontend.models.UpdateContactNumber
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class AgentDetailsConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
+class UpdateConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
 
-  def getAgentDetails(arn: String): Future[AgentDetails] = {
-    ws url (s"http://localhost:9009/get-agent-details") post (Json.toJson(arn)) map {
-      response =>
-        AgentDetails(
-          (response.json \ "arn").as[String],
-          (response.json \ "businessName").as[String],
-          (response.json \ "email").as[String],
-          (response.json \ "mobileNumber").as[Long],
-          (response.json \ "moc").as[Seq[String]],
-          (response.json \ "propertyNumber").as[String],
-          (response.json \ "postcode").as[String]
-        )
+  def updateContactNumber(update: UpdateContactNumber): Future[Boolean] = ws.url("http://localhost:9009/update-contact-number")
+    .patch(Json.obj("arn" -> update.arn, "contactNumber" -> update.contactNumber))
+    .map {
+      _.status match {
+        case 204 => true
+        case _ => false
+      }
     }
-  }
-
 }

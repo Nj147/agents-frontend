@@ -71,9 +71,6 @@ object AgentDetails {
   implicit val format: OFormat[AgentDetails] = Json.format[AgentDetails]
 }
 
-
-
-
 case class Address(propertyNumber: String, postcode: String) {
   val encode: String = propertyNumber + "/" + postcode
 }
