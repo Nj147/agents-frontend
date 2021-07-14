@@ -1,9 +1,9 @@
 # microservice specific routes
 
-->         /govuk-frontend          govuk.Routes
-->         /hmrc-frontend           hmrcfrontend.Routes
+->          /govuk-frontend         govuk.Routes
+->          /hmrc-frontend          hmrcfrontend.Routes
 
-GET        /assets/*file            controllers.Assets.versioned(path = "/public", file: Asset)
+GET         /assets/*file           controllers.Assets.versioned(path = "/public", file: Asset)
 
 GET         /start-page             uk.gov.hmrc.agentsfrontend.controllers.StartController.start()
 
@@ -12,21 +12,19 @@ GET         /agent-login            uk.gov.hmrc.agentsfrontend.controllers.Agent
 POST        /agent-login            uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.agentLoginSubmit()
 
 +nocsrf
-POST       /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.submitClientCode()
-GET        /clientCode              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.getInputClientCode()
+POST        /client-code            uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.submitClientCode()
+GET         /client-code            uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.getInputClientCode()
 
-GET        /successClientCode       uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController.successClientCode()
+GET         /success-client-code    uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController.successClientCode()
 +nocsrf
-GET        /removeClients/:crn      uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
+GET         /remove-clients/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
 
 +nocsrf
-POST       /removeConfirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
+POST        /remove-confirmed/:crn  uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
 
-GET        /dashboard               uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
-
-GET        /logout                  uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.logout()
-
-GET        /update-page              uk.gov.hmrc.agentsfrontend.controllers.UpdateController.getDetails
+GET         /dashboard              uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
+GET         /logout                 uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController.logout()
+GET         /update-page            uk.gov.hmrc.agentsfrontend.controllers.UpdateController.getDetails
 
 GET         /update-contact         uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
 +nocsrf
