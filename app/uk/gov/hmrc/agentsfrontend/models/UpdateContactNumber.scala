@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.connectors
+package uk.gov.hmrc.agentsfrontend.models
 
-import play.api.libs.json.Json
-import play.api.libs.ws.WSClient
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
-import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import play.api.libs.json.{Json, OFormat}
 
-class InputClientCodeConnector @Inject()(ws: WSClient) {
+case class UpdateContactNumber(arn: String, contactNumber: Long)
 
-  def postClientCode(agentClientCode: AgentClient): Future[Int] = ws.url("http://localhost:9006/add-agent")
-    .patch(Json.obj("crn" -> agentClientCode.crn, "arn" -> agentClientCode.arn)) map (_.status)
+object UpdateContactNumber{
+  implicit val format: OFormat[UpdateContactNumber] = Json.format[UpdateContactNumber]
 }
-
-
-
-
-

@@ -18,7 +18,7 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
-import uk.gov.hmrc.agentsfrontend.views.html.{StartPage, UpdatePage}
+import uk.gov.hmrc.agentsfrontend.views.html.UpdatePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject

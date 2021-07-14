@@ -17,29 +17,30 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.models.ContactNumber
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.models.{ContactNumber, UpdateContactNumber}
 import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
+import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class UpdateContactNumberController @Inject()( mcc: MessagesControllerComponents, updatePage: ContactNumberPage) extends FrontendController(mcc) {
+class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents, updatePage: ContactNumberPage, connector: UpdateConnector) extends FrontendController(mcc) {
 
   def startPage: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
-      case Some(arn) => request.session.get("contactNumber").fold(
-        Ok(updatePage(ContactNumber.contactForm.fill(ContactNumber(number= ""))))
-      )
-      {cNumber => Ok(updatePage(ContactNumber.contactForm.fill(ContactNumber(number= cNumber))))}
-
+      case Some(arn) => Ok(updatePage(ContactNumber.contactForm))
       case None => Redirect(routes.StartController.start())
     }
   }
 
-  def processContactNumber: Action[AnyContent] = Action { implicit request =>
+  def processContactNumber: Action[AnyContent] = Action async { implicit request =>
     ContactNumber.contactForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(updatePage(formWithErrors)),
-      cNumber => Redirect(routes.DashBoardController.index()).withSession(request.session + ("contactNumber" -> cNumber.number))
+      formWithErrors => Future.successful(BadRequest(updatePage(formWithErrors))),
+      cNum => connector.updateContactNumber(UpdateContactNumber(request.session.get("arn").get, cNum.number.toLong)).map {
+        case true => Redirect(routes.UpdateController.getDetails())
+        case false => NotAcceptable(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
+      }
     )
   }
 }
