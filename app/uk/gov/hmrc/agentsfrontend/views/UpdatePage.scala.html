@@ -46,11 +46,12 @@ key = Key(
 content = Text("Contact Number")
 ),
 value = Value(
+content = Text(user.contactNumber.toString())
 ),
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "/registration/contactNumber/true",
+href = "/agents-frontend/update-contact",
 content = Text("Change"),
 )
 )
@@ -90,7 +91,4 @@ content = Text("Change"),
 )
 )
 ))
-<form action="@uk.gov.hmrc.agentsfrontend.controllers.routes.UpdateController.getDetails()">
-    <button id="next-button" class="govuk-button" data-module="govuk-button">Submit</button>
-</form>
 }
