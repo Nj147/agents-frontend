@@ -19,18 +19,17 @@ package uk.gov.hmrc.agentsfrontend.connectors
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.{BaseController, ControllerComponents}
-import uk.gov.hmrc.agentsfrontend.models.UpdateContactNumber
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class UpdateConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
 
-  def updateContactNumber(update: UpdateContactNumber): Future[Boolean] = ws.url("http://localhost:9009/update-contact-number")
-    .patch(Json.obj("arn" -> update.arn, "contactNumber" -> update.contactNumber))
+  def updateContactNumber(arn: String, contactNumber: Long): Future[Boolean] = ws.url(s"http://localhost:9009/agents/${arn}/contact-number")
+    .patch(Json.obj("contactNumber" -> contactNumber))
     .map {
       _.status match {
-        case 204 => true
+        case 200 => true
         case _ => false
       }
     }

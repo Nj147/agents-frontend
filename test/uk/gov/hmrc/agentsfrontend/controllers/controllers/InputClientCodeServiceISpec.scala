@@ -21,9 +21,9 @@ import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.http.Status.{CONFLICT, NOT_FOUND, NO_CONTENT}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -36,23 +36,23 @@ class InputClientCodeServiceISpec extends AnyWordSpec with Matchers with GuiceOn
   "postClientCode" should {
     "return 204" when {
       "Agent code is successfully added" in {
-        when(connector.postClientCode(any())) thenReturn (Future(204))
-        val result = service.postClientCode(AgentClient("Agent", "Client"))
-        await(result) shouldBe (204)
+        when(connector.postClientCode(any(), any())) thenReturn (Future(NO_CONTENT))
+        val result = service.postClientCode("Agent", "Client")
+        await(result) shouldBe NO_CONTENT
       }
     }
     "return 404" when {
       "Client code provided does not exist in Client database" in {
-        when(connector.postClientCode(any())) thenReturn (Future(404))
-        val result = service.postClientCode(AgentClient("Agent", "Error in Client Code"))
-        await(result) shouldBe (404)
+        when(connector.postClientCode(any(), any())) thenReturn (Future(NOT_FOUND))
+        val result = service.postClientCode("Agent", "Error in Client Code")
+        await(result) shouldBe NOT_FOUND
       }
     }
     "return 409" when {
       "Client already has an associated Agent" in {
-        when(connector.postClientCode(any())) thenReturn (Future(409))
-        val result = service.postClientCode(AgentClient("Agent", "Client code already in use"))
-        await(result) shouldBe (409)
+        when(connector.postClientCode(any(), any())) thenReturn (Future(CONFLICT))
+        val result = service.postClientCode("Agent", "Client code already in use")
+        await(result) shouldBe CONFLICT
       }
     }
   }

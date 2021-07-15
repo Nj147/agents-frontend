@@ -24,17 +24,17 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DashBoardController @Inject()( mcc: MessagesControllerComponents,
-                                     indexPage: Index,
-                                     connector: DashBoardConnector)
-                                     extends FrontendController(mcc) {
+class DashBoardController @Inject()(mcc: MessagesControllerComponents,
+                                    indexPage: Index,
+                                    connector: DashBoardConnector)
+  extends FrontendController(mcc) {
 
 
   def index: Action[AnyContent] = Action.async { implicit request =>
-    request.session.get("arn")  match {
-      case Some(arn)    => connector.getAllClientsData(arn).map {x => Ok(indexPage(arn, x))
+    request.session.get("arn") match {
+      case Some(arn) => connector.getAllClientsData(arn).map { x => Ok(indexPage(arn, x))
       }
-      case _            => Future(Redirect(routes.AgentLoginController.agentLogin()))
+      case _ => Future(Redirect(routes.AgentLoginController.agentLogin()))
     }
   }
 }

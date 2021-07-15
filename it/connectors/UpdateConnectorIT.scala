@@ -20,12 +20,11 @@ import org.scalatest.BeforeAndAfterEach
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
-import uk.gov.hmrc.agentsfrontend.models.UpdateContactNumber
 
 class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
 
@@ -37,19 +36,20 @@ class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
 
   override val wireMockPort: Int = 9009
 
-  val contactNumber: UpdateContactNumber = UpdateContactNumber("ARN00001", "0098765345".toLong)
+  val contactNumber: JsObject = Json.obj("contact-number" -> "0098765345".toLong)
+
   "UpdateContactNumber" should {
     "return true" when {
       "the contact number has been updated" in {
-        stubPatch("/update-contact-number", 204, Json.toJson(contactNumber).toString())
-        val result = connector.updateContactNumber(contactNumber)
+        stubPatch (s"/agents/ARN00001/contact-number", 200, Json.toJson(contactNumber).toString())
+        val result = connector.updateContactNumber("ARN00001", "0098765345".toLong)
         await(result) shouldBe true
       }
     }
     "return false" when {
       "the contact number has not been updated" in {
-        stubPatch("/update-contact-number", 406, Json.toJson(contactNumber).toString())
-        val result = connector.updateContactNumber(contactNumber)
+        stubPatch("/agents/ARN00001/contact-number", 500, Json.toJson(contactNumber).toString())
+        val result = connector.updateContactNumber("ARN00001", "0098765345".toLong)
         await(result) shouldBe false
       }
     }

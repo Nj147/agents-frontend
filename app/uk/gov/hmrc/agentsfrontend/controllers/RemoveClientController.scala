@@ -19,23 +19,30 @@ package uk.gov.hmrc.agentsfrontend.controllers
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
 import uk.gov.hmrc.agentsfrontend.views.html.{RemovalConfirmation, RemoveClients}
-
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
 @Singleton
 class RemoveClientController @Inject()(mcc: MessagesControllerComponents,
                                        removePage: RemoveClients,
                                        resultConf: RemovalConfirmation,
-                                       conn: ClientConnector)(implicit ec: ExecutionContext) extends FrontendController(mcc){
+                                       connector: ClientConnector)(implicit ec: ExecutionContext) extends FrontendController(mcc) {
 
   def removeClients(crn: String): Action[AnyContent] = Action { implicit request =>
-    Ok(removePage(crn))
+    request.session.get("arn") match {
+      case Some(arn) => Ok(removePage(crn))
+      case None => Redirect(routes.StartController.start())
+    }
   }
 
   def processRemoval(crn: String): Action[AnyContent] = Action async { implicit request =>
-    conn.removeClient(AgentClient(request.session.get("arn").get, crn)).map(result => Ok(resultConf(result)))
+    Try {
+      request.session.get("arn").get
+    } match {
+      case Success(arn) => connector.removeClient(arn, crn).map(result => Ok(resultConf(result)))
+      case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
+    }
   }
 }

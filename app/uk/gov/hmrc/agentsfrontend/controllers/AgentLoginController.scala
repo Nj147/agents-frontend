@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentsfrontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.config.ErrorHandler
 import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
-import uk.gov.hmrc.agentsfrontend.models.{AgentLogin, AgentLoginForm}
+import uk.gov.hmrc.agentsfrontend.models.AgentLogin
 import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,26 +34,26 @@ class AgentLoginController @Inject()(
                                       error: ErrorHandler
                                     ) extends FrontendController(mcc) {
 
-  val agentLogin: Action[AnyContent] = Action { implicit request =>
+  def agentLogin: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(_) => Redirect(routes.DashBoardController.index())
-      case _ => Ok(agentLoginPage(AgentLoginForm.submitForm.fill(AgentLogin("", "")))).withNewSession
+      case _ => Ok(agentLoginPage(AgentLogin.submitForm))
     }
   }
 
-  val agentLoginSubmit: Action[AnyContent] = Action.async { implicit request =>
-    AgentLoginForm.submitForm.bindFromRequest().fold({ formWithErrors =>
+  def agentLoginSubmit: Action[AnyContent] = Action.async { implicit request =>
+    AgentLogin.submitForm.bindFromRequest().fold({ formWithErrors =>
       Future.successful(BadRequest(agentLoginPage(formWithErrors)))
     }, { agentLogin =>
       ac.checkLogin(agentLogin).map {
         case 200 => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn))
-        case 404 => NotFound(agentLoginPage(AgentLoginForm.submitForm.withError("arn", "Login does not exist")))
+        case 404 => NotFound(agentLoginPage(AgentLogin.submitForm.withError("arn", "Login does not exist")))
         case 500 => InternalServerError(error.standardErrorTemplate("", "", ""))
       }
     })
   }
 
-  val logout: Action[AnyContent] = Action {
+  def logout: Action[AnyContent] = Action {
     Redirect(routes.AgentLoginController.agentLogin()).withNewSession
   }
 

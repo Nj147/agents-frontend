@@ -18,14 +18,14 @@ package uk.gov.hmrc.agentsfrontend.models
 
 import play.api.libs.json.{Json, OFormat}
 
-case class Client (crn: String,
-                   name: String,
-                   businessName: String,
-                   contactNumber: String,
-                   propertyNumber: Int,
-                   postcode: String,
-                   businessType: String,
-                   arn: String)
+case class Client(crn: String,
+                  name: String,
+                  businessName: String,
+                  contactNumber: String,
+                  propertyNumber: Int,
+                  postcode: String,
+                  businessType: String,
+                  arn: String)
 
 object Client {
   implicit val format: OFormat[Client] = Json.format[Client]

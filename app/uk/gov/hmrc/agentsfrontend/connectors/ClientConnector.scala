@@ -18,14 +18,13 @@ package uk.gov.hmrc.agentsfrontend.connectors
 
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class ClientConnector @Inject()(ws: WSClient) {
 
-  def removeClient(agentClient: AgentClient):Future[Boolean] = ws.url(s"http://localhost:9006/remove-agent").patch(Json.toJson(agentClient)) map {
+  def removeClient(arn: String, crn: String): Future[Boolean] = ws.url(s"http://localhost:9006/remove-agent").patch(Json.obj("crn" -> crn, "arn" -> arn)) map {
     _.status match {
       case 204 => true
       case _ => false
