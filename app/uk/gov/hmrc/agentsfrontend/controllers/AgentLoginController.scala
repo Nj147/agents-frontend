@@ -46,8 +46,8 @@ class AgentLoginController @Inject()(
       Future.successful(BadRequest(agentLoginPage(formWithErrors)))
     }, { agentLogin =>
       ac.checkLogin(agentLogin).map {
-        case 200 => Redirect(routes.DashBoardController.index()).withNewSession.withSession(request.session + ("arn" -> agentLogin.arn))
-        case 404 => NotFound(agentLoginPage(AgentLogin.submitForm.withError("arn", "Login does not exist")))
+        case 200 => Redirect(routes.DashBoardController.index()).withSession(request.session + ("arn" -> agentLogin.arn))
+        case 401 => Unauthorized(agentLoginPage(AgentLogin.submitForm.withError("arn", "Login does not exist")))
         case 500 => InternalServerError(error.standardErrorTemplate("", "", ""))
       }
     })

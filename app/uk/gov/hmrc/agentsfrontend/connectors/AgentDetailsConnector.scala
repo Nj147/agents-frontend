@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentsfrontend.connectors
 
-import play.api.libs.json.{JsError, JsSuccess, Json}
+import play.api.libs.json.{JsError, JsSuccess}
 import play.api.libs.ws.WSClient
 import play.api.mvc.{BaseController, ControllerComponents}
 import uk.gov.hmrc.agentsfrontend.models.AgentDetails
@@ -27,11 +27,12 @@ import scala.concurrent.Future
 class AgentDetailsConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
 
   def getAgentDetails(arn: String): Future[Option[AgentDetails]] = {
-    ws url (s"http://localhost:9009/agents/$arn/details") post (Json.toJson(arn)) map {
-      response => response.json.validate[AgentDetails] match {
-        case JsSuccess(agent, _) => Some(agent)
-        case JsError(_) => None
-      }
+    ws.url(s"http://localhost:9009/agents/$arn/details").get().map {
+      response =>
+        response.json.validate[AgentDetails] match {
+          case JsSuccess(agent, _) => Some(agent)
+          case JsError(_) => None
+        }
     }
   }
 
