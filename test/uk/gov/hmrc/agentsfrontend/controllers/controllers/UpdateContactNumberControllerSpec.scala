@@ -26,7 +26,7 @@ import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
-import uk.gov.hmrc.agentsfrontend.controllers.{UpdateContactNumberController, routes}
+import uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController
 import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
 import scala.concurrent.Future
 
@@ -55,27 +55,28 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
   }
 
   "POST /update-contact" should {
-    "return not acceptable" when {
-      "the user submits form data which already exists in db" in {
-        when(connector.updateContactNumber(any())) thenReturn (Future.successful(false))
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("arn" -> "ARN0000001"))
-        status(result) shouldBe NOT_ACCEPTABLE
-        Jsoup.parse(contentAsString(result)).text() should include("Change cannot be made, please try again")
-      }
-    }
-    "return a bad request and a form with errors" when {
-      "the user submits a form with an invalid contact number" in {
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "0123456").withSession("arn" -> "ARN0000001"))
+    "returns BadRequest" when {
+      "an empty form is submitted" in {
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("notnumber" -> "123").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe BAD_REQUEST
-        Jsoup.parse(contentAsString(result)).text() should include("Please enter a valid phone number")
+      }
+      "the database doesn't accept the change" in {
+        when(connector.updateContactNumber(any(), any())) thenReturn (Future.successful(false))
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "07986526663").withSession("arn" -> "ARN0000001"))
+        status(result) shouldBe BAD_REQUEST
       }
     }
-    "redirect back to the dashboard [update summary] with updated session values" when {
-      "a valid contact number is submitted" in {
-        when(connector.updateContactNumber(any())) thenReturn (Future.successful(true))
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "01234567890").withSession("arn" -> "ARN0000001"))
+    "returns see other" when {
+      "there is no session variable set" in {
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("" -> ""))
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some(s"${routes.UpdateController.getDetails()}")
+        redirectLocation(result).get shouldBe ("/agents-frontend/start-page")
+      }
+      "the change has been accepted" in {
+        when(connector.updateContactNumber(any(), any())) thenReturn (Future.successful(true))
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "09876509876").withSession("arn" -> "ARN0000001"))
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get shouldBe ("/agents-frontend/update-page")
       }
     }
   }

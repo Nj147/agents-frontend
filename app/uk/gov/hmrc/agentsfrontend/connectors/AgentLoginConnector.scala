@@ -34,11 +34,7 @@ class AgentLoginConnector @Inject()(ws: WSClient, val controllerComponents: Cont
   }
 
   def checkLogin(agentLogin: AgentLogin): Future[Int] = {
-    val newLogin = Json.obj(
-      "arn" -> agentLogin.arn,
-      "password" -> agentLogin.password
-    )
-    wspost("http://localhost:9009/check-agent-login", newLogin).map {
+    wspost(s"http://localhost:9009/agents/${agentLogin.arn}/login", Json.obj("password" -> agentLogin.password)).map {
       _.status
     }
   }

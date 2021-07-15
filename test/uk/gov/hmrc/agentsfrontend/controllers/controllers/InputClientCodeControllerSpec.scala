@@ -22,23 +22,23 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.http.Status
+import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
+import play.api.libs.json.{JsObject, Json}
 
 class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
-        "metrics.jvm"     -> false,
+        "metrics.jvm" -> false,
         "metrics.enabled" -> false
       )
       .build()
@@ -47,39 +47,45 @@ class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with Guice
   val clientCode: InputClientCode = app.injector.instanceOf[InputClientCode]
   val service: InputClientCodeService = mock(classOf[InputClientCodeService])
   val controller = new InputClientCodeController(Helpers.stubMessagesControllerComponents(), clientCode, service)
-  val obj: AgentClient = AgentClient("agent", "client")
+  val obj: JsObject = Json.obj("arn" -> "agent", "crn" -> "client")
 
   "GET /clientCode" should {
     "return 200" in {
-      val result = controller.getInputClientCode(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
-    "return HTML" in {
-      val result = controller.getInputClientCode(fakeRequest)
+      val result = controller.getInputClientCode(fakeRequest.withSession("arn" -> "ARN0001"))
+      status(result) shouldBe OK
       contentType(result) shouldBe Some("text/html")
-      Helpers.charset(result)     shouldBe Some("utf-8")
+      Helpers.charset(result) shouldBe Some("utf-8")
+    }
+    "return 303" in {
+      val result = controller.getInputClientCode(fakeRequest)
+      status(result) shouldBe SEE_OTHER
+      redirectLocation(result).get should include ("/agent-login")
     }
   }
 
   "submitClientCode" should {
     "return 204 when successfully added agent to client and redirected to success page" in {
-      when(service.postClientCode(any())) thenReturn(Future.successful(204))
+      when(service.postClientCode(any(), any())) thenReturn (Future.successful(204))
       val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody("crn" -> "client"))
-      status(result) shouldBe Status.SEE_OTHER
+      status(result) shouldBe SEE_OTHER
     }
     "return 404 when the client code provided does not exist in the client database" in {
-      when(service.postClientCode(any())) thenReturn(Future.successful(404))
+      when(service.postClientCode(any(), any())) thenReturn (Future.successful(404))
       val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody("crn" -> "client"))
-      status(result) shouldBe Status.NOT_FOUND
+      status(result) shouldBe NOT_FOUND
     }
     "return 409 when the client code provided already has an agent linked with them" in {
-      when(service.postClientCode(any())) thenReturn(Future.successful(409))
+      when(service.postClientCode(any(), any())) thenReturn (Future.successful(409))
       val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody("crn" -> "client"))
-      status(result) shouldBe Status.CONFLICT
+      status(result) shouldBe CONFLICT
     }
     "return 400 when the nothing is sent" in {
-      val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody("crn" -> ""))
-      status(result) shouldBe Status.BAD_REQUEST
+      val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody())
+      status(result) shouldBe BAD_REQUEST
+    }
+    "returns 303 if the client service is down" in {
+      val result = controller.submitClientCode().apply(FakeRequest("POST", "clientCode").withFormUrlEncodedBody("crn" -> "client"))
+      status(result) shouldBe SEE_OTHER
     }
 
   }

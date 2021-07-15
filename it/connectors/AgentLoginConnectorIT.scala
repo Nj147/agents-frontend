@@ -41,23 +41,23 @@ class AgentLoginConnectorIT extends AnyWordSpec with Matchers with GuiceOneServe
   "checkLogin" should {
     "returns 200" when {
       "agent login details exist" in {
-        stubPost("/check-agent-login", 200, "")
+        stubPost(s"/agents/${testAgentLogin.arn}/login", 200, "")
         val result = connector.checkLogin(testAgentLogin)
         await(result) shouldBe Status.OK
       }
     }
-    "return 404" when {
+    "return 401" when {
       "agent login details do not exist" in {
-        stubPost("/check-agent-login", 404, "")
+        stubPost(s"/agents/${testAgentLogin.arn}/login", 401, "")
         val result = connector.checkLogin(testAgentLogin)
-        await(result) shouldBe Status.NOT_FOUND
+        await(result) shouldBe Status.UNAUTHORIZED
       }
     }
     "return false" when {
       "server is down" in {
-        stubPost("/check-agent-login", 500, "")
+        stubPost(s"/agents/${testAgentLogin.arn}/login", 400, "")
         val result = connector.checkLogin(testAgentLogin)
-        await(result) shouldBe Status.INTERNAL_SERVER_ERROR
+        await(result) shouldBe Status.BAD_REQUEST
       }
     }
 

@@ -50,14 +50,14 @@ class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPer
   "/update-address" should {
     "return an OK status" when {
       "a valid arn is submitted" in {
-        when(ac.getAgentDetails(any())) thenReturn Future.successful(agentDetails)
+        when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(agentDetails))
         val result = controller.getDetails.apply(FakeRequest().withSession("arn" -> "ARN43242334"))
         status(result) shouldBe Status.OK
       }
     }
     "redirect to login" when {
       "no arn is found" in {
-        when(ac.getAgentDetails(any())) thenReturn Future.successful(agentDetails)
+        when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(agentDetails))
         val result = controller.getDetails.apply(FakeRequest())
         status(result) shouldBe Status.SEE_OTHER
       }

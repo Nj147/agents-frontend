@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.services
+package uk.gov.hmrc.agentsfrontend.models
 
-import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
-import javax.inject.Inject
-import scala.concurrent.Future
+import play.api.data.Form
+import play.api.data.Forms.{mapping, nonEmptyText}
 
-class InputClientCodeService @Inject()(connector: InputClientCodeConnector) {
+case class ClientCode(crn: String)
 
-  def postClientCode(arn: String, crn: String): Future[Int] = {
-    connector.postClientCode(arn, crn)
-  }
+object ClientCode {
+  val form: Form[ClientCode] = Form (
+    mapping(
+      "crn" -> nonEmptyText
+    )(ClientCode.apply)(ClientCode.unapply)
+  )
 }

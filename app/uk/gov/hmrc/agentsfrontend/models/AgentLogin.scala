@@ -21,7 +21,7 @@ import play.api.data.Forms.{mapping, nonEmptyText}
 
 case class AgentLogin (arn: String, password: String)
 
-object AgentLoginForm {
+object AgentLogin {
   val submitForm: Form[AgentLogin] =
     Form(
       mapping(

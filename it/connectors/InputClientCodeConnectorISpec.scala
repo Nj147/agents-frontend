@@ -40,9 +40,8 @@ import play.api.test.Helpers.baseApplicationBuilder.injector
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import traits.WireMockHelper
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
-import uk.gov.hmrc.agentsfrontend.models.AgentClient
 
-class InputClientCodeConnectorISpec extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach{
+class InputClientCodeConnectorISpec extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
   lazy val connector: InputClientCodeConnector = injector.instanceOf[InputClientCodeConnector]
 
   override def beforeEach(): Unit = startWireMock()
@@ -53,22 +52,22 @@ class InputClientCodeConnectorISpec extends AnyWordSpec with Matchers with Guice
     "return 204" when {
       "Agent code is successfully added" in {
         stubPatch("/add-agent", 204, "")
-        val result = connector.postClientCode(agentClientCode = AgentClient("Agent", "Client"))
-        await(result) shouldBe(204)
+        val result = connector.postClientCode("Agent", "Client")
+        await(result) shouldBe (204)
       }
     }
     "return 404" when {
       "Client code provided does not exist in Client database" in {
         stubPatch("/add-agent", 404, "")
-        val result = connector.postClientCode(agentClientCode = AgentClient("Agent", "Error in Client Code"))
-        await(result) shouldBe(404)
+        val result = connector.postClientCode("Agent", "Error in Client Code")
+        await(result) shouldBe (404)
       }
     }
     "return 409" when {
       "Client already has an associated Agent" in {
         stubPatch("/add-agent", 409, "")
-        val result = connector.postClientCode(agentClientCode = AgentClient("Agent", "Client code already in use"))
-        await(result) shouldBe(409)
+        val result = connector.postClientCode("Agent", "Client code already in use")
+        await(result) shouldBe (409)
       }
     }
   }

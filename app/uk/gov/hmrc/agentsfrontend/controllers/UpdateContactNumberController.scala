@@ -18,12 +18,13 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
-import uk.gov.hmrc.agentsfrontend.models.{ContactNumber, UpdateContactNumber}
+import uk.gov.hmrc.agentsfrontend.models.ContactNumber
 import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import scala.concurrent.ExecutionContext.Implicits.global
 import javax.inject.Inject
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success, Try}
 
 class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents, updatePage: ContactNumberPage, connector: UpdateConnector) extends FrontendController(mcc) {
 
@@ -35,12 +36,16 @@ class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents,
   }
 
   def processContactNumber: Action[AnyContent] = Action async { implicit request =>
-    ContactNumber.contactForm.bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(updatePage(formWithErrors))),
-      cNum => connector.updateContactNumber(UpdateContactNumber(request.session.get("arn").get, cNum.number.toLong)).map {
-        case true => Redirect(routes.UpdateController.getDetails())
-        case false => NotAcceptable(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
-      }
-    )
+    Try {
+      request.session.get("arn").get
+    } match {
+      case Success(value) => ContactNumber.contactForm.bindFromRequest().fold(
+        formWithErrors => Future.successful(BadRequest(updatePage(formWithErrors))),
+        cNum => connector.updateContactNumber(value, cNum.number.toLong).map {
+          case true => Redirect(routes.UpdateController.getDetails())
+          case false => BadRequest(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
+        })
+      case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
+    }
   }
 }

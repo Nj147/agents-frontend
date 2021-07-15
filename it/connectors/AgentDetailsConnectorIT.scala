@@ -41,9 +41,9 @@ class AgentDetailsConnectorIT extends AnyWordSpec with Matchers with GuiceOneSer
 
   "getDetails" should {
     "return list of details on the agent" in {
-      stubPost("/get-agent-details", 200, Json.toJson(agent).toString())
+      stubPost(s"/agents/${agent.arn}/details", 200, Json.toJson(agent).toString())
       val result = connector.getAgentDetails(arn = "ARN00000")
-      await(result) shouldBe agent
+      await(result) shouldBe Some(agent)
     }
   }
 
