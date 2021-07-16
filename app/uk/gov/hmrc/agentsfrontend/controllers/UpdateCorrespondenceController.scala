@@ -20,23 +20,30 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
 import uk.gov.hmrc.agentsfrontend.models.Correspondence.correspondenceForm
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateCorrespondencePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
 @Singleton
-class UpdateCorrespondenceController @Inject()(mcc: MessagesControllerComponents, updateMOC: UpdateCorrespondencePage)(implicit val ec: ExecutionContext)
+class UpdateCorrespondenceController @Inject()(mcc: MessagesControllerComponents, connector: UpdateConnector, updateMOC: UpdateCorrespondencePage)(implicit val ec: ExecutionContext)
   extends FrontendController(mcc) with play.api.i18n.I18nSupport {
 
   def getCorrespondence: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     Ok(updateMOC(form = correspondenceForm))
   }
 
-  def updateCorrespondence(): Action[AnyContent] = Action { implicit request =>
-    val response = correspondenceForm.bindFromRequest.get
-    response.modes.size match {
-      case 0 => BadRequest(updateMOC(correspondenceForm.withError("modes", "Please select at least one method of correspondence")))
-      case _ => Redirect(routes.DashBoardController.index()) // should re-direct to summary page with modes + arn
+  def updateCorrespondence(): Action[AnyContent] = Action async { implicit request =>
+    Try {
+      request.session.get("arn").get
+    } match {
+      case Success(value) => correspondenceForm.bindFromRequest.fold(
+        formWithErrors => Future.successful(BadRequest(updateMOC(formWithErrors))),
+        moc => connector.updateCorrespondence(value, moc.modes).map {
+          case true => Redirect(routes.UpdateController.getDetails())
+          case false => BadRequest(updateMOC(correspondenceForm.withError("moc", "Change cannot be made, please try again")))
+        })
+      case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
     }
   }
 }
