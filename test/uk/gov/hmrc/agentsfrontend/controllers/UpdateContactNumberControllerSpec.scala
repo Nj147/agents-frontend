@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers.controllers
+package uk.gov.hmrc.agentsfrontend.controllers
 
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -57,7 +57,7 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
   "POST /update-contact" should {
     "returns BadRequest" when {
       "an empty form is submitted" in {
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("notnumber" -> "123").withSession("arn" -> "ARN0000001"))
+        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe BAD_REQUEST
       }
       "the database doesn't accept the change" in {

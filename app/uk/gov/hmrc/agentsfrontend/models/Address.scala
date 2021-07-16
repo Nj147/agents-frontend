@@ -19,6 +19,8 @@ package uk.gov.hmrc.agentsfrontend.models
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText, text}
 import play.api.data.validation.{Constraint, Invalid, Valid, ValidationError}
+import play.api.libs.json.{Json, OFormat}
+
 import scala.util.matching.Regex
 
 case class Address(propertyNumber: String, postcode: String) {
@@ -26,6 +28,8 @@ case class Address(propertyNumber: String, postcode: String) {
 }
 
 object Address {
+
+  implicit val format: OFormat[Address] = Json.format[Address]
 
   val regex: Regex = """(?:[A-Za-z]\d ?\d[A-Za-z]{2})|(?:[A-Za-z][A-Za-z\d]\d ?\d[A-Za-z]{2})|(?:[A-Za-z]{2}\d{2} ?\d[A-Za-z]{2})|(?:[A-Za-z]\d[A-Za-z] ?\d[A-Za-z]{2})|(?:[A-Za-z]{2}\d[A-Za-z] ?\d[A-Za-z]{2})""".stripMargin.r
 
@@ -47,12 +51,4 @@ object Address {
         "propertyNumber" -> nonEmptyText,
         "postcode" -> text.verifying(postcodeCheckConstraint)
       )(Address.apply)(Address.unapply))
-
-  def decode(string: String): Address = {
-    val (n, p): (String, String) = string.split("/").toList match {
-      case h :: t :: _ => h -> t
-      case _ => ("", "")
-    }
-    Address(n, p)
-  }
 }

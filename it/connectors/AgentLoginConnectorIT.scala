@@ -30,13 +30,14 @@ import uk.gov.hmrc.agentsfrontend.models.AgentLogin
 class AgentLoginConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
   lazy val connector: AgentLoginConnector = injector.instanceOf[AgentLoginConnector]
 
+  override val wireMockPort: Int = 9009
+
   override def beforeEach(): Unit = startWireMock()
 
   override def afterEach(): Unit = stopWireMock()
 
   private val testAgentLogin = AgentLogin("FJ3J343J", "pa55w0rd")
 
-  override val wireMockPort: Int = 9009
 
   "checkLogin" should {
     "returns 200" when {

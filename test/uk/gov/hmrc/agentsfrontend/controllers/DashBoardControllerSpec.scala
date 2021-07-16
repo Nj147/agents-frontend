@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers.controllers
+package uk.gov.hmrc.agentsfrontend.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.test.Helpers.{defaultAwaitTimeout, status}
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
 import uk.gov.hmrc.agentsfrontend.controllers.DashBoardController
@@ -54,15 +54,18 @@ class DashBoardControllerSpec extends AnyWordSpec
         .index()
         .apply(FakeRequest("GET", "/dashboard")
           .withSession("arn" -> "arn"))
+      contentType(result) shouldBe Some("text/html")
+      Helpers.charset(result) shouldBe Some("utf-8")
       status(result) shouldBe 200
     }
 
-    "return 303 BadRequest" in {
+    "redirect 303" in {
       when(connector.getAllClientsData(any())) thenReturn (Future.successful(Option(List())))
       val result = controller
         .index()
         .apply(FakeRequest("GET", "/dashboard"))
       status(result) shouldBe 303
+      redirectLocation(result).get shouldBe "/agents-frontend/agent-login"
     }
   }
 

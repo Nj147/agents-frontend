@@ -48,7 +48,7 @@ class AgentLoginController @Inject()(
       ac.checkLogin(agentLogin).map {
         case 200 => Redirect(routes.DashBoardController.index()).withSession(request.session + ("arn" -> agentLogin.arn))
         case 401 => Unauthorized(agentLoginPage(AgentLogin.submitForm.withError("arn", "Login does not exist")))
-        case 500 => InternalServerError(error.standardErrorTemplate("", "", ""))
+        case _ => InternalServerError(error.standardErrorTemplate("", "", ""))
       }
     })
   }
