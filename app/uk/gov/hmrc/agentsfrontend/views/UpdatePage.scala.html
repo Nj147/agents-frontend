@@ -4,7 +4,7 @@
 
 @(user: AgentDetails)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Summary")) {
+@layout(pageTitle = Some("Summary"), isLoggedIn = true) {
 <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Summary</h1>
 @govukSummaryList(SummaryList(
@@ -91,7 +91,4 @@ content = Text("Change"),
 )
 )
 ))
-<form action="@uk.gov.hmrc.agentsfrontend.controllers.routes.UpdateController.getDetails()">
-    <button id="next-button" class="govuk-button" data-module="govuk-button">Submit</button>
-</form>
 }
