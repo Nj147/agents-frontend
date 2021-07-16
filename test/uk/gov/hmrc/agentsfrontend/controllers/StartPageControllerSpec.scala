@@ -24,7 +24,6 @@ import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.agentsfrontend.controllers.StartController
 import uk.gov.hmrc.agentsfrontend.views.html.StartPage
 
 class StartPageControllerSpec extends AnyWordSpec with Matchers with GuiceOneServerPerSuite {

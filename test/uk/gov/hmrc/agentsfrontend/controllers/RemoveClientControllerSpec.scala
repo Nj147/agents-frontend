@@ -26,7 +26,6 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
-import uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController
 import uk.gov.hmrc.agentsfrontend.views.html.{RemovalConfirmation, RemoveClients}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -55,24 +54,24 @@ class RemoveClientControllerSpec extends AnyWordSpec with Matchers with GuiceOne
 
   "GET /processRemoval/CRN0001" should {
     "return 200" in {
-      when(conn.removeClient(any(), any())) thenReturn(Future.successful(true))
+      when(conn.removeClient(any(), any())) thenReturn (Future.successful(true))
       val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       status(result) shouldBe Status.OK
     }
     "return HTML" in {
-      when(conn.removeClient(any(), any())) thenReturn(Future.successful(true))
+      when(conn.removeClient(any(), any())) thenReturn (Future.successful(true))
       val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       contentType(result) shouldBe Some("text/html")
       charset(result) shouldBe Some("utf-8")
     }
     "have a success message" in {
-      when(conn.removeClient(any(), any())) thenReturn(Future.successful(true))
+      when(conn.removeClient(any(), any())) thenReturn (Future.successful(true))
       val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       Jsoup.parse(contentAsString(result)).text() should include("Client has been successfully unlinked from your account")
       Jsoup.parse(contentAsString(result)).text() should not include ("Client has failed to be unlinked from your account")
     }
     "have a failure message" in {
-      when(conn.removeClient(any(), any())) thenReturn(Future.successful(false))
+      when(conn.removeClient(any(), any())) thenReturn (Future.successful(false))
       val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       Jsoup.parse(contentAsString(result)).text() should include("Client has failed to be unlinked from your account")
       Jsoup.parse(contentAsString(result)).text() should not include ("Client has been successfully unlinked from your account")

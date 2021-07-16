@@ -26,7 +26,6 @@ import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
 
@@ -59,7 +58,7 @@ class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with Guice
     "return 303" in {
       val result = controller.getInputClientCode(fakeRequest)
       status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get should include ("/agent-login")
+      redirectLocation(result).get should include("/agent-login")
     }
   }
 

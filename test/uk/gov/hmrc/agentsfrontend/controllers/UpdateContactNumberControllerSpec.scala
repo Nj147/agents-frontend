@@ -26,7 +26,6 @@ import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
-import uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController
 import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
 import scala.concurrent.Future
 
