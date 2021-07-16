@@ -34,15 +34,18 @@ class UpdateCorrespondenceController @Inject()(mcc: MessagesControllerComponents
   }
 
   def updateCorrespondence(): Action[AnyContent] = Action async { implicit request =>
+    val response = correspondenceForm.bindFromRequest.get
     Try {
       request.session.get("arn").get
     } match {
-      case Success(value) => correspondenceForm.bindFromRequest.fold(
-        formWithErrors => Future.successful(BadRequest(updateMOC(formWithErrors))),
-        moc => connector.updateCorrespondence(value, moc.modes).map {
-          case true => Redirect(routes.UpdateController.getDetails())
-          case false => BadRequest(updateMOC(correspondenceForm.withError("moc", "Change cannot be made, please try again")))
-        })
+      case Success(value) =>
+        response.modes.size match {
+          case 0 => Future.successful(BadRequest(updateMOC(correspondenceForm.withError("modes", "Please select at least one method of correspondence"))))
+          case _ => connector.updateCorrespondence(value, response.modes).map {
+            case true => Redirect(routes.UpdateController.getDetails())
+            case false => BadRequest(updateMOC(correspondenceForm.withError("modes", "Change cannot be made, please try again")))
+          }
+        }
       case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
     }
   }
