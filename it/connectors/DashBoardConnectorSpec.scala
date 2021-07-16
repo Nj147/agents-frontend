@@ -55,16 +55,16 @@ class DashBoardConnectorSpec extends AnyWordSpec
 
   override def afterEach(): Unit = stopWireMock()
 
-  val clientList: String = Json.toJson(Some(List(Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", 8, "BS166FGJ", "Space Exploration", "ABBCVDDE"),
-    Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", 7, "BS166FGJ", "Space Exploration", "AVVCVDDE")))).toString()
+  val clientList: String = Json.toJson(Some(List(Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", "8", "BS166FGJ", "Space Exploration", "ABBCVDDE"),
+    Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", "7", "BS166FGJ", "Space Exploration", "AVVCVDDE")))).toString()
 
   "getsAllClientsData" should {
     "return 200" when {
       "Clients data successfully fetched" in {
         stubPost("/read-all-agent", 200, clientList)
         val result = connector.getAllClientsData(arn = "AADSCCD")
-        await(result) shouldBe Some(List(Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", 8, "BS166FGJ", "Space Exploration", "ABBCVDDE"),
-          Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", 7, "BS166FGJ", "Space Exploration", "AVVCVDDE")))
+        await(result) shouldBe Some(List(Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", "8", "BS166FGJ", "Space Exploration", "ABBCVDDE"),
+          Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", "7", "BS166FGJ", "Space Exploration", "AVVCVDDE")))
       }
     }
 

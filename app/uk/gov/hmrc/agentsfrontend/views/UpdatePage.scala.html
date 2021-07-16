@@ -83,7 +83,7 @@ content = Text(user.propertyNumber+", "+user.postcode)
 actions = Some(Actions(
 items = Seq(
 ActionItem(
-href = "/registration/address/true",
+href = "/update-address",
 content = Text("Change"),
 )
 )
@@ -91,4 +91,7 @@ content = Text("Change"),
 )
 )
 ))
+<form action="@uk.gov.hmrc.agentsfrontend.controllers.routes.UpdateController.getDetails()">
+    <button id="next-button" class="govuk-button" data-module="govuk-button">Submit</button>
+</form>
 }

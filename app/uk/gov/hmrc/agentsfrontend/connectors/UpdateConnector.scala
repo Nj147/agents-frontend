@@ -19,6 +19,8 @@ package uk.gov.hmrc.agentsfrontend.connectors
 import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc.{BaseController, ControllerComponents}
+import uk.gov.hmrc.agentsfrontend.models.Address
+
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -33,4 +35,14 @@ class UpdateConnector @Inject()(ws: WSClient, val controllerComponents: Controll
         case _ => false
       }
     }
+
+  def updateAddress(arn: String, address: Address) = {
+    ws.url(s"http://localhost:9009/agents/${arn}/address").patch(Json.toJson(address)).map { response =>
+      response.status match {
+        case 200 => true
+        case _ => false
+      }
+    }
+  }
+
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers.controllers
+package uk.gov.hmrc.agentsfrontend.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}

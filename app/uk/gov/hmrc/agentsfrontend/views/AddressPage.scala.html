@@ -22,11 +22,10 @@ title = Text(messages("There is a problem"))
     @if(form.errors("propertyNumber").nonEmpty) {
     @govukInput(Input(
     id = "propertyNumber",
-    value= Some(form.data("propertyNumber")),
     name = "propertyNumber",
     classes = "govuk-input--width-10",
     errorMessage = Some(ErrorMessage(
-    content = Text("Invalid address"))),
+    content = Text("Please the registered property number of your business, for example - '103b'"))),
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",
@@ -37,8 +36,8 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "propertyNumber",
     name = "propertyNumber",
-    value= Some(form.data("propertyNumber")),
     classes = "govuk-input--width-10",
+    hint = Some(Hint(content = Text("The registered property number of your business, for example - '103b'"))),
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",
@@ -51,10 +50,9 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "postcode",
     name = "postcode",
-    value = Some(form.data("postcode")),
     classes = "govuk-input--width-10",
     errorMessage = Some(ErrorMessage(
-    content = Text("Invalid postcode"))),
+    content = Text("Please enter the registered postcode of your business, for example - 'HA8 3NY'"))),
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",
@@ -65,8 +63,8 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "postcode",
     name = "postcode",
-    value = Some(form.data("postcode")),
     classes = "govuk-input--width-10",
+    hint = Some(Hint(content = Text("The registered postcode of your business, for example - 'HA8 3NY'"))),
     label = Label(
     isPageHeading = true,
     classes = "govuk-label--m",

@@ -33,7 +33,7 @@ class RemoveClientController @Inject()(mcc: MessagesControllerComponents,
   def removeClients(crn: String): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(arn) => Ok(removePage(crn))
-      case None => Redirect(routes.StartController.start())
+      case None => Redirect(routes.AgentLoginController.agentLogin())
     }
   }
 
@@ -42,7 +42,7 @@ class RemoveClientController @Inject()(mcc: MessagesControllerComponents,
       request.session.get("arn").get
     } match {
       case Success(arn) => connector.removeClient(arn, crn).map(result => Ok(resultConf(result)))
-      case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
+      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
     }
   }
 }

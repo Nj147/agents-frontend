@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers.controllers
+package uk.gov.hmrc.agentsfrontend.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.should.Matchers
@@ -60,6 +60,13 @@ class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPer
         when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(agentDetails))
         val result = controller.getDetails.apply(FakeRequest())
         status(result) shouldBe Status.SEE_OTHER
+      }
+    }
+    "return an internal server error" when {
+      "the service fails to provide agent details" in {
+        when(ac.getAgentDetails(any())) thenReturn Future.successful(None)
+        val result = controller.getDetails.apply(FakeRequest().withSession("arn" -> "ARN43242334"))
+        status(result) shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
   }

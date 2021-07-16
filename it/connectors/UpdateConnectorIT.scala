@@ -25,10 +25,12 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.models.Address
 
 class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
 
   lazy val connector: UpdateConnector = injector.instanceOf[UpdateConnector]
+
 
   override def beforeEach(): Unit = startWireMock()
 
@@ -38,21 +40,41 @@ class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
 
   val contactNumber: JsObject = Json.obj("contact-number" -> "0098765345".toLong)
 
+  val arn = "ARN00001"
+  val address: Address = Address("101a", "AB1 2AB")
+
+
   "UpdateContactNumber" should {
     "return true" when {
       "the contact number has been updated" in {
-        stubPatch (s"/agents/ARN00001/contact-number", 200, Json.toJson(contactNumber).toString())
-        val result = connector.updateContactNumber("ARN00001", "0098765345".toLong)
+        stubPatch (s"/agents/$arn/contact-number", 200, "")
+        val result = connector.updateContactNumber("ARN00001", 98765345678L)
         await(result) shouldBe true
       }
     }
     "return false" when {
       "the contact number has not been updated" in {
-        stubPatch("/agents/ARN00001/contact-number", 500, Json.toJson(contactNumber).toString())
-        val result = connector.updateContactNumber("ARN00001", "0098765345".toLong)
+        stubPatch(s"/agents/$arn/contact-number", 500, "")
+        val result = connector.updateContactNumber("ARN00001", 98765345678L)
         await(result) shouldBe false
       }
     }
   }
 
+  "updateAddress" should {
+    "return a true" when {
+      "a valid request is sent and accepted by the backend" in {
+        stubPatch(s"/agents/$arn/address", 200, "")
+        val result = connector.updateAddress(arn, address)
+        await(result) shouldBe true
+      }
+    }
+    "return a false" when {
+      "the database responds to the request with a not accepted" in {
+        stubPatch(s"/agents/$arn/address", 500, "")
+        val result = connector.updateAddress(arn, address)
+        await(result) shouldBe false
+      }
+    }
+  }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers.controllers
+package uk.gov.hmrc.agentsfrontend.controllers
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
@@ -73,14 +73,14 @@ class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAp
       val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
       status(result) shouldBe Status.SEE_OTHER
     }
-    "return a status NOT_FOUND" in {
-      when(ac.checkLogin(any())) thenReturn Future.successful(Status.NOT_FOUND)
-      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "F34FF34", "password" -> "pa55w0rd"))
-      status(result) shouldBe Status.NOT_FOUND
-    }
     "return Bad request error if some fields are blank" in {
       val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "", "password" -> "pa55w0rd"))
       status(result) shouldBe Status.BAD_REQUEST
+    }
+    "return 401 Unauthorized with a form with errors if incorrect login details are entered" in {
+      when(ac.checkLogin(any())) thenReturn Future.successful(401)
+      val result = controller.agentLoginSubmit.apply(FakeRequest().withFormUrlEncodedBody("arn" -> "ARN0001", "password" -> "pa55w0rd"))
+      status(result) shouldBe Status.UNAUTHORIZED
     }
   }
 

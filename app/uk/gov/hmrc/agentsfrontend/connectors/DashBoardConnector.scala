@@ -34,7 +34,7 @@ class DashBoardConnector @Inject()(ws: WSClient) {
           (response \ "name").as[String],
           (response \ "businessName").as[String],
           (response \ "contactNumber").as[String],
-          (response \ "propertyNumber").as[Int],
+          (response \ "propertyNumber").as[String],
           (response \ "postcode").as[String],
           (response \ "businessType").as[String],
           (response \ "arn").as[String]

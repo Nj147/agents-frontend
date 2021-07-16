@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers.controllers
+package uk.gov.hmrc.agentsfrontend.services
 
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
@@ -24,7 +24,6 @@ import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.Status.{CONFLICT, NOT_FOUND, NO_CONTENT}
 import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import uk.gov.hmrc.agentsfrontend.connectors.InputClientCodeConnector
-import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

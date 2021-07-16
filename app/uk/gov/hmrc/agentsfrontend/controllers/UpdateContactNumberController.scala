@@ -31,7 +31,7 @@ class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents,
   def startPage: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(arn) => Ok(updatePage(ContactNumber.contactForm))
-      case None => Redirect(routes.StartController.start())
+      case None => Redirect(routes.AgentLoginController.agentLogin())
     }
   }
 
@@ -45,7 +45,7 @@ class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents,
           case true => Redirect(routes.UpdateController.getDetails())
           case false => BadRequest(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
         })
-      case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
+      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
     }
   }
 }

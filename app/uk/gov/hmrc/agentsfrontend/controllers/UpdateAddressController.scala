@@ -17,29 +17,38 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.Address
 import uk.gov.hmrc.agentsfrontend.views.html.AddressPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
-class UpdateAddressController @Inject()( mcc: MessagesControllerComponents, addressPage: AddressPage) extends FrontendController(mcc){
+class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addressPage: AddressPage, conn: UpdateConnector) extends FrontendController(mcc) {
 
   def startPage: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
-      case Some(arn) => request.session.get("address").fold(
-        Ok(addressPage(Address.addressForm.fill(Address(propertyNumber= "", postcode = ""))))
-      )
-      {address => Ok(addressPage(Address.addressForm.fill(Address.decode(address))))}
-
-      case None => Redirect(routes.StartController.start())
+      case Some(arn) => Ok(addressPage(Address.addressForm))
+      case None => Redirect(routes.AgentLoginController.agentLogin())
     }
   }
 
-  def processAddress: Action[AnyContent] = Action { implicit request =>
-    Address.addressForm.bindFromRequest().fold(
-      formWithErrors => BadRequest(addressPage(formWithErrors)),
-      address => Redirect(routes.DashBoardController.index()).withSession(request.session + ("address" -> address.encode))
-    )
+  def processAddress: Action[AnyContent] = Action.async { implicit request =>
+    Try {
+      request.session.get("arn").get
+    } match {
+      case Success(value) =>
+        Address.addressForm.bindFromRequest().fold(
+          formWithErrors => Future.successful(BadRequest(addressPage(formWithErrors))),
+          address => conn.updateAddress(value, Address(address.propertyNumber, address.postcode)).map {
+            case true => Redirect(routes.UpdateController.getDetails())
+            case false => BadRequest(addressPage(Address.addressForm.withError("propertyNumber", "Change of details could not be process, please try again")))
+          }
+        )
+      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
+    }
   }
 }

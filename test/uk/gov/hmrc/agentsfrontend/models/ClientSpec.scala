@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.agentsfrontend.controllers.models
-
+package uk.gov.hmrc.agentsfrontend.models
 
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
@@ -30,7 +29,7 @@ class ClientSpec extends AnyWordSpec with Matchers{
     name = "testName",
     businessName = "testBusiness",
     contactNumber = "testContact",
-    propertyNumber = 12,
+    propertyNumber = "1",
     postcode = "testPostcode",
     businessType = "testBusinessType",
     arn = "testArn")
@@ -41,7 +40,7 @@ class ClientSpec extends AnyWordSpec with Matchers{
 				"name": "testName",
 				"businessName": "testBusiness",
 				"contactNumber": "testContact",
-				"propertyNumber": 12,
+				"propertyNumber": "1",
 				"postcode": "testPostcode",
 				"businessType": "testBusinessType",
 				"arn": "testArn"
