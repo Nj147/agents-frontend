@@ -23,7 +23,6 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{FakeRequest, Helpers}
-import uk.gov.hmrc.agentsfrontend.controllers.UpdateController
 import org.mockito.Mockito.{mock, when}
 import play.api.http.Status
 import play.api.test.Helpers.{defaultAwaitTimeout, status}

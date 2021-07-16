@@ -24,13 +24,12 @@ import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController
 
 class SuccessClientCodeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
       .configure(
-        "metrics.jvm"     -> false,
+        "metrics.jvm" -> false,
         "metrics.enabled" -> false
       )
       .build()
@@ -47,7 +46,7 @@ class SuccessClientCodeControllerSpec extends AnyWordSpec with Matchers with Gui
     "return HTML" in {
       val result = controller.successClientCode(fakeRequest)
       contentType(result) shouldBe Some("text/html")
-      charset(result)     shouldBe Some("utf-8")
+      charset(result) shouldBe Some("utf-8")
     }
   }
 }
