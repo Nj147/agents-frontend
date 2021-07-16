@@ -70,7 +70,7 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
       "there is no session variable set" in {
         val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("" -> ""))
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe ("/agents-frontend/start-page")
+        redirectLocation(result).get shouldBe ("/agents-frontend/agent-login")
       }
       "the change has been accepted" in {
         when(connector.updateContactNumber(any(), any())) thenReturn (Future.successful(true))

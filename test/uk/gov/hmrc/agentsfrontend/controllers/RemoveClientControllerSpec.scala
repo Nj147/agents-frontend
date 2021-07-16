@@ -49,7 +49,7 @@ class RemoveClientControllerSpec extends AnyWordSpec with Matchers with GuiceOne
     }
     "return HTML" in {
       val result = controller.removeClients("CRN0001")(fakeRequest)
-      redirectLocation(result).get shouldBe ("/agents-frontend/start-page")
+      redirectLocation(result).get shouldBe ("/agents-frontend/agent-login")
     }
   }
 

@@ -32,7 +32,7 @@ class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addre
   def startPage: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
       case Some(arn) => Ok(addressPage(Address.addressForm))
-      case None => Redirect(routes.StartController.start())
+      case None => Redirect(routes.AgentLoginController.agentLogin())
     }
   }
 
@@ -48,7 +48,7 @@ class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addre
             case false => BadRequest(addressPage(Address.addressForm.withError("propertyNumber", "Change of details could not be process, please try again")))
           }
         )
-      case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
+      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
     }
   }
 }

@@ -80,7 +80,7 @@ class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOn
       "the client is not logged in and tries to access the page" in {
         val result = controller.processAddress.apply(fakePostRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> "AA12 1AB"))
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/agents-frontend/start-page"
+        redirectLocation(result).get shouldBe "/agents-frontend/agent-login"
       }
     }
   }
