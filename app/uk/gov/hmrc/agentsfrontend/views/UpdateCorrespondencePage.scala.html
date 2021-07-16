@@ -55,9 +55,16 @@ name = Some("modes[3]")
 )
 ))
 <br>
-<button type="submit" value="submit" class="govuk-button" data-module="govuk-button">
-    Update
+<button id="next-button" class="govuk-button" data-module="govuk-button">
+    Save and Continue
 </button>
+<hr>
+<div>
+    <a class="govuk-link" data-module="govuk-button"
+       href="@uk.gov.hmrc.agentsfrontend.controllers.routes.UpdateController.getDetails">
+        Cancel
+    </a>
+</div>
 
 }
 
