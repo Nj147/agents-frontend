@@ -17,18 +17,24 @@
 package uk.gov.hmrc.agentsfrontend.controllers.controllers
 
 import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, status}
+import play.api.http.Status._
+import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, redirectLocation, status}
 import play.api.test.{FakeRequest, Helpers}
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.controllers.UpdateCorrespondenceController
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateCorrespondencePage
+
+import scala.concurrent.Future
 
 
 class UpdateCorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -40,9 +46,11 @@ class UpdateCorrespondenceControllerSpec extends AnyWordSpec with Matchers with 
       )
       .build()
 
+  val connector: UpdateConnector = mock(classOf[UpdateConnector])
   private val fakeRequest = FakeRequest("GET", "/")
+  private val fakePostRequest = FakeRequest("/POST", "/update-correspondence")
   val updateMOC: UpdateCorrespondencePage = app.injector.instanceOf[UpdateCorrespondencePage]
-  val controller = new UpdateCorrespondenceController(Helpers.stubMessagesControllerComponents(), updateMOC)
+  val controller = new UpdateCorrespondenceController(Helpers.stubMessagesControllerComponents(), connector, updateMOC)
 
   "GET /update-correspondence " should {
     "return 200" in {
@@ -61,15 +69,30 @@ class UpdateCorrespondenceControllerSpec extends AnyWordSpec with Matchers with 
   }
 
   "POST /update-correspondence " should {
-    "return 303 when redirected to dashboard" in {
-      val result = controller.updateCorrespondence().apply(FakeRequest("POST", "/updateCorrespondence").withFormUrlEncodedBody("modes[]" -> "call"))
-      status(result) shouldBe Status.SEE_OTHER
+    "returns BadRequest" when {
+      "an empty form is submitted" in {
+        val result = controller.updateCorrespondence().apply(fakePostRequest.withFormUrlEncodedBody().withSession("arn" -> "ARN0000001"))
+        status(result) shouldBe BAD_REQUEST
+      }
+      "the database doesn't accept the change" in {
+        when(connector.updateCorrespondence(any(), any())) thenReturn (Future.successful(false))
+        val result = controller.updateCorrespondence().apply(fakePostRequest.withFormUrlEncodedBody("modes[]" -> "text").withSession("arn" -> "ARN0000001"))
+        status(result) shouldBe BAD_REQUEST
+      }
     }
-
-    "return 400 when the nothing is sent" in {
-      val result = controller.updateCorrespondence().apply(FakeRequest("POST", "/updateCorrespondence").withFormUrlEncodedBody())
-      status(result) shouldBe Status.BAD_REQUEST
+    "returns see other" when {
+      "there is no session variable set" in {
+        val result = controller.updateCorrespondence().apply(fakePostRequest.withFormUrlEncodedBody("" -> ""))
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get shouldBe ("/agents-frontend/start-page")
+      }
+      "the change has been accepted" in {
+        when(connector.updateCorrespondence(any(), any())) thenReturn (Future.successful(true))
+        val result = controller.updateCorrespondence().apply(fakePostRequest.withFormUrlEncodedBody("modes[]" -> "text").withSession("arn" -> "ARN0000001"))
+        status(result) shouldBe SEE_OTHER
+        redirectLocation(result).get shouldBe ("/agents-frontend/update-page")
+      }
     }
-
   }
+
 }
