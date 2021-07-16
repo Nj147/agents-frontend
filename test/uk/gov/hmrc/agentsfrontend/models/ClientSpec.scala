@@ -19,17 +19,15 @@ package uk.gov.hmrc.agentsfrontend.models
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import play.api.libs.json.{JsSuccess, JsValue, Json}
-import uk.gov.hmrc.agentsfrontend.models.Client
 
-
-class ClientSpec extends AnyWordSpec with Matchers{
+class ClientSpec extends AnyWordSpec with Matchers {
 
   val clientModel: Client = Client(
     crn = "testCrn",
     name = "testName",
     businessName = "testBusiness",
     contactNumber = "testContact",
-    propertyNumber = "1",
+    propertyNumber = "12",
     postcode = "testPostcode",
     businessType = "testBusinessType",
     arn = "testArn")
@@ -40,7 +38,7 @@ class ClientSpec extends AnyWordSpec with Matchers{
 				"name": "testName",
 				"businessName": "testBusiness",
 				"contactNumber": "testContact",
-				"propertyNumber": "1",
+				"propertyNumber": "12",
 				"postcode": "testPostcode",
 				"businessType": "testBusinessType",
 				"arn": "testArn"

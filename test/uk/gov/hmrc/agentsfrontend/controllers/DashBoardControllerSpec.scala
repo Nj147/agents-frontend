@@ -24,7 +24,6 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
-import uk.gov.hmrc.agentsfrontend.controllers.DashBoardController
 import uk.gov.hmrc.agentsfrontend.models.Client
 import uk.gov.hmrc.agentsfrontend.views.html.Index
 
@@ -34,7 +33,7 @@ class DashBoardControllerSpec extends AnyWordSpec
   with Matchers
   with GuiceOneAppPerSuite {
 
-  val dashBoard = app.injector.instanceOf[Index]
+  val dashBoard: Index = app.injector.instanceOf[Index]
   val connector: DashBoardConnector = mock(classOf[DashBoardConnector])
   val controller = new DashBoardController(Helpers.stubMessagesControllerComponents(), dashBoard, connector)
 
@@ -42,7 +41,7 @@ class DashBoardControllerSpec extends AnyWordSpec
     "testName",
     "testBusiness",
     "testContact",
-    "1",
+    "12",
     "testPostcode",
     "testBusinessType",
     "testArn")

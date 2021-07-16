@@ -28,7 +28,6 @@ import play.api.test.Helpers.{defaultAwaitTimeout, session, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.config.ErrorHandler
 import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
-import uk.gov.hmrc.agentsfrontend.controllers.AgentLoginController
 import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
 
 import scala.concurrent.Future
