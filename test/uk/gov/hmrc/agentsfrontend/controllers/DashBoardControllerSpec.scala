@@ -42,7 +42,7 @@ class DashBoardControllerSpec extends AnyWordSpec
     "testName",
     "testBusiness",
     "testContact",
-    12,
+    "1",
     "testPostcode",
     "testBusinessType",
     "testArn")
