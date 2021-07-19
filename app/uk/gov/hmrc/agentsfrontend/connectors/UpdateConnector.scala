@@ -45,4 +45,12 @@ class UpdateConnector @Inject()(ws: WSClient, val controllerComponents: Controll
     }
   }
 
+  def updateEmail(arn: String, email: String): Future[Boolean] = ws.url(s"http://localhost:9009/agents/${arn}/update-email")
+    .patch(Json.obj("email" -> email))
+    .map {
+      _.status match {
+        case 200 => true
+        case _ => false
+      }
+    }
 }

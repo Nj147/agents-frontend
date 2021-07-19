@@ -36,3 +36,7 @@ POST        /update-contact         uk.gov.hmrc.agentsfrontend.controllers.Updat
 GET         /update-address         uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
 +nocsrf
 POST        /update-address         uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.processAddress
+
+GET         /update-email           uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.displayUpdateEmailPage()
++nocsrf
+POST        /update-email           uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.processUpdateEmail()

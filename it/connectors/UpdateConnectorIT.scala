@@ -25,7 +25,7 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 import play.api.test.Helpers.baseApplicationBuilder.injector
 import traits.WireMockHelper
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
-import uk.gov.hmrc.agentsfrontend.models.Address
+import uk.gov.hmrc.agentsfrontend.models.{Address, Email}
 
 class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPerSuite with WireMockHelper with BeforeAndAfterEach {
 
@@ -42,6 +42,7 @@ class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
 
   val arn = "ARN00001"
   val address: Address = Address("101a", "AB1 2AB")
+  val email: JsObject = Json.obj("email" -> "test@test.com")
 
 
   "UpdateContactNumber" should {
@@ -73,6 +74,22 @@ class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
       "the database responds to the request with a not accepted" in {
         stubPatch(s"/agents/$arn/address", 500, "")
         val result = connector.updateAddress(arn, address)
+        await(result) shouldBe false
+      }
+    }
+  }
+  "UpdateEmail" should {
+    "return true" when {
+      "the email has been updated" in {
+        stubPatch (s"/agents/ARN00001/update-email", 200, Json.toJson(email).toString())
+        val result = connector.updateEmail("ARN00001", "test@test.com")
+        await(result) shouldBe true
+      }
+    }
+    "return false" when {
+      "the email has not been updated" in {
+        stubPatch("/agents/ARN00001/update-email", 500, Json.toJson(email).toString())
+        val result = connector.updateEmail("ARN00001", "test@test.com")
         await(result) shouldBe false
       }
     }
