@@ -40,4 +40,11 @@ POST        /update-correspondence    uk.gov.hmrc.agentsfrontend.controllers.Upd
 
 GET         /update-correspondence    uk.gov.hmrc.agentsfrontend.controllers.UpdateCorrespondenceController.getCorrespondence()
 +nocsrf
+
 POST        /update-address           uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.processAddress
+
+POST        /update-address         uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.processAddress
+
+GET         /update-email           uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.displayUpdateEmailPage()
++nocsrf
+POST        /update-email           uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.processUpdateEmail()
