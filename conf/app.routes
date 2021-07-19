@@ -29,26 +29,22 @@ GET         /logout                   uk.gov.hmrc.agentsfrontend.controllers.Age
 
 GET         /update-page              uk.gov.hmrc.agentsfrontend.controllers.UpdateController.getDetails
 
-GET         /update-contact           uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
 +nocsrf
 POST        /update-contact           uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.processContactNumber
 
-GET         /update-address           uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
+GET         /update-contact           uk.gov.hmrc.agentsfrontend.controllers.UpdateContactNumberController.startPage
 
 +nocsrf
 POST        /update-correspondence    uk.gov.hmrc.agentsfrontend.controllers.UpdateCorrespondenceController.updateCorrespondence()
 
 GET         /update-correspondence    uk.gov.hmrc.agentsfrontend.controllers.UpdateCorrespondenceController.getCorrespondence()
-+nocsrf
 
++nocsrf
 POST        /update-address           uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.processAddress
 
-POST        /update-address         uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.processAddress
+GET         /update-address           uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.startPage
 
-GET         /update-email           uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.displayUpdateEmailPage()
 +nocsrf
-POST        /update-address         uk.gov.hmrc.agentsfrontend.controllers.UpdateAddressController.processAddress
+POST        /update-email             uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.processUpdateEmail()
 
-GET         /update-email           uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.displayUpdateEmailPage()
-+nocsrf
-POST        /update-email           uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.processUpdateEmail()
+GET         /update-email             uk.gov.hmrc.agentsfrontend.controllers.UpdateEmailController.displayUpdateEmailPage()
