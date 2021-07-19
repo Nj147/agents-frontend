@@ -27,7 +27,7 @@ class DashBoardConnector @Inject()(ws: WSClient) {
 
   def getAllClientsData(arn: String): Future[Option[List[Client]]] = {
 
-    ws.url(s"http://localhost:9006/read-all-agent").post(Json.obj("arn" -> arn)).map { x =>
+    ws.url(s"http://localhost:9006/clients/$arn").get().map { x =>
       x.status match {
         case 200 => Some(x.json.as[JsArray].value.flatMap(response => Some(Client(
           (response \ "crn").as[String],

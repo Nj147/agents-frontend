@@ -23,9 +23,7 @@ import play.api.libs.json.{Json, OFormat}
 
 import scala.util.matching.Regex
 
-case class Address(propertyNumber: String, postcode: String) {
-  val encode: String = propertyNumber + "/" + postcode
-}
+case class Address(propertyNumber: String, postcode: String)
 
 object Address {
 

@@ -86,6 +86,11 @@ class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with Guice
       val result = controller.submitClientCode().apply(FakeRequest("POST", "clientCode").withFormUrlEncodedBody("crn" -> "client"))
       status(result) shouldBe SEE_OTHER
     }
+    "returns 500 if the backend service fails to respond" in {
+      when(service.postClientCode(any(), any())) thenReturn (Future.successful(500))
+      val result = controller.submitClientCode().apply(FakeRequest("POST", "clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody("crn" -> "client"))
+      status(result) shouldBe INTERNAL_SERVER_ERROR
+    }
 
   }
 }
