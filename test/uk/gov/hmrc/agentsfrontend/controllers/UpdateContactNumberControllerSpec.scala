@@ -26,13 +26,13 @@ import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
-import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
+import uk.gov.hmrc.agentsfrontend.views.html.UpdateContactNumberPage
 import scala.concurrent.Future
 
 class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   val connector: UpdateConnector = mock(classOf[UpdateConnector])
-  val updatePage: ContactNumberPage = app.injector.instanceOf[ContactNumberPage]
+  val updatePage: UpdateContactNumberPage = app.injector.instanceOf[UpdateContactNumberPage]
   val controller = new UpdateContactNumberController(Helpers.stubMessagesControllerComponents(), updatePage, connector)
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")
