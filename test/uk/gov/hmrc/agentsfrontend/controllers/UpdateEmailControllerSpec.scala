@@ -71,7 +71,7 @@ class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
         when(uc.updateEmail(any(), any())) thenReturn Future.successful(true)
         val result = controller.processUpdateEmail().apply(fakePostRequest.withFormUrlEncodedBody("email" -> "test@test.com").withSession("arn" -> "ARN0001"))
         status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("/agents-frontend/agent-login")
+        redirectLocation(result) shouldBe Some("/agents-frontend/update-page")
       }
     }
     "return bad request if data base return false" when {
