@@ -51,22 +51,22 @@ class InputClientCodeConnectorISpec extends AnyWordSpec with Matchers with Guice
   "postClientCode" should {
     "return 204" when {
       "Agent code is successfully added" in {
-        stubPatch("/add-agent", 204, "")
-        val result = connector.postClientCode("Agent", "Client")
+        stubPatch("/clients/CRN000001/add", 204, "")
+        val result = connector.postClientCode("ARN00001", "CRN000001")
         await(result) shouldBe (204)
       }
     }
     "return 404" when {
       "Client code provided does not exist in Client database" in {
-        stubPatch("/add-agent", 404, "")
-        val result = connector.postClientCode("Agent", "Error in Client Code")
+        stubPatch("/clients/CRN000001/add", 404, "")
+        val result = connector.postClientCode("ARN00001", "CRN000001")
         await(result) shouldBe (404)
       }
     }
     "return 409" when {
       "Client already has an associated Agent" in {
-        stubPatch("/add-agent", 409, "")
-        val result = connector.postClientCode("Agent", "Client code already in use")
+        stubPatch("/clients/CRN000001/add", 409, "")
+        val result = connector.postClientCode("ARN00001", "CRN000001")
         await(result) shouldBe (409)
       }
     }

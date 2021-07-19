@@ -53,14 +53,10 @@ class RemoveClientControllerSpec extends AnyWordSpec with Matchers with GuiceOne
   }
 
   "GET /processRemoval/CRN0001" should {
-    "return 200" in {
+    "return 200 with an HTML body" in {
       when(conn.removeClient(any(), any())) thenReturn (Future.successful(true))
       val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       status(result) shouldBe Status.OK
-    }
-    "return HTML" in {
-      when(conn.removeClient(any(), any())) thenReturn (Future.successful(true))
-      val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       contentType(result) shouldBe Some("text/html")
       charset(result) shouldBe Some("utf-8")
     }
@@ -75,6 +71,11 @@ class RemoveClientControllerSpec extends AnyWordSpec with Matchers with GuiceOne
       val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       Jsoup.parse(contentAsString(result)).text() should include("Client has failed to be unlinked from your account")
       Jsoup.parse(contentAsString(result)).text() should not include ("Client has been successfully unlinked from your account")
+    }
+    "redirect to the login page if not logged in" in {
+      val result = controller.processRemoval("CRN0001")(fakeRequest)
+      status(result) shouldBe 303
+      redirectLocation(result) shouldBe Some("/agents-frontend/agent-login")
     }
   }
 }
