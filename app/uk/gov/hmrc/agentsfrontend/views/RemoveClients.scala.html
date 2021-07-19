@@ -1,21 +1,23 @@
-
 @this(layout: Layout, govukInput : GovukInput,  govukButton: GovukButton, govukErrorSummary : GovukErrorSummary)
 
-@(arn: String)(implicit request: Request[_], messages: Messages)
+@(crn: String)(implicit request: Request[_], messages: Messages)
+
 
 @layout(pageTitle = Some("Remove Clients"), isLoggedIn = true) {
 
-    <a href="/agents-frontend/dashboard" class="govuk-back-link">Back</a>
-    <h1 class="govuk-heading-m">Are you sure you want to remove client @arn from your client list?</h1>
-    <form method="GET" action="/agents-frontend/dashboard">
-        <button id="cancelButton" class="govuk-button govuk-button--warning" data-module="govuk-button">
-            No
-        </button>
-    </form>
-    <form method="POST" action="/agents-frontend/removeConfirmed/@arn">
-        <button id="confirmButton" class="govuk-button" data-module="govuk-button">
-            Yes
-        </button>
-    </form>
 
+<h1 class="govuk-heading-m">Are you sure you want to remove client @crn from your client list?</h1>
+
+
+<a class="govuk-button govuk-button--warning" data-module="govuk-button"
+   href="@uk.gov.hmrc.agentsfrontend.controllers.routes.RemoveClientController.processRemoval(crn)">
+    Yes, remove client
+</a>
+<hr>
+<div>
+    <a class="govuk-link" data-module="govuk-button"
+       href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index">
+        Cancel
+    </a>
+</div>
 }

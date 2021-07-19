@@ -21,7 +21,7 @@ GET         /success-client-code      uk.gov.hmrc.agentsfrontend.controllers.Suc
 GET         /remove-clients/:crn      uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
 
 +nocsrf
-POST        /remove-confirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
+GET        /remove-confirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
 
 GET         /dashboard                uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
 
