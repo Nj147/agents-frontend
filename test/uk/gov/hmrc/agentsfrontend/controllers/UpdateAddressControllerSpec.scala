@@ -26,13 +26,13 @@ import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
-import uk.gov.hmrc.agentsfrontend.views.html.AddressPage
+import uk.gov.hmrc.agentsfrontend.views.html.UpdateAddressPage
 import scala.concurrent.Future
 
 class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   val conn: UpdateConnector = mock(classOf[UpdateConnector])
-  val addressPage: AddressPage = app.injector.instanceOf[AddressPage]
+  val addressPage: UpdateAddressPage = app.injector.instanceOf[UpdateAddressPage]
   val controller: UpdateAddressController = new UpdateAddressController(Helpers.stubMessagesControllerComponents(), addressPage, conn)
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")

@@ -42,7 +42,7 @@ class UpdateEmailController @Inject()(mcc: MessagesControllerComponents,
       case Success(value) => Email.emailForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(updateEmailPage(formWithErrors))),
         email => connector.updateEmail(value, email.email) map {
-          case true => Redirect(routes.AgentLoginController.agentLogin())
+          case true => Redirect(routes.UpdateController.getDetails())
           case false => BadRequest(updateEmailPage(Email.emailForm.withError("email", "Change cannot be made, please try again")))
         })
       case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))

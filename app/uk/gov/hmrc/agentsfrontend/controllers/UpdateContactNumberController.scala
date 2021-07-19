@@ -19,14 +19,14 @@ package uk.gov.hmrc.agentsfrontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.ContactNumber
-import uk.gov.hmrc.agentsfrontend.views.html.ContactNumberPage
+import uk.gov.hmrc.agentsfrontend.views.html.UpdateContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success, Try}
 
-class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents, updatePage: ContactNumberPage, connector: UpdateConnector) extends FrontendController(mcc) {
+class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents, updatePage: UpdateContactNumberPage, connector: UpdateConnector) extends FrontendController(mcc) {
 
   def startPage: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {

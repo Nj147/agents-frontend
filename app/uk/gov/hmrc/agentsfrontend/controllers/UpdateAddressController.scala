@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentsfrontend.controllers
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.Address
-import uk.gov.hmrc.agentsfrontend.views.html.AddressPage
+import uk.gov.hmrc.agentsfrontend.views.html.UpdateAddressPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
@@ -27,7 +27,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addressPage: AddressPage, conn: UpdateConnector) extends FrontendController(mcc) {
+class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addressPage: UpdateAddressPage, conn: UpdateConnector) extends FrontendController(mcc) {
 
   def startPage: Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
