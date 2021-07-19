@@ -39,6 +39,7 @@ class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
   override val wireMockPort: Int = 9009
 
   val contactNumber: JsObject = Json.obj("contact-number" -> "0098765345".toLong)
+  val correspondence: JsObject = Json.obj("moc" -> List("text"))
 
   val arn = "ARN00001"
   val address: Address = Address("101a", "AB1 2AB")
@@ -56,6 +57,22 @@ class UpdateConnectorIT extends AnyWordSpec with Matchers with GuiceOneServerPer
       "the contact number has not been updated" in {
         stubPatch(s"/agents/$arn/contact-number", 500, "")
         val result = connector.updateContactNumber("ARN00001", 98765345678L)
+        await(result) shouldBe false
+      }
+    }
+  }
+  "UpdateCorrespondence" should {
+    "return true" when {
+      "the correspondence has been updated" in {
+        stubPatch (s"/agents/ARN00001/correspondence", 200, Json.toJson(correspondence).toString())
+        val result = connector.updateCorrespondence("ARN00001", List("text"))
+        await(result) shouldBe true
+      }
+    }
+    "return false" when {
+      "the contact number has not been updated" in {
+        stubPatch("/agents/ARN00001/correspondence", 500, Json.toJson(correspondence).toString())
+        val result = connector.updateCorrespondence("ARN00001", List("text"))
         await(result) shouldBe false
       }
     }

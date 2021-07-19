@@ -36,6 +36,15 @@ class UpdateConnector @Inject()(ws: WSClient, val controllerComponents: Controll
       }
     }
 
+  def updateCorrespondence(arn: String, moc: List[String]): Future[Boolean] = ws.url(s"http://localhost:9009/agents/${arn}/correspondence")
+    .patch(Json.obj("modes" -> moc))
+    .map {
+      _.status match {
+        case 200 => true
+        case _ => false
+      }
+    }
+
   def updateAddress(arn: String, address: Address) = {
     ws.url(s"http://localhost:9009/agents/${arn}/address").patch(Json.toJson(address)).map { response =>
       response.status match {
