@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentsfrontend.connectors
 
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.JsArray
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.models.Client
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class DashBoardConnector @Inject()(ws: WSClient) {
 
   def getAllClientsData(arn: String): Future[Option[List[Client]]] = {
 
-    ws.url(s"http://localhost:9006/clients/$arn").get().map { x =>
+    ws.url(s"http://localhost:9006/clients/read-all/$arn").get().map { x =>
       x.status match {
         case 200 => Some(x.json.as[JsArray].value.flatMap(response => Some(Client(
           (response \ "crn").as[String],

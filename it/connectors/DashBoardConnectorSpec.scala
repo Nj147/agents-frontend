@@ -61,7 +61,7 @@ class DashBoardConnectorSpec extends AnyWordSpec
   "getsAllClientsData" should {
     "return 200" when {
       "Clients data successfully fetched" in {
-        stubGet("/clients/ARN0001", 200, clientList)
+        stubGet("/clients/read-all/ARN0001", 200, clientList)
         val result = connector.getAllClientsData(arn = "ARN0001")
         await(result) shouldBe Some(List(Client("AABCCD", "Elon Musk", "SpaceX", "08977643456", "8", "BS166FGJ", "Space Exploration", "ABBCVDDE"),
           Client("AADSCCD", "Elon Musk", "SpaceX", "08977643456", "7", "BS166FGJ", "Space Exploration", "AVVCVDDE")))
@@ -70,7 +70,7 @@ class DashBoardConnectorSpec extends AnyWordSpec
 
     "return 404" when {
       "Clients data not fetched" in {
-        stubGet("/clients/ARN0001", 404, "")
+        stubGet("/clients/read-all/ARN0001", 404, "")
         val result = connector.getAllClientsData(arn = "ARN0001")
         await(result) shouldBe Some(List())
       }
