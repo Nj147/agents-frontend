@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.agentsfrontend.connectors
 
-import play.api.libs.json.{JsArray, Json}
+import play.api.libs.json.JsArray
 import play.api.libs.ws.WSClient
 import uk.gov.hmrc.agentsfrontend.models.Client
 import javax.inject.Inject
