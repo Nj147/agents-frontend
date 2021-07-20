@@ -9,13 +9,13 @@
 <h1 class="govuk-heading-m">Are you sure you want to remove client @crn from your client list?</h1>
 
 
-<a class="govuk-button govuk-button--warning" data-module="govuk-button"
+<a class="govuk-button govuk-button--warning" id="ConfirmRemoveClient" data-module="govuk-button"
    href="@uk.gov.hmrc.agentsfrontend.controllers.routes.RemoveClientController.processRemoval(crn)">
     Yes, remove client
 </a>
 <hr>
 <div>
-    <a class="govuk-link" data-module="govuk-button"
+    <a class="govuk-link cancel" data-module="govuk-button"
        href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index">
         Cancel
     </a>
