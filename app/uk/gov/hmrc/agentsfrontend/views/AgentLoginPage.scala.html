@@ -7,7 +7,7 @@
 
 @layout(pageTitle = Some("Agent Login")) {
 
-<h1 class="govuk-heading-xl">Enter your Login details</h1>
+<h1 class="govuk-heading-xl">Sign in using Government Gateway</h1>
 @helper.form(action=uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLoginSubmit()){
 <div class="govuk-list govuk-error-summary__list">
     @if(form.errors.nonEmpty) {
@@ -28,6 +28,7 @@
     @govukInput(Input(
     id = "arn",
     name = "arn",
+    hint = Some(Hint(content = Text("This is up to 10 characters long starting with ARN"))),
     classes = "govuk-input--width-10",
     label = Label(
     isPageHeading = true,
@@ -39,6 +40,7 @@
     @govukInput(Input(
     id = "arn",
     name = "arn",
+    hint = Some(Hint(content = Text("This is up to 10 characters long starting with 'ARN'."))),
     classes = "govuk-input--width-10",
     label = Label(
     isPageHeading = true,
