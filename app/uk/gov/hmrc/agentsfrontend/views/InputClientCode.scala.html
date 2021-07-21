@@ -7,7 +7,6 @@
 
 @layout(pageTitle = Some("Add a Client"), isLoggedIn = true) {
     @helper.form(action = uk.gov.hmrc.agentsfrontend.controllers.routes.InputClientCodeController.submitClientCode()) {
-<a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-back-link">Back</a>
     @if(form.errors.nonEmpty) { @defining(form.errors.map { error => ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args:_*)))}) { errorLinks => @errorSummary(ErrorSummary(errorList = errorLinks,title = Text(messages("Error Alert "))))}}
 
     @if(form.errors("crn").nonEmpty) {
@@ -19,5 +18,12 @@
     Submit
 </button>
 }
+<hr>
+<div>
+    <a class="govuk-link cancel" data-module="govuk-button"
+       href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index">
+        Cancel
+    </a>
+</div>
 }
 
