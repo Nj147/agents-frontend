@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.connectors.{AgentDetailsConnector, UpdateConnector}
 import uk.gov.hmrc.agentsfrontend.models.Address
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateAddressPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -27,12 +27,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
-class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addressPage: UpdateAddressPage, conn: UpdateConnector) extends FrontendController(mcc) {
+class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addressPage: UpdateAddressPage, conn: UpdateConnector, ac: AgentDetailsConnector) extends FrontendController(mcc) {
 
-  def startPage: Action[AnyContent] = Action { implicit request =>
+  def startPage: Action[AnyContent] = Action async { implicit request =>
     request.session.get("arn") match {
-      case Some(arn) => Ok(addressPage(Address.addressForm))
-      case None => Redirect(routes.AgentLoginController.agentLogin())
+      case Some(arn) =>
+        ac.getAgentDetails(arn).map { x =>
+          Ok(addressPage(Address.addressForm.fill(Address(x.get.propertyNumber, x.get.postcode))))
+        }
+      case None => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
     }
   }
 
@@ -45,7 +48,7 @@ class UpdateAddressController @Inject()(mcc: MessagesControllerComponents, addre
           formWithErrors => Future.successful(BadRequest(addressPage(formWithErrors))),
           address => conn.updateAddress(value, Address(address.propertyNumber, address.postcode)).map {
             case true => Redirect(routes.UpdateController.getDetails())
-            case false => BadRequest(addressPage(Address.addressForm.withError("propertyNumber", "Change of details could not be process, please try again")))
+            case false => BadRequest(addressPage(Address.addressForm.fill(address).withError("propertyNumber", "Change of details could not be process, please try again")))
           }
         )
       case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))

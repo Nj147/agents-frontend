@@ -26,8 +26,10 @@ import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
-import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.connectors.{AgentDetailsConnector, UpdateConnector}
+import uk.gov.hmrc.agentsfrontend.models.AgentDetails
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateEmailPage
+
 import scala.concurrent.Future
 class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
@@ -38,14 +40,17 @@ class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
       )
       .build()
   private val uc = mock(classOf[UpdateConnector])
+  val ac: AgentDetailsConnector = mock(classOf[AgentDetailsConnector])
   private val fakeRequest = FakeRequest("GET", "/update-email")
   private val fakePostRequest = FakeRequest("POST", "/update-email")
   private val updateEmailPage = app.injector.instanceOf[UpdateEmailPage]
-  private val controller = new UpdateEmailController(Helpers.stubMessagesControllerComponents(), updateEmailPage, uc)
+  private val controller = new UpdateEmailController(Helpers.stubMessagesControllerComponents(), updateEmailPage, uc, ac)
+  private val testAgent = AgentDetails("ARN432423", "Big Business", "agent@gmail.com", "0743254345".toLong, Seq("Text"), "12", "W14PL")
+
   "GET/update-email" should {
     "return status 200 with a email address form field" when {
       "the user is logged in as an agent" in {
-        when(uc.updateEmail(any(), any())) thenReturn Future.successful(true)
+        when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(testAgent))
         val result = controller.displayUpdateEmailPage().apply(fakeRequest.withSession("arn" -> "ARN0002034"))
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-form-group").size shouldBe 2
