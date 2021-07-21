@@ -14,12 +14,11 @@
     } else {
     @govukInput(Input(id = "crn", name = "crn", hint = Some(Hint(content = Text("This is up to 10 characters long starting with 'CRN'."))), label = Label(isPageHeading = true, classes = "govuk-label--l, gg, govuk-input-error", content = Text("Add a Client Code"))))
     }
-<div class="govuk-button-group">
-    <button class="govuk-button" value="Submit" type="submit">
-        Submit
-    </button>
-    }
-
+<button class="govuk-button" value="Submit" type="submit">
+    Submit
+</button>
+<hr>
+}
     <a class="govuk-link cancel" data-module="govuk-button"
        href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index">
         Cancel
