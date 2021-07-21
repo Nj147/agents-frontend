@@ -48,6 +48,7 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
         val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001"))
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
+        Jsoup.parse(contentAsString(result)).getElementById("number").`val`() shouldBe testAgent.contactNumber.toString
       }
     }
     "redirect to the home page" when {

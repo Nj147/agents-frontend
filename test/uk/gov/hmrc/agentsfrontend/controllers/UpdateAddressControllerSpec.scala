@@ -50,6 +50,9 @@ class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOn
         contentType(result) shouldBe Some("text/html")
         Helpers.charset(result) shouldBe Some("utf-8")
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
+        Jsoup.parse(contentAsString(result)).getElementById("propertyNumber").`val`() shouldBe testAgent.propertyNumber
+        Jsoup.parse(contentAsString(result)).getElementById("postcode").`val`() shouldBe testAgent.postcode
+
       }
     }
     "redirect to the home page" when {

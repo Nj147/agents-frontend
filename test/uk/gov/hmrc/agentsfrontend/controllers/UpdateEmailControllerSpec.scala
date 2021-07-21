@@ -54,6 +54,7 @@ class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
         val result = controller.displayUpdateEmailPage().apply(fakeRequest.withSession("arn" -> "ARN0002034"))
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-form-group").size shouldBe 2
+        Jsoup.parse(contentAsString(result)).getElementById("email").`val`() shouldBe testAgent.email
       }
     }
     "redirect to the home page" when {
