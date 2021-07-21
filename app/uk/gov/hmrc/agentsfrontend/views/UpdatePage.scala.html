@@ -4,9 +4,9 @@
 
 @(user: AgentDetails)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Summary"), isLoggedIn = true) {
+@layout(pageTitle = Some("Your Account"), isLoggedIn = true) {
 <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index" class="govuk-back-link">Back</a>
-<h1 class="govuk-heading-xl">Summary</h1>
+<h1 class="govuk-heading-xl">Your Account</h1>
 @govukSummaryList(SummaryList(
 rows = Seq(
 SummaryListRow(
