@@ -22,6 +22,7 @@ title = Text(messages("There is a problem"))
     @if(form.errors("propertyNumber").nonEmpty) {
     @govukInput(Input(
     id = "propertyNumber",
+    value = Some(form.data("propertyNumber")),
     name = "propertyNumber",
     classes = "govuk-input--width-10",
     errorMessage = Some(ErrorMessage(
@@ -35,6 +36,7 @@ title = Text(messages("There is a problem"))
     } else {
     @govukInput(Input(
     id = "propertyNumber",
+    value = Some(form.data("propertyNumber")),
     name = "propertyNumber",
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The registered property number of your business, for example - '103b'"))),
@@ -49,6 +51,7 @@ title = Text(messages("There is a problem"))
     @if(form.errors("postcode").nonEmpty) {
     @govukInput(Input(
     id = "postcode",
+    value = Some(form.data("postcode")),
     name = "postcode",
     classes = "govuk-input--width-10",
     errorMessage = Some(ErrorMessage(
@@ -63,6 +66,7 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "postcode",
     name = "postcode",
+    value = Some(form.data("postcode")),
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The registered postcode of your business, for example - 'HA8 3NY'"))),
     label = Label(

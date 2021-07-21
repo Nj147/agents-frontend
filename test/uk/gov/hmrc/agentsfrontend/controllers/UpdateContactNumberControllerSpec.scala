@@ -25,24 +25,30 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
-import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.connectors.{AgentDetailsConnector, UpdateConnector}
+import uk.gov.hmrc.agentsfrontend.models.AgentDetails
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateContactNumberPage
+
 import scala.concurrent.Future
 
 class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   val connector: UpdateConnector = mock(classOf[UpdateConnector])
   val updatePage: UpdateContactNumberPage = app.injector.instanceOf[UpdateContactNumberPage]
-  val controller = new UpdateContactNumberController(Helpers.stubMessagesControllerComponents(), updatePage, connector)
+  val ac: AgentDetailsConnector = mock(classOf[AgentDetailsConnector])
+  val controller = new UpdateContactNumberController(Helpers.stubMessagesControllerComponents(), updatePage, connector, ac)
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")
+  private val testAgent = AgentDetails("ARN432423", "Big Business", "agent@gmail.com", "0743254345".toLong, Seq("Text"), "12", "W14PL")
 
   "GET /update-contact" should {
     "return status 200" when {
       "the user is logged in as an agent and it loads the form" in {
+        when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(testAgent))
         val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001"))
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
+        Jsoup.parse(contentAsString(result)).getElementById("number").`val`() shouldBe testAgent.contactNumber.toString
       }
     }
     "redirect to the home page" when {

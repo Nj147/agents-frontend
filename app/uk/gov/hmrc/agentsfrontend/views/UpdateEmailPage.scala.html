@@ -20,6 +20,7 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "email",
     name = "email",
+    value = Some(form.data("email")),
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The email address you prefer to be contacted with, for example - 'test@test.com'"))),
     errorMessage = Some(ErrorMessage(
@@ -34,6 +35,7 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "email",
     name = "email",
+    value = Some(form.data("email")),
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The email address you prefer to be contacted with, for example - 'test@test.com'"))),
     label = Label(
