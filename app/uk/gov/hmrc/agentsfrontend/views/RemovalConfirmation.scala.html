@@ -4,8 +4,11 @@
 
 @layout(pageTitle = Some("Remove Clients Confirmation"), isLoggedIn = true) {
 
-    <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-back-link">Back</a>
-    @if(success){
+
+@if(success){
+<div class="govuk-width-container">
+    <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
+
         <div class="govuk-panel govuk-panel--confirmation">
             <h1 class="govuk-panel__title">
                 Successful
@@ -14,15 +17,35 @@
                 Client has been successfully unlinked from your account
             </div>
         </div>
-    } else {
-        <div class="govuk-panel govuk-panel--confirmation" style="background-color:red;">
-            <h1 class="govuk-panel__title">
-                Unsuccessful
-            </h1>
-            <div class="govuk-panel__body">
-                Client has failed to be unlinked from your account
-            </div>
-        </div>
-    }
+        <h2 class="govuk-heading-m">What happens next</h2>
+
+        <p class="govuk-body">The selected client is unlinked from your account.</p>
+        <p class="govuk-body">
+            You will not see any details of the deleted client.
+        </p>
+        <p class="govuk-body">
+            The client will contact you to confirm your un-registration, or to ask for more information.
+        </p>
+
+        </br>
+        <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-link">Return
+            to dashboard</a>
+    </main>
+</div>
+
+} else {
+<div class="govuk-panel govuk-panel--confirmation" style="background-color:red;">
+    <h1 class="govuk-panel__title">
+        Unsuccessful
+    </h1>
+    <div class="govuk-panel__body">
+        Client has failed to be unlinked from your account
+    </div>
+
+</div>
+</br>
+<a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-link">Return
+    to dashboard</a>
+}
 
 }
