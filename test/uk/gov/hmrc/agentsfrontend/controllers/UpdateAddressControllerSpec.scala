@@ -25,8 +25,7 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, redirectLocation, status}
-import uk.gov.hmrc.agentsfrontend.connectors.{AgentDetailsConnector, UpdateConnector}
-import uk.gov.hmrc.agentsfrontend.models.AgentDetails
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateAddressPage
 
 import scala.concurrent.Future
@@ -34,25 +33,19 @@ import scala.concurrent.Future
 class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   val conn: UpdateConnector = mock(classOf[UpdateConnector])
-  val ac: AgentDetailsConnector = mock(classOf[AgentDetailsConnector])
   val addressPage: UpdateAddressPage = app.injector.instanceOf[UpdateAddressPage]
-  val controller: UpdateAddressController = new UpdateAddressController(Helpers.stubMessagesControllerComponents(), addressPage, conn, ac)
+  val controller: UpdateAddressController = new UpdateAddressController(Helpers.stubMessagesControllerComponents(), addressPage, conn)
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")
-  private val testAgent = AgentDetails("ARN432423", "Big Business", "agent@gmail.com", "0743254345".toLong, Seq("Text"), "12", "W14PL")
 
   "GET /update-address" should {
     "return status 200 with a contact number form field" when {
       "the user is logged in as an agent" in {
-        when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(testAgent))
         val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001"))
         status(result) shouldBe OK
         contentType(result) shouldBe Some("text/html")
         Helpers.charset(result) shouldBe Some("utf-8")
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
-        Jsoup.parse(contentAsString(result)).getElementById("propertyNumber").`val`() shouldBe testAgent.propertyNumber
-        Jsoup.parse(contentAsString(result)).getElementById("postcode").`val`() shouldBe testAgent.postcode
-
       }
     }
     "redirect to the home page" when {

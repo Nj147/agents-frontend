@@ -21,7 +21,6 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "number",
     name = "number",
-    value = Some(form.data("number")),
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))),
     errorMessage = Some(ErrorMessage(
@@ -36,7 +35,6 @@ title = Text(messages("There is a problem"))
     @govukInput(Input(
     id = "number",
     name = "number",
-    value = Some(form.data("number")),
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))),
     label = Label(
