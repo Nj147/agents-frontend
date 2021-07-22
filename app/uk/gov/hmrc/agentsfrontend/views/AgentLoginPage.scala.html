@@ -6,7 +6,7 @@
 @(form: Form[AgentLogin])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("Agent Login")) {
-
+<a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.StartController.start" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Sign in using Government Gateway</h1>
 @helper.form(action=uk.gov.hmrc.agentsfrontend.controllers.routes.AgentLoginController.agentLoginSubmit()){
 <div class="govuk-list govuk-error-summary__list">
@@ -78,4 +78,6 @@
 </div>
 <button name="submit-button" class="govuk-button" data-module="govuk-button" type="submit">Log in</button>
 }
+<hr>
+<a href="http://localhost:9000/registration/business-name/false" class="govuk-link">Register as an agent</a>
 }
