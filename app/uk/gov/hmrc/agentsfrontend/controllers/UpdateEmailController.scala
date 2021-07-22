@@ -17,7 +17,7 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.agentsfrontend.connectors.{AgentDetailsConnector, UpdateConnector}
+import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.Email
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateEmailPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -30,16 +30,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class UpdateEmailController @Inject()(mcc: MessagesControllerComponents,
                                       updateEmailPage: UpdateEmailPage,
                                       connector: UpdateConnector,
-                                      ac: AgentDetailsConnector
                                      )
   extends FrontendController(mcc) {
-  def displayUpdateEmailPage(): Action[AnyContent] = Action async { implicit request =>
+  def displayUpdateEmailPage(): Action[AnyContent] = Action { implicit request =>
     request.session.get("arn") match {
-      case Some(arn) =>
-        ac.getAgentDetails(arn).map { x =>
-          Ok(updateEmailPage(Email.emailForm.fill(Email(x.get.email))))
-        }
-      case None => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
+      case Some(_) => Ok(updateEmailPage(Email.emailForm))
+      case None => Redirect(routes.AgentLoginController.agentLogin())
     }
   }
 
@@ -51,7 +47,7 @@ class UpdateEmailController @Inject()(mcc: MessagesControllerComponents,
         formWithErrors => Future.successful(BadRequest(updateEmailPage(formWithErrors))),
         email => connector.updateEmail(value, email.email) map {
           case true => Redirect(routes.UpdateController.getDetails())
-          case false => BadRequest(updateEmailPage(Email.emailForm.fill(email).withError("email", "Change cannot be made, please try again")))
+          case false => BadRequest(updateEmailPage(Email.emailForm.withError("email", "Change cannot be made, please try again")))
         })
       case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
     }
