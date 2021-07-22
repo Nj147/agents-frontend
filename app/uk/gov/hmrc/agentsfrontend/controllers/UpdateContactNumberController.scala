@@ -21,7 +21,6 @@ import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.models.ContactNumber
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -42,7 +41,7 @@ class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents,
     } match {
       case Success(value) => ContactNumber.contactForm.bindFromRequest().fold(
         formWithErrors => Future.successful(BadRequest(updatePage(formWithErrors))),
-        cNum => connector.updateContactNumber(value, cNum.number.toLong).map {
+        cNum => connector.updateContactNumber(value, cNum.number).map {
           case true => Redirect(routes.UpdateController.getDetails())
           case false => BadRequest(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
         })

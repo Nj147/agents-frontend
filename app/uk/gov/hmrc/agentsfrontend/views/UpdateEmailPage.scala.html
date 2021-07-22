@@ -3,7 +3,6 @@
 @this(layout: Layout, govukInput : GovukInput, govukErrorSummary : GovukErrorSummary, govukButton: GovukButton)
 @(form: Form[Email])(implicit request: Request[_], messages: Messages)
 @layout(pageTitle = Some("Update your email"), isLoggedIn = true) {
-<a href="@request.headers.get("referer")" class="govuk-back-link">Back</a>
 <h1 class="govuk-heading-xl">Update Email Address </h1>
 @if(form.errors.nonEmpty) {
 @defining(form.errors.map { error =>

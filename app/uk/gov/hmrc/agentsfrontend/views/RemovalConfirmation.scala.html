@@ -4,7 +4,6 @@
 
 @layout(pageTitle = Some("Remove Clients Confirmation"), isLoggedIn = true) {
 
-
 @if(success){
 <div class="govuk-width-container">
     <main class="govuk-main-wrapper govuk-main-wrapper--l" id="main-content" role="main">
@@ -26,13 +25,8 @@
         <p class="govuk-body">
             The client will contact you to confirm your un-registration, or to ask for more information.
         </p>
-
-        </br>
-        <a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-link">Return
-            to dashboard</a>
     </main>
 </div>
-
 } else {
 <div class="govuk-panel govuk-panel--confirmation" style="background-color:red;">
     <h1 class="govuk-panel__title">
@@ -41,11 +35,7 @@
     <div class="govuk-panel__body">
         Client has failed to be unlinked from your account
     </div>
-
 </div>
-</br>
-<a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-link">Return
-    to dashboard</a>
 }
-
+<a href="@uk.gov.hmrc.agentsfrontend.controllers.routes.DashBoardController.index()" class="govuk-link">Return to dashboard</a>
 }

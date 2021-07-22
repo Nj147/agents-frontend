@@ -19,7 +19,7 @@ package uk.gov.hmrc.agentsfrontend.models
 import play.api.data.Form
 import play.api.data.Forms.{mapping, nonEmptyText}
 
-case class AgentLogin (arn: String, password: String)
+case class AgentLogin(arn: String, password: String)
 
 object AgentLogin {
   val submitForm: Form[AgentLogin] =

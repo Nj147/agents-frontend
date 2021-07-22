@@ -15,6 +15,7 @@
  */
 
 package uk.gov.hmrc.agentsfrontend.controllers
+
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
@@ -30,6 +31,7 @@ import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateEmailPage
 
 import scala.concurrent.Future
+
 class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
     new GuiceApplicationBuilder()
@@ -38,6 +40,7 @@ class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
         "metrics.enabled" -> false
       )
       .build()
+
   private val uc = mock(classOf[UpdateConnector])
   private val fakeRequest = FakeRequest("GET", "/update-email")
   private val fakePostRequest = FakeRequest("POST", "/update-email")
