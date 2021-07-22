@@ -44,7 +44,7 @@ class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPer
   private val ac = mock(classOf[AgentDetailsConnector])
   private val updatePage = app.injector.instanceOf[UpdatePage]
   private val controller = new UpdateController(Helpers.stubMessagesControllerComponents(), ac, updatePage)
-  private val agentDetails = AgentDetails("ARN34234", "Business Ltd", "email@email.com", "073253423".toLong, Seq("Text message"), "12", "SW12 R4T")
+  private val agentDetails = AgentDetails("ARN34234", "Business Ltd", "email@email.com", "073253423", Seq("Text message"), "12", "SW12 R4T")
 
   "/update-address" should {
     "return an OK status" when {

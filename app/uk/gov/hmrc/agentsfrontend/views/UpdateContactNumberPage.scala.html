@@ -20,6 +20,7 @@ title = Text(messages("There is a problem"))
     @if(form.errors("number").nonEmpty) {
     @govukInput(Input(
     id = "number",
+    inputType = "number",
     name = "number",
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))),
@@ -34,6 +35,7 @@ title = Text(messages("There is a problem"))
     } else {
     @govukInput(Input(
     id = "number",
+    inputType = "number",
     name = "number",
     classes = "govuk-input--width-10",
     hint = Some(Hint(content = Text("The phone number you prefer to be contacted on, for example - '01615555555'"))),

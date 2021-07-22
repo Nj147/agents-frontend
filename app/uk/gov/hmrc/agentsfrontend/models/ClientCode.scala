@@ -22,7 +22,7 @@ import play.api.data.Forms.{mapping, nonEmptyText}
 case class ClientCode(crn: String)
 
 object ClientCode {
-  val form: Form[ClientCode] = Form (
+  val form: Form[ClientCode] = Form(
     mapping(
       "crn" -> nonEmptyText
     )(ClientCode.apply)(ClientCode.unapply)

@@ -38,11 +38,9 @@
                data-module="govuk-button">Add a client</a>
         </div>
         @if(client.get.isEmpty) {
-        <div class="govuk-warning-text">
-            <strong class="govuk-warning-text__text">
-                <span class="govuk-warning-text__assistive">Alert</span>
-                When you have registered clients they will be displayed here. You currently have no clients, please click above to add client
-            </strong>
+        <div class="govuk-body">
+            <strong>When you have registered clients they will be displayed here. You currently have no clients, please
+                click above to add client</strong>
         </div>
         } else {
         <table class="govuk-table">

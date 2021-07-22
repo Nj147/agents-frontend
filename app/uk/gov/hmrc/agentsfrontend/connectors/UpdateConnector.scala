@@ -27,7 +27,7 @@ import scala.concurrent.Future
 
 class UpdateConnector @Inject()(ws: WSClient, val controllerComponents: ControllerComponents) extends BaseController {
 
-  def updateContactNumber(arn: String, contactNumber: Long): Future[Boolean] = ws.url(s"http://localhost:9009/agents/${arn}/contact-number")
+  def updateContactNumber(arn: String, contactNumber: String): Future[Boolean] = ws.url(s"http://localhost:9009/agents/${arn}/contact-number")
     .patch(Json.obj("contactNumber" -> contactNumber))
     .map {
       _.status match {
@@ -45,7 +45,7 @@ class UpdateConnector @Inject()(ws: WSClient, val controllerComponents: Controll
       }
     }
 
-  def updateAddress(arn: String, address: Address) = {
+  def updateAddress(arn: String, address: Address): Future[Boolean] = {
     ws.url(s"http://localhost:9009/agents/${arn}/address").patch(Json.toJson(address)).map { response =>
       response.status match {
         case 200 => true
