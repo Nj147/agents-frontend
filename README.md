@@ -37,9 +37,9 @@ Start the service locally by going to http://localhost:9005/agents-frontend/agen
 
 ## Authors
 
-* **Ayub Yusuf** - [JBansal10](https://github.com/JBansal10)
-* **Isabel Lee** - [sforsteracademytrainee](https://github.com/sforsteracademytrainee)
-* **Nathan Jackson** - [qa-ihussain](https://github.com/qa-ihussain)
-* **Chetan Pardeep** - [JakeReid2020](https://github.com/JakeReid2020)
-* **Ekip Kalir** - [ayub96](https://github.com/ayub96)
-* **Daniel Carter** - [ayub96](https://github.com/ayub96)
+* **Ayub Yusuf**
+* **Isabel Lee**
+* **Nathan Jackson**
+* **Chetan Pardeep**
+* **Ekip Kalir**
+* **Daniel Carter**
