@@ -19,30 +19,25 @@ package uk.gov.hmrc.agentsfrontend.controllers
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.views.html.{RemovalConfirmation, RemoveClients}
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class RemoveClientController @Inject()(mcc: MessagesControllerComponents,
                                        removePage: RemoveClients,
                                        resultConf: RemovalConfirmation,
-                                       connector: ClientConnector)(implicit ec: ExecutionContext) extends FrontendController(mcc) {
+                                       loginChecker: LoginChecker,
+                                       connector: ClientConnector) extends FrontendController(mcc) {
 
-  def removeClients(crn: String): Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(arn) => Ok(removePage(crn))
-      case None => Redirect(routes.AgentLoginController.agentLogin())
-    }
+  def removeClients(crn: String): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.isLoggedIn(_ => Future.successful(Ok(removePage(crn))))
   }
 
   def processRemoval(crn: String): Action[AnyContent] = Action async { implicit request =>
-    Try {
-      request.session.get("arn").get
-    } match {
-      case Success(arn) => connector.removeClient(arn, crn).map(result => Ok(resultConf(result)))
-      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
-    }
+    loginChecker.isLoggedIn(arn => connector.removeClient(arn, crn).map(result => Ok(resultConf(result))))
   }
+
 }

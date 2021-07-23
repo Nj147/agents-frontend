@@ -28,6 +28,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateEmailPage
 
 import scala.concurrent.Future
@@ -45,7 +46,8 @@ class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
   private val fakeRequest = FakeRequest("GET", "/update-email")
   private val fakePostRequest = FakeRequest("POST", "/update-email")
   private val updateEmailPage = app.injector.instanceOf[UpdateEmailPage]
-  private val controller = new UpdateEmailController(Helpers.stubMessagesControllerComponents(), updateEmailPage, uc)
+  private val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  private val controller = new UpdateEmailController(Helpers.stubMessagesControllerComponents(), updateEmailPage, login, uc)
 
   "GET/update-email" should {
     "return status 200 with a email address form field" when {
@@ -53,12 +55,6 @@ class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
         val result = controller.displayUpdateEmailPage().apply(fakeRequest.withSession("arn" -> "ARN0002034"))
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-form-group").size shouldBe 2
-      }
-    }
-    "redirect to the home page" when {
-      "an agent is not logged in" in {
-        val result = controller.displayUpdateEmailPage().apply(fakeRequest)
-        status(result) shouldBe SEE_OTHER
       }
     }
   }
@@ -83,13 +79,6 @@ class UpdateEmailControllerSpec extends AnyWordSpec with Matchers with GuiceOneA
         when(uc.updateEmail(any(), any())) thenReturn Future.successful(false)
         val result = controller.processUpdateEmail().apply(fakePostRequest.withFormUrlEncodedBody("email" -> "test@test.com").withSession("arn" -> "ARN0001"))
         status(result) shouldBe BAD_REQUEST
-      }
-    }
-    "redirect to login page" when {
-      "arn is not in session" in {
-        val result = controller.processUpdateEmail().apply(fakePostRequest.withFormUrlEncodedBody("email" -> "test@test.com"))
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result) shouldBe Some("/agents-frontend/agent-login")
       }
     }
   }

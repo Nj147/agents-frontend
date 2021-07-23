@@ -21,12 +21,12 @@ import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.DashBoardConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.models.Client
 import uk.gov.hmrc.agentsfrontend.views.html.Index
-
 import scala.concurrent.Future
 
 class DashBoardControllerSpec extends AnyWordSpec
@@ -35,9 +35,10 @@ class DashBoardControllerSpec extends AnyWordSpec
 
   val dashBoard: Index = app.injector.instanceOf[Index]
   val connector: DashBoardConnector = mock(classOf[DashBoardConnector])
-  val controller = new DashBoardController(Helpers.stubMessagesControllerComponents(), dashBoard, connector)
+  val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  val controller = new DashBoardController(Helpers.stubMessagesControllerComponents(), dashBoard, login, connector)
 
-  val obj = Client("CRN684077E0",
+  val obj: Client = Client("CRN684077E0",
     "testName",
     "testBusiness",
     "testContact",
@@ -56,15 +57,6 @@ class DashBoardControllerSpec extends AnyWordSpec
       contentType(result) shouldBe Some("text/html")
       Helpers.charset(result) shouldBe Some("utf-8")
       status(result) shouldBe 200
-    }
-
-    "redirect 303" in {
-      when(connector.getAllClientsData(any())) thenReturn (Future.successful(Option(List())))
-      val result = controller
-        .index()
-        .apply(FakeRequest("GET", "/dashboard"))
-      status(result) shouldBe 303
-      redirectLocation(result).get shouldBe "/agents-frontend/agent-login"
     }
   }
 

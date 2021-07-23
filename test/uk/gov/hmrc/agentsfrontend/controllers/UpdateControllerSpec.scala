@@ -27,6 +27,7 @@ import org.mockito.Mockito.{mock, when}
 import play.api.http.Status
 import play.api.test.Helpers.{defaultAwaitTimeout, status}
 import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.models.AgentDetails
 import uk.gov.hmrc.agentsfrontend.views.html.UpdatePage
 
@@ -43,7 +44,8 @@ class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPer
 
   private val ac = mock(classOf[AgentDetailsConnector])
   private val updatePage = app.injector.instanceOf[UpdatePage]
-  private val controller = new UpdateController(Helpers.stubMessagesControllerComponents(), ac, updatePage)
+  private val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  private val controller = new UpdateController(Helpers.stubMessagesControllerComponents(), ac, login, updatePage)
   private val agentDetails = AgentDetails("ARN34234", "Business Ltd", "email@email.com", "073253423", Seq("Text message"), "12", "SW12 R4T")
 
   "/update-address" should {
@@ -52,13 +54,6 @@ class UpdateControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPer
         when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(agentDetails))
         val result = controller.getDetails.apply(FakeRequest().withSession("arn" -> "ARN43242334"))
         status(result) shouldBe Status.OK
-      }
-    }
-    "redirect to login" when {
-      "no arn is found" in {
-        when(ac.getAgentDetails(any())) thenReturn Future.successful(Some(agentDetails))
-        val result = controller.getDetails.apply(FakeRequest())
-        status(result) shouldBe Status.SEE_OTHER
       }
     }
     "return an internal server error" when {

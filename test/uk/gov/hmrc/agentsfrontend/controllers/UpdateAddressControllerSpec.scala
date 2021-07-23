@@ -26,15 +26,16 @@ import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateAddressPage
-
 import scala.concurrent.Future
 
 class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
   val conn: UpdateConnector = mock(classOf[UpdateConnector])
   val addressPage: UpdateAddressPage = app.injector.instanceOf[UpdateAddressPage]
-  val controller: UpdateAddressController = new UpdateAddressController(Helpers.stubMessagesControllerComponents(), addressPage, conn)
+  val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  val controller: UpdateAddressController = new UpdateAddressController(Helpers.stubMessagesControllerComponents(), addressPage, login, conn)
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")
 
@@ -46,12 +47,6 @@ class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOn
         contentType(result) shouldBe Some("text/html")
         Helpers.charset(result) shouldBe Some("utf-8")
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 2
-      }
-    }
-    "redirect to the home page" when {
-      "an agent is not logged in" in {
-        val result = controller.startPage.apply(fakeRequest)
-        status(result) shouldBe SEE_OTHER
       }
     }
   }
@@ -76,11 +71,6 @@ class UpdateAddressControllerSpec extends AnyWordSpec with Matchers with GuiceOn
         val result = controller.processAddress.apply(fakePostRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> "AA12 1AB").withSession("arn" -> "ARN0000001"))
         status(result) shouldBe SEE_OTHER
         redirectLocation(result).get shouldBe ("/agents-frontend/update-page")
-      }
-      "the client is not logged in and tries to access the page" in {
-        val result = controller.processAddress.apply(fakePostRequest.withFormUrlEncodedBody("propertyNumber" -> "1 New Street", "postcode" -> "AA12 1AB"))
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe "/agents-frontend/agent-login"
       }
     }
   }

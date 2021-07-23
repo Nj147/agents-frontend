@@ -16,12 +16,11 @@ POST        /client-code              uk.gov.hmrc.agentsfrontend.controllers.Inp
 
 GET         /client-code              uk.gov.hmrc.agentsfrontend.controllers.InputClientCodeController.getInputClientCode()
 
-GET         /success-client-code      uk.gov.hmrc.agentsfrontend.controllers.SuccessClientCodeController.successClientCode()
 +nocsrf
 GET         /remove-clients/:crn      uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.removeClients(crn)
 
 +nocsrf
-GET        /remove-confirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
+GET         /remove-confirmed/:crn    uk.gov.hmrc.agentsfrontend.controllers.RemoveClientController.processRemoval(crn)
 
 GET         /dashboard                uk.gov.hmrc.agentsfrontend.controllers.DashBoardController.index()
 
