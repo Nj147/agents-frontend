@@ -24,14 +24,13 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
-import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.agentsfrontend.views.html.{InputClientCode, SuccessClientCode}
 import scala.concurrent.Future
 import play.api.libs.json.{JsObject, Json}
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 
 class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
@@ -44,8 +43,10 @@ class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with Guice
 
   private val fakeRequest = FakeRequest("GET", "/")
   val clientCode: InputClientCode = app.injector.instanceOf[InputClientCode]
+  val success: SuccessClientCode = app.injector.instanceOf[SuccessClientCode]
   val service: InputClientCodeService = mock(classOf[InputClientCodeService])
-  val controller = new InputClientCodeController(Helpers.stubMessagesControllerComponents(), clientCode, service)
+  val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  val controller = new InputClientCodeController(Helpers.stubMessagesControllerComponents(), clientCode, login, success, service)
   val obj: JsObject = Json.obj("arn" -> "agent", "crn" -> "client")
 
   "GET /clientCode" should {
@@ -55,18 +56,13 @@ class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with Guice
       contentType(result) shouldBe Some("text/html")
       Helpers.charset(result) shouldBe Some("utf-8")
     }
-    "return 303" in {
-      val result = controller.getInputClientCode(fakeRequest)
-      status(result) shouldBe SEE_OTHER
-      redirectLocation(result).get should include("/agent-login")
-    }
   }
 
   "submitClientCode" should {
-    "return 204 when successfully added agent to client and redirected to success page" in {
+    "return 200 when successfully added agent to client and redirected to success page" in {
       when(service.postClientCode(any(), any())) thenReturn (Future.successful(204))
       val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody("crn" -> "client"))
-      status(result) shouldBe SEE_OTHER
+      status(result) shouldBe OK
     }
     "return 404 when the client code provided does not exist in the client database" in {
       when(service.postClientCode(any(), any())) thenReturn (Future.successful(404))
@@ -81,10 +77,6 @@ class InputClientCodeControllerSpec extends AnyWordSpec with Matchers with Guice
     "return 400 when the nothing is sent" in {
       val result = controller.submitClientCode().apply(FakeRequest("POST", "/clientCode").withSession("arn" -> "agent").withFormUrlEncodedBody())
       status(result) shouldBe BAD_REQUEST
-    }
-    "returns 303 if the client service is down" in {
-      val result = controller.submitClientCode().apply(FakeRequest("POST", "clientCode").withFormUrlEncodedBody("crn" -> "client"))
-      status(result) shouldBe SEE_OTHER
     }
     "returns 500 if the backend service fails to respond" in {
       when(service.postClientCode(any(), any())) thenReturn (Future.successful(500))

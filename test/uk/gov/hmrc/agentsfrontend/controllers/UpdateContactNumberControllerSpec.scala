@@ -26,15 +26,16 @@ import play.api.http.Status._
 import play.api.test.{FakeRequest, Helpers}
 import play.api.test.Helpers.{contentAsString, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateContactNumberPage
-
 import scala.concurrent.Future
 
 class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
 
-  val connector: UpdateConnector = mock(classOf[UpdateConnector])
-  val updatePage: UpdateContactNumberPage = app.injector.instanceOf[UpdateContactNumberPage]
-  val controller = new UpdateContactNumberController(Helpers.stubMessagesControllerComponents(), updatePage, connector)
+  private val connector: UpdateConnector = mock(classOf[UpdateConnector])
+  private val updatePage: UpdateContactNumberPage = app.injector.instanceOf[UpdateContactNumberPage]
+  private val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  private val controller = new UpdateContactNumberController(Helpers.stubMessagesControllerComponents(), updatePage, login, connector)
   private val fakeRequest = FakeRequest("/GET", "/update-contact")
   private val fakePostRequest = FakeRequest("/POST", "/update-contact")
 
@@ -44,12 +45,6 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
         val result = controller.startPage.apply(fakeRequest.withSession("arn" -> "ARN0000001"))
         status(result) shouldBe OK
         Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-input--width-10").size shouldBe 1
-      }
-    }
-    "redirect to the home page" when {
-      "an agent is not logged in" in {
-        val result = controller.startPage.apply(fakeRequest)
-        status(result) shouldBe SEE_OTHER
       }
     }
   }
@@ -67,11 +62,6 @@ class UpdateContactNumberControllerSpec extends AnyWordSpec with Matchers with G
       }
     }
     "returns see other" when {
-      "there is no session variable set" in {
-        val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("" -> ""))
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe ("/agents-frontend/agent-login")
-      }
       "the change has been accepted" in {
         when(connector.updateContactNumber(any(), any())) thenReturn (Future.successful(true))
         val result = controller.processContactNumber.apply(fakePostRequest.withFormUrlEncodedBody("number" -> "09876509876").withSession("arn" -> "ARN0000001"))

@@ -16,24 +16,20 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{mock, when}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
-import play.api.http.Status
 import play.api.http.Status._
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.test.Helpers.{contentAsString, contentType, defaultAwaitTimeout, redirectLocation, status}
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateCorrespondencePage
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-
 
 class UpdateCorrespondenceControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
   override def fakeApplication(): Application =
@@ -45,24 +41,17 @@ class UpdateCorrespondenceControllerSpec extends AnyWordSpec with Matchers with 
       .build()
 
   val connector: UpdateConnector = mock(classOf[UpdateConnector])
-  private val fakeRequest = FakeRequest("GET", "/")
+  private val fakeRequest = FakeRequest("GET", "/").withSession("arn" -> "09876543")
   private val fakePostRequest = FakeRequest("/POST", "/update-correspondence")
   val updateMOC: UpdateCorrespondencePage = app.injector.instanceOf[UpdateCorrespondencePage]
-  val controller = new UpdateCorrespondenceController(Helpers.stubMessagesControllerComponents(), connector, updateMOC)
+  val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  val controller = new UpdateCorrespondenceController(Helpers.stubMessagesControllerComponents(), connector, login, updateMOC)
 
   "GET /update-correspondence " should {
-    "return 200" in {
-      val result = controller.getCorrespondence(fakeRequest)
-      status(result) shouldBe Status.OK
-    }
     "return HTML" in {
       val result = controller.getCorrespondence(fakeRequest)
       contentType(result) shouldBe Some("text/html")
       Helpers.charset(result) shouldBe Some("utf-8")
-    }
-    "return a page with 1 input" in {
-      val result = controller.getCorrespondence(fakeRequest)
-      Jsoup.parse(contentAsString(result)).getElementsByClass("govuk-checkboxes__item").size shouldBe 4
     }
   }
 
@@ -79,11 +68,6 @@ class UpdateCorrespondenceControllerSpec extends AnyWordSpec with Matchers with 
       }
     }
     "returns see other" when {
-      "there is no session variable set" in {
-        val result = controller.updateCorrespondence().apply(fakePostRequest.withFormUrlEncodedBody("" -> ""))
-        status(result) shouldBe SEE_OTHER
-        redirectLocation(result).get shouldBe ("/agents-frontend/start-page")
-      }
       "the change has been accepted" in {
         when(connector.updateCorrespondence(any(), any())) thenReturn (Future.successful(true))
         val result = controller.updateCorrespondence().apply(fakePostRequest.withFormUrlEncodedBody("modes[]" -> "text").withSession("arn" -> "ARN0000001"))

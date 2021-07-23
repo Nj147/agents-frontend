@@ -18,25 +18,24 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.AgentDetailsConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.views.html.UpdatePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class UpdateController @Inject()(
                                   mcc: MessagesControllerComponents,
-                                  ac: AgentDetailsConnector,
+                                  connector: AgentDetailsConnector,
+                                  loginChecker: LoginChecker,
                                   updatePage: UpdatePage
                                 ) extends FrontendController(mcc) {
 
-  val getDetails: Action[AnyContent] = Action.async { implicit request =>
-    request.session.get("arn") match {
-      case Some(arn) => ac.getAgentDetails(arn).map {
-        case Some(agent) => Ok(updatePage(agent))
-        case None => InternalServerError
-      }
-      case _ => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
-    }
+  def getDetails: Action[AnyContent] = Action.async { implicit request =>
+
+    loginChecker.isLoggedIn(arn => connector.getAgentDetails(arn).map {
+      case Some(agent) => Ok(updatePage(agent))
+      case None => InternalServerError
+    })
   }
 }

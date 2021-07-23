@@ -18,38 +18,29 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.models.Email
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateEmailPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-
-import scala.util.{Failure, Success, Try}
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class UpdateEmailController @Inject()(mcc: MessagesControllerComponents,
                                       updateEmailPage: UpdateEmailPage,
-                                      connector: UpdateConnector,
-                                     )
-  extends FrontendController(mcc) {
-  def displayUpdateEmailPage(): Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(_) => Ok(updateEmailPage(Email.emailForm))
-      case None => Redirect(routes.AgentLoginController.agentLogin())
-    }
+                                      loginChecker: LoginChecker,
+                                      connector: UpdateConnector) extends FrontendController(mcc) {
+
+  def displayUpdateEmailPage(): Action[AnyContent] = Action async { implicit request =>
+    loginChecker.isLoggedIn(_ => Future.successful(Ok(updateEmailPage(Email.emailForm))))
   }
 
   def processUpdateEmail(): Action[AnyContent] = Action async { implicit request =>
-    Try {
-      request.session.get("arn").get
-    } match {
-      case Success(value) => Email.emailForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(updateEmailPage(formWithErrors))),
-        email => connector.updateEmail(value, email.email) map {
-          case true => Redirect(routes.UpdateController.getDetails())
-          case false => BadRequest(updateEmailPage(Email.emailForm.withError("email", "Change cannot be made, please try again")))
-        })
-      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
-    }
+    loginChecker.isLoggedIn(arn => Email.emailForm.bindFromRequest().fold(
+      formWithErrors => Future.successful(BadRequest(updateEmailPage(formWithErrors))),
+      email => connector.updateEmail(arn, email.email) map {
+        case true => Redirect(routes.UpdateController.getDetails())
+        case false => BadRequest(updateEmailPage(Email.emailForm.withError("email", "Change cannot be made, please try again")))
+      }))
   }
 }

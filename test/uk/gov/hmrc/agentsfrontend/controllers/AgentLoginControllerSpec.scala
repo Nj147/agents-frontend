@@ -29,7 +29,6 @@ import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.config.ErrorHandler
 import uk.gov.hmrc.agentsfrontend.connectors.AgentLoginConnector
 import uk.gov.hmrc.agentsfrontend.views.html.AgentLoginPage
-
 import scala.concurrent.Future
 
 class AgentLoginControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {

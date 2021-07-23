@@ -17,39 +17,36 @@
 package uk.gov.hmrc.agentsfrontend.controllers
 
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.models.ClientCode
-import uk.gov.hmrc.agentsfrontend.views.html.InputClientCode
+import uk.gov.hmrc.agentsfrontend.views.html.{InputClientCode, SuccessClientCode}
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import uk.gov.hmrc.agentsfrontend.services.InputClientCodeService
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class InputClientCodeController @Inject()(mcc: MessagesControllerComponents, clientCode: InputClientCode, post: InputClientCodeService)(implicit val ec: ExecutionContext)
-  extends FrontendController(mcc) with play.api.i18n.I18nSupport {
+class InputClientCodeController @Inject()(mcc: MessagesControllerComponents,
+                                          clientCode: InputClientCode,
+                                          loginChecker: LoginChecker,
+                                          success: SuccessClientCode,
+                                          post: InputClientCodeService) extends FrontendController(mcc) {
 
-  def getInputClientCode: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    request.session.get("arn") match {
-      case Some(_) => Ok(clientCode(ClientCode.form))
-      case _ => Redirect(routes.AgentLoginController.agentLogin())
-    }
+  def getInputClientCode: Action[AnyContent] = Action async { implicit request =>
+    loginChecker.isLoggedIn(_ => Future.successful(Ok(clientCode(ClientCode.form))))
   }
 
   def submitClientCode: Action[AnyContent] = Action async { implicit request =>
-    Try {
-      request.session.get("arn").get
-    } match {
-      case Success(value) => ClientCode.form.bindFromRequest.fold(
-        formWithErrors => Future.successful(BadRequest(clientCode(formWithErrors))),
-        response => post.postClientCode(value, response.crn) map {
-          case 204 => Redirect(routes.SuccessClientCodeController.successClientCode())
-          case 404 => NotFound(clientCode(ClientCode.form.withError("crn", "Wrong client code entered")))
-          case 409 => Conflict(clientCode(ClientCode.form.withError("crn", "This client already has an agent")))
-          case _ => InternalServerError
-        })
-      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
-    }
+    loginChecker.isLoggedIn(arn => ClientCode.form.bindFromRequest.fold(
+      formWithErrors => Future.successful(BadRequest(clientCode(formWithErrors))),
+      response => post.postClientCode(arn, response.crn) map {
+        case 204 => Ok(success())
+        case 404 => NotFound(clientCode(ClientCode.form.withError("crn", "Wrong client code entered")))
+        case 409 => Conflict(clientCode(ClientCode.form.withError("crn", "This client already has an agent")))
+        case _ => InternalServerError
+      })
+    )
   }
 }
 

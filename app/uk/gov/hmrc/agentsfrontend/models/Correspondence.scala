@@ -22,7 +22,7 @@ import play.api.data.Forms.{list, mapping, text}
 case class Correspondence(modes: List[String])
 
 object Correspondence {
-  val correspondenceForm: Form[Correspondence] = Form(
+  val form: Form[Correspondence] = Form(
     mapping(
       "modes" -> list(text)
     )(Correspondence.apply)(Correspondence.unapply))

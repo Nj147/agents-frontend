@@ -16,38 +16,35 @@
 
 package uk.gov.hmrc.agentsfrontend.controllers
 
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Request}
-import uk.gov.hmrc.agentsfrontend.models.Correspondence.correspondenceForm
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.agentsfrontend.models.Correspondence
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateCorrespondencePage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Success, Try}
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class UpdateCorrespondenceController @Inject()(mcc: MessagesControllerComponents, connector: UpdateConnector, updateMOC: UpdateCorrespondencePage)(implicit val ec: ExecutionContext)
-  extends FrontendController(mcc) with play.api.i18n.I18nSupport {
+class UpdateCorrespondenceController @Inject()(mcc: MessagesControllerComponents,
+                                               connector: UpdateConnector,
+                                               loginChecker: LoginChecker,
+                                               updateMOC: UpdateCorrespondencePage) extends FrontendController(mcc) {
 
-  def getCorrespondence: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(updateMOC(form = correspondenceForm))
+  def getCorrespondence: Action[AnyContent] = Action async { implicit request =>
+    loginChecker.isLoggedIn(_ => Future.successful(Ok(updateMOC(Correspondence.form))))
   }
 
   def updateCorrespondence(): Action[AnyContent] = Action async { implicit request =>
-    val response = correspondenceForm.bindFromRequest.get
-    Try {
-      request.session.get("arn").get
-    } match {
-      case Success(value) =>
-        response.modes.size match {
-          case 0 => Future.successful(BadRequest(updateMOC(correspondenceForm.withError("modes", "Please select at least one method of correspondence"))))
-          case _ => connector.updateCorrespondence(value, response.modes).map {
-            case true => Redirect(routes.UpdateController.getDetails())
-            case false => BadRequest(updateMOC(correspondenceForm.withError("modes", "Change cannot be made, please try again")))
-          }
-        }
-      case Failure(_) => Future.successful(Redirect(routes.StartController.start()))
-    }
+    val response = Correspondence.form.bindFromRequest.get
+    loginChecker.isLoggedIn(arn => response.modes.size match {
+      case 0 => Future.successful(BadRequest(updateMOC(Correspondence.form.withError("modes", "Please select at least one method of correspondence"))))
+      case _ => connector.updateCorrespondence(arn, response.modes).map {
+        case true => Redirect(routes.UpdateController.getDetails())
+        case false => BadRequest(updateMOC(Correspondence.form.withError("modes", "Change cannot be made, please try again")))
+      }
+    })
   }
 }
 

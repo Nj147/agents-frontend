@@ -18,34 +18,30 @@ package uk.gov.hmrc.agentsfrontend.controllers
 
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.agentsfrontend.connectors.UpdateConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.models.ContactNumber
 import uk.gov.hmrc.agentsfrontend.views.html.UpdateContactNumberPage
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import javax.inject.Inject
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.{Failure, Success, Try}
 
-class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents, updatePage: UpdateContactNumberPage, connector: UpdateConnector) extends FrontendController(mcc) {
+class UpdateContactNumberController @Inject()(mcc: MessagesControllerComponents,
+                                              updatePage: UpdateContactNumberPage,
+                                              loginChecker: LoginChecker,
+                                              connector: UpdateConnector) extends FrontendController(mcc) {
 
-  def startPage: Action[AnyContent] = Action { implicit request =>
-    request.session.get("arn") match {
-      case Some(_) => Ok(updatePage(ContactNumber.contactForm))
-      case None => Redirect(routes.AgentLoginController.agentLogin())
-    }
+  def startPage: Action[AnyContent] = Action async { implicit request =>
+    loginChecker.isLoggedIn(_ => Future.successful(Ok(updatePage(ContactNumber.contactForm))))
   }
 
   def processContactNumber: Action[AnyContent] = Action async { implicit request =>
-    Try {
-      request.session.get("arn").get
-    } match {
-      case Success(value) => ContactNumber.contactForm.bindFromRequest().fold(
-        formWithErrors => Future.successful(BadRequest(updatePage(formWithErrors))),
-        cNum => connector.updateContactNumber(value, cNum.number).map {
-          case true => Redirect(routes.UpdateController.getDetails())
-          case false => BadRequest(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
-        })
-      case Failure(_) => Future.successful(Redirect(routes.AgentLoginController.agentLogin()))
-    }
+    loginChecker.isLoggedIn(arn => ContactNumber.contactForm.bindFromRequest().fold(
+      formWithErrors => Future.successful(BadRequest(updatePage(formWithErrors))),
+      cNum => connector.updateContactNumber(arn, cNum.number).map {
+        case true => Redirect(routes.UpdateController.getDetails())
+        case false => BadRequest(updatePage(ContactNumber.contactForm.withError("number", "Change cannot be made, please try again")))
+      }
+    ))
   }
 }

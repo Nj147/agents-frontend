@@ -26,8 +26,8 @@ import play.api.http.Status
 import play.api.test.Helpers._
 import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.agentsfrontend.connectors.ClientConnector
+import uk.gov.hmrc.agentsfrontend.controllers.predicates.LoginChecker
 import uk.gov.hmrc.agentsfrontend.views.html.{RemovalConfirmation, RemoveClients}
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RemoveClientControllerSpec extends AnyWordSpec with Matchers with GuiceOneAppPerSuite {
@@ -37,7 +37,8 @@ class RemoveClientControllerSpec extends AnyWordSpec with Matchers with GuiceOne
   private val conn = mock(classOf[ClientConnector])
   private val removePage = app.injector.instanceOf[RemoveClients]
   private val resultConf = app.injector.instanceOf[RemovalConfirmation]
-  private val controller = new RemoveClientController(Helpers.stubMessagesControllerComponents(), removePage, resultConf, conn)
+  private val login: LoginChecker = app.injector.instanceOf[LoginChecker]
+  private val controller = new RemoveClientController(Helpers.stubMessagesControllerComponents(), removePage, resultConf, login, conn)
 
   "GET /removeClients/CRN0001" should {
     "return 200" in {
@@ -71,11 +72,6 @@ class RemoveClientControllerSpec extends AnyWordSpec with Matchers with GuiceOne
       val result = controller.processRemoval("CRN0001")(fakeRequest.withSession("arn" -> "ARN01234567"))
       Jsoup.parse(contentAsString(result)).text() should include("Client has failed to be unlinked from your account")
       Jsoup.parse(contentAsString(result)).text() should not include ("Client has been successfully unlinked from your account")
-    }
-    "redirect to the login page if not logged in" in {
-      val result = controller.processRemoval("CRN0001")(fakeRequest)
-      status(result) shouldBe 303
-      redirectLocation(result) shouldBe Some("/agents-frontend/agent-login")
     }
   }
 }
