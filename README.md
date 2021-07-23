@@ -26,8 +26,7 @@ sbt clean coverage test it:test coverageReport
 
 ### Dependencies
 
-This service is dependant the folowing services:
-* agents-registration-frontend
+This service is dependant the following services:
 * agents-backend
 * client-backend
 
